@@ -52,7 +52,7 @@ button{font-family:var(--pxfont);font-size:9px;line-height:1.5;text-transform:up
 .levelGrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
 .levelBtn{padding:10px;background:#2b3563;border:3px solid var(--plum);color:white;box-shadow:inset 0 3px 0 #3d4a87,inset 0 -3px 0 #1e2549,3px 3px 0 #0a0d1f;cursor:pointer}
 .levelBtn:hover{background:#354175}
-.archetypeBtn{min-height:115px}.archetypeBtn strong{display:block;font-family:var(--pxfont);font-size:10px;color:var(--gold);margin-bottom:6px}
+.archetypeBtn{min-height:135px;height:100%;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;text-align:left}.archetypeBtn strong{display:block;flex:0 0 auto;width:100%;font-family:var(--pxfont);font-size:10px;line-height:1.5;color:var(--gold);margin:0 0 8px}.archetypeDesc{display:block;flex:1 1 auto;width:100%;text-align:left;line-height:1.25}.archetypeCount{display:block;flex:0 0 auto;width:100%;margin-top:10px;text-align:left}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .tabs{display:flex;gap:4px;margin-bottom:8px;position:sticky;top:0;background:var(--panel);padding:4px 0;z-index:2}
 .tab{flex:1;padding:6px;background:#2c3667;border:3px solid var(--plum);color:white;cursor:pointer;box-shadow:inset 0 2px 0 #3d4a87,inset 0 -2px 0 #1e2549}
@@ -280,11 +280,215 @@ let cameraDrag={active:false,pointerId:null,startX:0,startY:0,lastX:0,lastY:0,mo
 
 function levelDimensions(level){
  if(level===1)return {w:20,h:40};
+ if(level===5)return {w:20,h:40};
+ if(level===12)return {w:46,h:46};
+ if(level===13)return {w:40,h:82};
  return {w:Math.min(40,20+Math.floor((level-1)*1.5)),h:Math.min(64,40+Math.floor((level-1)*1.8))};
 }
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;}}
 function cpBox(cp,s){const o=Math.floor((s-1)/2);return {x:cp.x-o,y:cp.y-o,w:s,h:s};}
 function cpZoneRect(cp){return cpBox(cp,5);}
+
+const LEVEL5_LAYOUT=[
+ '....................',
+ '....................',
+ '....................',
+ '....................',
+ '....................',
+ '....................',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+ '........####........',
+];
+function makeLevel5Map(){
+ const w=20,h=40,grid=LEVEL5_LAYOUT.map(row=>[...row].map(ch=>ch==='#'?2:0));
+ const spawns=[{x:0,y:38,w:2,h:2},{x:9,y:0,w:2,h:2}];
+ const exits=[{x:18,y:38,w:2,h:2}];
+ const checkpoints=[{x:3,y:23,w:1,h:1},{x:15,y:23,w:1,h:1}];
+ for(const r of [...spawns,...exits,...checkpoints])for(let yy=r.y;yy<r.y+r.h;yy++)for(let xx=r.x;xx<r.x+r.w;xx++)grid[yy][xx]=0;
+ return {w,h,grid,spawns,exits,checkpoints,terrain:terrainRectsFromGrid(grid),decor:[],airExit:null,routeCheckpointIndices:[[0,1],[1]],routeUnlockWaves:[1,4],customLayout:'level5'};
+}
+
+const LEVEL12_LAYOUT=[
+ '##########....................................',
+ '######........................................',
+ '####..........................................',
+ '###...........................................',
+ '##............................................',
+ '#.............................................',
+ '#.............................................',
+ '#.............................................',
+ '#.............#################...............',
+ '#...........#####################.............',
+ '#................##################...........',
+ '........................############..........',
+ '..............................######..........',
+ '...............................#####..........',
+ '................................####..........',
+ '.................................####.........',
+ '..................................###.........',
+ '..................................###.........',
+ '..................................###.........',
+ '..................................###.........',
+ '..........#.......................###.........',
+ '..........#........................##.........',
+ '..........#........................#..........',
+ '.........##........................#..........',
+ '.........##........................#..........',
+ '.........###..................................',
+ '.........###..................................',
+ '.........####.................................',
+ '.........####.................................',
+ '.........#####................................',
+ '..........####................................',
+ '..........#####...............................',
+ '..........######..............................',
+ '...........######.............................',
+ '............#########.........................',
+ '.............################.................',
+ '...............###################............',
+ '................################.............#',
+ '.............................................#',
+ '.............................................#',
+ '.............................................#',
+ '.............................................#',
+ '............................................##',
+ '...........................................###',
+ '.........................................#####',
+ '....................................##########',
+];
+function makeLevel12Map(){
+ const w=46,h=46,grid=LEVEL12_LAYOUT.map(row=>[...row].map(ch=>ch==='#'?2:0));
+ const spawns=[{x:0,y:44,w:2,h:2},{x:44,y:0,w:2,h:2}];
+ const exits=[{x:22,y:22,w:2,h:2}];
+ const checkpoints=[{x:4,y:13,w:1,h:1},{x:40,y:31,w:1,h:1}];
+ for(const r of [...spawns,...exits,...checkpoints])for(let yy=r.y;yy<r.y+r.h;yy++)for(let xx=r.x;xx<r.x+r.w;xx++)grid[yy][xx]=0;
+ return {w,h,grid,spawns,exits,checkpoints,terrain:terrainRectsFromGrid(grid),decor:[],airExit:null,routeCheckpointIndices:[[0],[1]],routeUnlockWaves:[1,4],customLayout:'level12',noFlying:true};
+}
+
+const LEVEL13_LAYOUT=[
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '#########......................#########',
+ '#########......................#########',
+ '#########......................#########',
+ '#########......................#########',
+ '#########......................#########',
+ '#########......................#########',
+ '#########......................#########',
+ '##########....................##########',
+ '##########....................##########',
+ '##########....................##########',
+ '##########....................##########',
+ '##########....................##########',
+ '##########....................##########',
+ '##########....................##########',
+ '##########....................##########',
+ '##########....................##########',
+ '##########....................##########',
+ '##########....................##########',
+ '##########....................##########',
+ '###########..................###########',
+ '###########..................###########',
+ '###########..................###########',
+ '###########..................###########',
+ '###########..................###########',
+ '###########..................###########',
+ '###########..................###########',
+ '###########..................###########',
+ '###########..................###########',
+ '###########..................###########',
+ '###########..................###########',
+ '###########..................###########',
+ '###########..................###########',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '#############..............#############',
+ '#############..............#############',
+ '#############..............#############',
+ '#############..............#############',
+ '#############..............#############',
+ '#############..............#############',
+ '#############..............#############',
+ '#############..............#############',
+ '#############..............#############',
+ '#############..............#############',
+ '#############..............#############',
+ '#############..............#############',
+ '##############............##############',
+ '##############............##############',
+ '##############............##############',
+ '##############............##############',
+ '##############............##############',
+ '##############............##############',
+ '##############............##############',
+];
+function makeLevel13Map(){
+ const w=40,h=82,grid=LEVEL13_LAYOUT.map(row=>[...row].map(ch=>ch==='#'?2:0));
+ const spawns=[{x:0,y:0,w:2,h:2},{x:19,y:0,w:2,h:2},{x:38,y:0,w:2,h:2}];
+ const exits=[{x:19,y:80,w:2,h:2}];
+ const checkpoints=[{x:19,y:9,w:1,h:1},{x:20,y:48,w:1,h:1}];
+ for(const r of [...spawns,...exits,...checkpoints])for(let yy=r.y;yy<r.y+r.h;yy++)for(let xx=r.x;xx<r.x+r.w;xx++)grid[yy][xx]=0;
+ return {w,h,grid,spawns,exits,checkpoints,terrain:terrainRectsFromGrid(grid),decor:[],airExit:null,routeCheckpointIndices:[[0,1],[0,1],[0,1]],routeUnlockWaves:[1,1,1],customLayout:'level13'};
+}
 
 const LEVEL15_LAYOUT=[
  '...........######..######........#......',
@@ -495,7 +699,10 @@ function makeLevel7Map(){
 function makeMap(level,stage=1){
  if(state.mode==='endless')return makeEndlessMap();
  if(level===15)return makeLevel15Map();
+ if(level===13)return makeLevel13Map();
+ if(level===12)return makeLevel12Map();
  if(level===7)return makeLevel7Map();
+ if(level===5)return makeLevel5Map();
  const {w,h}=levelDimensions(level);
  const spawns=[],exits=[],checkpoints=[];
  const addRect=(arr,x,y,rw,rh)=>arr.push({x:Math.max(0,Math.min(w-rw,Math.floor(x))),y:Math.max(0,Math.min(h-rh,Math.floor(y))),w:rw,h:rh});
@@ -635,10 +842,11 @@ function generateEndlessWavePlan(wave){
 
 function generateWavePlan(level,stage,wave){
  if(state.mode==='endless')return generateEndlessWavePlan(wave);
- const max=getWaveMax(level),isBoss=wave===max;
+ const max=getWaveMax(level),bossWaves=level===12?[Math.max(6,Math.ceil(max*0.55)),max]:[max],isBoss=bossWaves.includes(wave);
  let type='basic';
  if(isBoss)type='boss';
  else if((level===1&&wave===5)||(level>=2&&wave>=4&&wave%4===1))type='flying';
+ if(level===12&&type==='flying')type=(wave%6===0?'armored':wave%4===0?'fast':wave%3===0?'slow':'basic');
  else if(wave%6===0)type='armored';
  else if(wave%4===0)type='fast';
  else if(wave%3===0)type='slow';
@@ -670,13 +878,20 @@ function generateWavePlan(level,stage,wave){
    const bossHP=Math.max(260,Math.round(totalNormalHP*1.1));
    const escortType=wave>=18?'armored':wave>=14?'fast':'basic';
    const escortHp=Math.round(hpBase*(escortType==='armored'?1.15:escortType==='fast'?.78:1));
+   if(level===12){
+     const bossCount=2;
+     const routeSequence=[0,1,...makeWeightedRouteSequence([0,1],escortCount,wave)];
+     return {type:'boss',count:bossCount+escortCount,hp:bossHP,bossHP,bossCount,escortCount,escortType,escortHp,bossReward:Math.max(1,Math.floor(combatRewardTarget*.38)),escortReward:escortCount?Math.max(1,Math.floor(combatRewardTarget*.24/escortCount)):0,combatRewardTarget,mazeGrant,rewardTarget,spawnGap:.46,isBoss:true,specialBoss:true,routeCount,activeRoutes:2,activeRouteIndices:[0,1],routeSequence,routeStartFractions:[0,0],tutorialHint:'Bosses attack from both spawns on this level.'};
+   }
    return {type:'boss',count:1+escortCount,hp:bossHP,bossHP,escortCount,escortType,escortHp,bossReward:Math.max(1,Math.floor(combatRewardTarget*.55)),escortReward:escortCount?Math.max(1,Math.floor(combatRewardTarget*.45/escortCount)):0,combatRewardTarget,mazeGrant,rewardTarget,spawnGap:escortCount?.7:1,isBoss:true,specialBoss:level>=7,routeCount,...schedule,tutorialHint:level===1?'Bosses resist displacement and can absorb much more damage.':''};
  }
  count=Math.max(type==='flying'?3:1,count);
  const reward=Math.max(1,Math.floor(combatRewardTarget/count)),rewardRemainder=Math.max(0,combatRewardTarget-reward*count);
  const spawnGap=type==='fast'?.38:type==='flying'?(level<=3?1.15:level<=7?.95:.78):type==='armored'?.8:type==='slow'?1:.62;
  const tutorialHint=level===1&&wave===5?'Flying creeps travel through every checkpoint. Dedicated anti-air towers deal bonus damage, while mixed-target towers are less efficient against them.':level===1&&wave===1?'Build towers to shape the ground route before starting the wave.':'';
- return {type,count,hp,reward,rewardRemainder,combatRewardTarget,mazeGrant,rewardTarget,spawnGap,unitSpeed,isBoss:false,specialBoss:false,routeCount,...schedule,tutorialHint};
+ let finalSchedule=schedule;
+ if(level===5&&type==='flying')finalSchedule={...schedule,activeRoutes:1,activeRouteIndices:[0],routeStartFractions:[0]};
+ return {type,count,hp,reward,rewardRemainder,combatRewardTarget,mazeGrant,rewardTarget,spawnGap,unitSpeed,isBoss:false,specialBoss:false,routeCount,...finalSchedule,tutorialHint};
 }
 
 function difficultyName(d){return d==='veryhard'?'Very Hard':capitalize(d);}
@@ -739,11 +954,11 @@ function showGuide(tab='how'){
  $('#menuModal').innerHTML=`<h1>Guide</h1>${nav}${body}<div class="sep"></div><button class="secondary" id="backMenu">Back</button>`;$$('.guideTab').forEach(b=>b.onclick=()=>showGuide(b.dataset.guide));$('#backMenu').onclick=showMainMenu;
  if(tab==='monsters')startDexAnim();else stopDexAnim();
 }
-function archetypeButtons(exclude=[]){let html='';for(const [id,a] of Object.entries(ARCHETYPES))if(!exclude.includes(id))html+=`<button class="menuBtn archetypeBtn" data-a="${id}"><strong style="color:${a.color}">${a.name}</strong>${a.desc}<br><span class="small">${TOWERS.filter(t=>t.arch===id).length} towers</span></button>`;return html;}
+function archetypeButtons(exclude=[]){let html='';for(const [id,a] of Object.entries(ARCHETYPES))if(!exclude.includes(id))html+=`<button class="menuBtn archetypeBtn" data-a="${id}"><strong style="color:${a.color}">${a.name}</strong><span class="archetypeDesc">${a.desc}</span><span class="small archetypeCount">${TOWERS.filter(t=>t.arch===id).length} towers</span></button>`;return html;}
 function showArchetypes(){state.mode='campaign';state.secondaryArchetype=null;state.secondArchetypeUnlocked=false;enterTitleScreen('page');let html=`<h2>Level ${state.level}: Choose Archetype</h2><p class="help">Difficulty: <b class="gold">${difficultyName(prefs.difficulty)}</b><br>The archetype is locked for the entire level. Level preview: ${previewText(state.level)}</p><div class="menuGrid">${archetypeButtons()}</div><div class="sep"></div><button class="secondary" id="backLevels">Back</button>`;$('#menuModal').innerHTML=html;$$('.archetypeBtn').forEach(b=>b.onclick=()=>{state.archetype=b.dataset.a;state.difficulty=prefs.difficulty;startLevel();});$('#backLevels').onclick=showLevelSelect;}
 function showEndlessArchetypes(){state.mode='endless';state.level=0;state.secondaryArchetype=null;state.secondArchetypeUnlocked=false;enterTitleScreen('page');$('#menuModal').innerHTML=`<h2>Endless: Choose Starting Archetype</h2><p class="help">Infinite waves · flying every 6th wave · boss every 10th wave · second archetype after Wave 20.<br>Difficulty: <b class="gold">${difficultyName(prefs.difficulty)}</b></p><div class="menuGrid">${archetypeButtons()}</div><div class="sep"></div><button class="secondary" id="backMenu">Back</button>`;$$('.archetypeBtn').forEach(b=>b.onclick=()=>{state.archetype=b.dataset.a;state.difficulty=prefs.difficulty;startLevel();});$('#backMenu').onclick=showMainMenu;}
 function showSecondArchetypePrompt(){if(state.mode!=='endless'||state.secondaryArchetype)return;state.paused=true;$('#menuOverlay').classList.remove('hidden');$('#resultModal').innerHTML=`<h1>Second Archetype Unlocked</h1><p>You survived 20 waves. Choose another archetype; both tower catalogues remain available for the rest of this run.</p><div class="menuGrid">${archetypeButtons([state.archetype])}</div>`;$$('#resultModal .archetypeBtn').forEach(b=>b.onclick=()=>{state.secondaryArchetype=b.dataset.a;state.secondArchetypeUnlocked=true;state.paused=false;$('#menuOverlay').classList.add('hidden');renderTowerList();updateUI();autosave();toast(`${ARCHETYPES[state.secondaryArchetype].name} towers unlocked`);});}
-function previewText(l){const {w,h}=levelDimensions(l),waves=getWaveMax(l);if(l===1)return `10-wave tutorial · ${w}×${h} map · flying at Wave 5 · boss at Wave 10`;if(l===7)return `${waves} waves · custom ${w}×${h} Z-shaped map · one spawn · two bend checkpoints · special-ability boss`;if(l===15)return `${waves} waves · custom ${w}×${h} layout · three spawns · Spawn 3 unlocks on Wave 11 · split checkpoints`;const parts=[`${waves} waves`,`${w}×${h} map`,l>=3?'terrain / irregular edges':'open terrain',l>=5?'multiple routes · two checkpoints':'one checkpoint',l>=7?'special-ability boss':'boss finale'];return parts.join(' · ');}
+function previewText(l){const {w,h}=levelDimensions(l),waves=getWaveMax(l);if(l===1)return `10-wave tutorial · ${w}×${h} map · flying at Wave 5 · boss at Wave 10`;if(l===5)return `${waves} waves · custom ${w}×${h} split-wall map · bottom-left opening route · flying uses both checkpoints`;if(l===7)return `${waves} waves · custom ${w}×${h} Z-shaped map · one spawn · two bend checkpoints · special-ability boss`;if(l===15)return `${waves} waves · custom ${w}×${h} layout · three spawns · Spawn 3 unlocks on Wave 11 · split checkpoints`;const parts=[`${waves} waves`,`${w}×${h} map`,l>=3?'terrain / irregular edges':'open terrain',l>=5?'multiple routes · two checkpoints':'one checkpoint',l>=7?'special-ability boss':'boss finale'];return parts.join(' · ');}
 function continueSave(){const raw=localStorage.getItem('amazingTD_save');if(!raw){toast('No autosave found');return;}try{const s=JSON.parse(raw);Object.assign(state,s.meta);state.level=clamp(state.level||1,1,15);state.stage=1;startLevel(true,s);}catch(e){toast('Autosave could not be loaded');}}
 
 function startLevel(fromSave=false,save=null){
@@ -779,7 +994,7 @@ function updateUI(){
   waveCard.innerHTML=`${state.mode==='endless'?'<h3>Endless Forecast</h3><div class="small">Flying every 6th · Boss every 10th</div><div class="sep"></div>':state.wave>=state.waveMax&&state.phase==='build'?'<h3>Level Cleared</h3><div class="help good">All waves complete.</div><div class="sep"></div>':''}<div class="waveList">${rows.join('')}</div>`;
   waveCard.dataset.key=waveCardKey;
  }
- $('#rulesCard').innerHTML=`${map?.checkpoints.length||0} checkpoint(s)<br>${map?.spawns.length||0} spawn(s)<br>${map?.exits.length||0} exit(s)<br>${map?.terrain.length||0} terrain feature(s)${map?.customLayout==='endless'?'<br><br><span class="good">Infinite waves. Pink spawn unlocks after Wave 20 at reduced density.</span><br><span class="modeNote">Second archetype: '+(state.secondaryArchetype?ARCHETYPES[state.secondaryArchetype].name:state.wave>=20?'Choose after this wave':'unlocks after Wave 20')+'</span>':map?.customLayout==='level7'?'<br><br><span class="good">Custom Z-shaped battlefield with one route through both bends.</span>':map?.customLayout==='level15'?'<br><br><span class="good">Spawn 3 unlocks on Wave 11 and bypasses checkpoints.</span>':''}<br><br>${state.difficulty==='standard'?'Unlimited planning':state.difficulty==='hard'?'60-second planning':'30-second planning'}`;
+ $('#rulesCard').innerHTML=`${map?.checkpoints.length||0} checkpoint(s)<br>${map?.spawns.length||0} spawn(s)<br>${map?.exits.length||0} exit(s)<br>${map?.terrain.length||0} terrain feature(s)${map?.customLayout==='endless'?'<br><br><span class="good">Infinite waves. Pink spawn unlocks after Wave 20 at reduced density.</span><br><span class="modeNote">Second archetype: '+(state.secondaryArchetype?ARCHETYPES[state.secondaryArchetype].name:state.wave>=20?'Choose after this wave':'unlocks after Wave 20')+'</span>':map?.customLayout==='level5'?'<br><br><span class="good">Bottom-left opens first. Flying always starts there and visits both checkpoints.</span>':map?.customLayout==='level7'?'<br><br><span class="good">Custom Z-shaped battlefield with one route through both bends.</span>':map?.customLayout==='level15'?'<br><br><span class="good">Spawn 3 unlocks on Wave 11 and bypasses checkpoints.</span>':''}<br><br>${state.difficulty==='standard'?'Unlimited planning':state.difficulty==='hard'?'60-second planning':'30-second planning'}`;
  const plannedRoutes=wavePlan?.activeRouteIndices||[0];
  $('#legend').innerHTML=(map?.spawns.length||1)>1?plannedRoutes.map(i=>`<div><span class="dot" style="background:${routeColor(i)}"></span>Route ${i+1} → Exit ${i+1}</div>`).join(''):`<div><span class="dot g"></span>Ground route</div><div><span class="dot a"></span>Flying route</div>`;
  $('#undoBtn').disabled=state.phase!=='build'||state.paused||!(state.undoStack?.length);
