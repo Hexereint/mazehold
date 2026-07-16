@@ -14,7 +14,7 @@ button{font-family:var(--pxfont);font-size:9px;line-height:1.5;text-transform:up
 #app{width:100%;height:100%;display:grid;grid-template-rows:auto 1fr auto;background:var(--bg)}
 #topbar{height:54px;display:flex;align-items:center;gap:12px;padding:6px 12px;background:var(--panel2);border-bottom:4px solid var(--plum);box-shadow:inset 0 3px 0 #39457e,inset 0 -3px 0 #141a38;z-index:5}
 .logo{font-family:var(--pxfont);font-size:13px;color:var(--gold);text-shadow:2px 2px 0 #7a4a1f}
-.stat{padding:4px 10px;background:#2b3563;border:3px solid var(--plum);box-shadow:inset 0 2px 0 #414e8c,inset 0 -2px 0 #1b2244;white-space:nowrap;font-size:21px}
+.stat{padding:4px 10px;background:#2b3563;border:3px solid var(--plum);box-shadow:inset 0 2px 0 #414e8c,inset 0 -2px 0 #1b2244;white-space:nowrap;font-size:21px}.stat.withIcon{display:flex;align-items:center;gap:7px}.pixelIcon{display:inline-block;position:relative;width:17px;height:17px;flex:0 0 17px;image-rendering:pixelated}.pixelIcon::before,.pixelIcon::after{content:"";position:absolute;width:3px;height:3px}.pixelCoin::before{left:1px;top:1px;background:#7a4a1f;box-shadow:3px 0 #7a4a1f,6px 0 #7a4a1f,9px 0 #7a4a1f,12px 0 #7a4a1f,0 3px #7a4a1f,3px 3px #ffd95e,6px 3px #ffd95e,9px 3px #ffd95e,12px 3px #7a4a1f,0 6px #7a4a1f,3px 6px #ffd95e,6px 6px #fff0a0,9px 6px #ffd95e,12px 6px #7a4a1f,0 9px #7a4a1f,3px 9px #ffd95e,6px 9px #ffd95e,9px 9px #ffd95e,12px 9px #7a4a1f,3px 12px #7a4a1f,6px 12px #7a4a1f,9px 12px #7a4a1f}.pixelHeart::before{left:1px;top:2px;background:#7c1f31;box-shadow:3px 0 #ff6d84,9px 0 #ff6d84,12px 0 #7c1f31,0 3px #ff6d84,3px 3px #ff8f9e,6px 3px #ff6d84,9px 3px #ff8f9e,12px 3px #ff6d84,0 6px #7c1f31,3px 6px #ff6d84,6px 6px #ff6d84,9px 6px #ff6d84,12px 6px #7c1f31,3px 9px #7c1f31,6px 9px #ff6d84,9px 9px #7c1f31,6px 12px #7c1f31}
 .spacer{flex:1}.small{font-size:17px;color:var(--muted)}
 #main{display:grid;grid-template-columns:270px 1fr 290px;min-height:0}
 .side{background:var(--panel);border-right:4px solid var(--plum);overflow:auto;padding:10px}.side.right{border-right:0;border-left:4px solid var(--plum)}
@@ -26,8 +26,9 @@ button{font-family:var(--pxfont);font-size:9px;line-height:1.5;text-transform:up
 .towerBtn{width:100%;text-align:left;background:#28316000;background-color:#283160;color:var(--ink);border:3px solid var(--plum);box-shadow:inset 0 3px 0 #3a4681,inset 0 -3px 0 #1c2447,3px 3px 0 #0a0d1f;padding:8px 10px;cursor:pointer;font-family:var(--bodyfont);font-size:19px;text-transform:none;letter-spacing:0}
 .towerBtn:hover{background-color:#334077}
 .towerBtn.selected{border-color:var(--gold);box-shadow:inset 0 3px 0 #3a4681,inset 0 -3px 0 #1c2447,3px 3px 0 #0a0d1f,0 0 0 2px var(--gold)}
-.towerBtn .name{font-family:var(--pxfont);font-size:9px;letter-spacing:.5px}
-.towerBtn .meta{font-size:17px;color:#bcc6ef;margin-top:3px}
+.towerBtn .nameRow{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:7px}.towerBtn .name{font-family:var(--pxfont);font-size:11px;line-height:1.45;letter-spacing:.5px;color:#fff3ad}.towerBtn .cost{flex:0 0 auto;font-family:var(--pxfont);font-size:8px;line-height:1.5;color:var(--gold)}
+.towerBtn .combatLine{display:flex;align-items:center;justify-content:space-between;gap:7px;font-size:17px;line-height:1.1}.towerBtn .damageType{text-transform:uppercase;font-size:15px;color:#d8def8}.towerBtn .damageType.physical{color:#ffd6a2}.towerBtn .damageType.flying{color:var(--air)}.towerBtn .damageType.magic{color:#a8d8ff}.towerBtn .damageType.support{color:#8ff0b5}.towerBtn .damageValue{color:#fff;font-weight:700;text-align:right}.towerBtn .statLine{display:flex;justify-content:space-between;gap:8px;margin-top:4px;font-size:16px;color:#bcc6ef}.towerBtn .sizeLine{margin-top:6px;padding-top:5px;border-top:2px solid rgba(77,90,160,.55);font-size:15px;color:#929bc7;text-align:right}
+#towerHoverCard{position:absolute;left:12px;top:12px;z-index:7;width:min(330px,calc(100% - 24px));max-height:calc(100% - 24px);overflow:auto;pointer-events:none;background:rgba(26,33,64,.98);border:3px solid var(--gold);box-shadow:inset 0 3px 0 #39457e,5px 5px 0 #05070f;padding:12px}#towerHoverCard h3{margin:0 0 6px;font-family:var(--pxfont);font-size:11px;line-height:1.45;color:var(--gold)}#towerHoverCard .hoverSub{font-size:17px;color:#bfc8ef;margin-bottom:7px}#towerHoverCard .hoverStats{display:grid;grid-template-columns:1fr auto;gap:4px 10px;margin-top:8px;font-size:18px}#towerHoverCard .hoverStats b{text-align:right;color:#fff}#towerHoverCard .hoverEffect{margin:9px 0 0;color:#cbd3f4;font-size:18px;line-height:1.2}#towerHoverCard .upgradeLine{display:grid;grid-template-columns:1fr auto auto auto;gap:6px;align-items:center;font-size:17px;margin-top:4px}#towerHoverCard .upgradeLine .from{color:#c2caeb}#towerHoverCard .upgradeLine .arrow{color:var(--gold)}#towerHoverCard .upgradeLine .to{color:#8ff0b5;font-weight:700}.towerActionWrap{display:inline-flex}
 .tier-low{border-left:8px solid #7bdc96}.tier-mid{border-left:8px solid #74b8ff}.tier-high{border-left:8px solid #d198ff}
 #bottom{min-height:58px;background:var(--panel2);border-top:4px solid var(--plum);display:flex;align-items:center;gap:8px;padding:8px 12px;z-index:5;box-shadow:inset 0 3px 0 #39457e}
 .primary{background:var(--gold);border:3px solid #7a4a1f;color:#3d2708;padding:10px 14px;box-shadow:inset 0 3px 0 #fff0b0,inset 0 -3px 0 #d8a636,0 4px 0 #7a4a1f;cursor:pointer}
@@ -94,8 +95,8 @@ button{font-family:var(--pxfont);font-size:9px;line-height:1.5;text-transform:up
 <div id="app" class="hidden">
   <div id="topbar">
     <div class="logo">MAZEHOLD</div>
-    <div class="stat">Gold <b id="goldText" class="gold">0</b></div>
-    <div class="stat">Lives <b id="livesText">15</b></div>
+    <div class="stat withIcon"><span class="pixelIcon pixelCoin" aria-hidden="true"></span><span>Gold <b id="goldText" class="gold">0</b></span></div>
+    <div class="stat withIcon"><span class="pixelIcon pixelHeart" aria-hidden="true"></span><span>Lives <b id="livesText">15</b></span></div>
     <div class="stat"><span id="levelLabel">LEVEL</span> <span id="levelText">1</span> · WAVE <span id="waveText">0</span><span id="waveDivider">/</span><span id="waveMaxText">10</span></div>
     <div class="stat" id="phaseText">Planning</div>
     <div class="spacer"></div>
@@ -112,10 +113,11 @@ button{font-family:var(--pxfont);font-size:9px;line-height:1.5;text-transform:up
       <canvas id="glCanvas"></canvas>
       <canvas id="gameCanvas"></canvas>
       <div id="towerMenu" class="hidden">
-        <button id="upgradeBtn" class="secondary" disabled>Upgrade</button>
+        <span id="upgradeHoverTarget" class="towerActionWrap"><button id="upgradeBtn" class="secondary" disabled>Upgrade</button></span>
         <button id="moveBtn" class="secondary" disabled>Move</button>
         <button id="sellBtn" class="secondary danger" disabled>Sell</button>
       </div>
+      <div id="towerHoverCard" class="hidden"></div>
       <div id="toast" class="toast hidden"></div>
       <div id="countdown" class="countdown hidden"></div>
       <div class="legend" id="legend"><div><span class="dot g"></span>Ground route</div><div><span class="dot a"></span>Flying route</div></div>
@@ -281,6 +283,7 @@ let cameraDrag={active:false,pointerId:null,startX:0,startY:0,lastX:0,lastY:0,mo
 function levelDimensions(level){
  if(level===1)return {w:20,h:40};
  if(level===5)return {w:20,h:40};
+ if(level===8)return {w:60,h:30};
  if(level===12)return {w:46,h:46};
  if(level===13)return {w:40,h:82};
  return {w:Math.min(40,20+Math.floor((level-1)*1.5)),h:Math.min(64,40+Math.floor((level-1)*1.8))};
@@ -338,6 +341,47 @@ function makeLevel5Map(){
  const checkpoints=[{x:3,y:23,w:1,h:1},{x:15,y:23,w:1,h:1}];
  for(const r of [...spawns,...exits,...checkpoints])for(let yy=r.y;yy<r.y+r.h;yy++)for(let xx=r.x;xx<r.x+r.w;xx++)grid[yy][xx]=0;
  return {w,h,grid,spawns,exits,checkpoints,terrain:terrainRectsFromGrid(grid),decor:[],airExit:null,routeCheckpointIndices:[[0,1],[1]],routeUnlockWaves:[1,4],customLayout:'level5'};
+}
+
+const LEVEL8_LAYOUT=[
+ '............####################################............',
+ '...............##############################...............',
+ '..................########################..................',
+ '....................####################....................',
+ '.......................##############.......................',
+ '........................############........................',
+ '.........................##########.........................',
+ '...........................######...........................',
+ '.............................##.............................',
+ '............................................................',
+ '............................................................',
+ '............................................................',
+ '............................................................',
+ '............................................................',
+ '............................................................',
+ '............................................................',
+ '............................................................',
+ '............................................................',
+ '............................................................',
+ '............................................................',
+ '............................................................',
+ '.............................##.............................',
+ '...........................######...........................',
+ '.........................##########.........................',
+ '........................############........................',
+ '.......................##############.......................',
+ '....................####################....................',
+ '..................########################..................',
+ '...............##############################...............',
+ '............####################################............',
+];
+function makeLevel8Map(){
+ const w=60,h=30,grid=LEVEL8_LAYOUT.map(row=>[...row].map(ch=>ch==='#'?2:0));
+ const spawns=[{x:0,y:14,w:2,h:2},{x:58,y:14,w:2,h:2}];
+ const exits=[{x:29,y:14,w:2,h:2}];
+ const checkpoints=[{x:14,y:14,w:1,h:1},{x:45,y:14,w:1,h:1}];
+ for(const r of [...spawns,...exits,...checkpoints])for(let yy=r.y;yy<r.y+r.h;yy++)for(let xx=r.x;xx<r.x+r.w;xx++)grid[yy][xx]=0;
+ return {w,h,grid,spawns,exits,checkpoints,terrain:terrainRectsFromGrid(grid),decor:[],airExit:null,routeCheckpointIndices:[[0],[1]],routeUnlockWaves:[1,1],customLayout:'level8'};
 }
 
 const LEVEL12_LAYOUT=[
@@ -669,7 +713,7 @@ function makeEndlessMap(){
  // Spawn order: top-left, top-center, top-right, bottom-left, bottom-right, pink/late.
  const spawns=[{x:6,y:0,w:2,h:2},{x:27,y:0,w:2,h:2},{x:48,y:0,w:2,h:2},{x:15,y:59,w:2,h:2},{x:39,y:59,w:2,h:2},{x:27,y:63,w:2,h:2}];
  const exits=[{x:27,y:84,w:2,h:2}];
- const checkpoints=[{x:6,y:21,w:1,h:1},{x:27,y:22,w:1,h:1},{x:49,y:21,w:1,h:1},{x:6,y:74,w:1,h:1},{x:28,y:75,w:1,h:1},{x:49,y:74,w:1,h:1}];
+ const checkpoints=[{x:6,y:21,w:1,h:1},{x:27,y:21,w:1,h:1},{x:49,y:21,w:1,h:1},{x:6,y:74,w:1,h:1},{x:28,y:74,w:1,h:1},{x:49,y:74,w:1,h:1}];
  // Top routes: nearest upper checkpoint, nearest lower-side checkpoint, then bottom-center.
  // Bottom routes: nearest lower-side checkpoint, then bottom-center. Pink goes to bottom-center.
  const routeCheckpointIndices=[[0,3,4],[1,3,4],[2,5,4],[3,4],[5,4],[4]];
@@ -701,6 +745,7 @@ function makeMap(level,stage=1){
  if(level===15)return makeLevel15Map();
  if(level===13)return makeLevel13Map();
  if(level===12)return makeLevel12Map();
+ if(level===8)return makeLevel8Map();
  if(level===7)return makeLevel7Map();
  if(level===5)return makeLevel5Map();
  const {w,h}=levelDimensions(level);
@@ -973,7 +1018,17 @@ function startLevel(fromSave=false,save=null){
 function resetCamera(){camera.x=0;camera.y=0;camera.zoom=1;}
 
 function availableArchetypes(){return [state.archetype,state.secondaryArchetype].filter((v,i,a)=>v&&a.indexOf(v)===i);}
-function renderTowerList(){const list=$('#towerList'),arches=availableArchetypes();$('#archTitle').textContent=arches.map(a=>ARCHETYPES[a].name).join(' + ');const active=$('.tab.active')?.dataset.tier||'all';list.innerHTML='';TOWERS.filter(t=>arches.includes(t.arch)&&(active==='all'||t.tier===active)).forEach(t=>{const b=document.createElement('button');b.className=`towerBtn tier-${t.tier}`;b.innerHTML=`<div class="name">${t.name} <span class="gold">${t.cost}g</span></div><div class="meta">${ARCHETYPES[t.arch].name} · ${t.footprint}×${t.footprint} · ${t.utility?'Utility':t.type} · ${t.range} range${t.dmg?` · ${t.dmg[0]}–${t.dmg[1]}`:''}</div>`;b.onclick=()=>selectBuild(t.id,b);list.appendChild(b);});}
+function towerAttackSpeedLabel(t){return t.interval>0?`${(1/t.interval).toFixed(t.interval<1?2:1)}/s`:'—';}
+function towerDamageTypeLabel(t){return t.utility?'Support':capitalize(t.type);}
+function towerDamageLabel(t,upgrade=0){return t.dmg?scaledDamageText(t,upgrade):'—';}
+function towerTargetSummary(t){return (t.target||[]).map(x=>capitalize(x)).join(', ')||'—';}
+function towerHoverHtml(t){return `<h3>${t.name}</h3><div class="hoverSub">${ARCHETYPES[t.arch].name} · ${capitalize(t.tier)} · <span class="gold">${t.cost}g</span></div><span class="tag ${t.type}">${towerDamageTypeLabel(t)}</span><div class="hoverStats"><span>Damage</span><b>${towerDamageLabel(t)}</b><span>Attack speed</span><b>${towerAttackSpeedLabel(t)}</b><span>Attack range</span><b>${t.range}</b><span>Targets</span><b>${towerTargetSummary(t)}</b><span>Grid size</span><b>${t.footprint}×${t.footprint}</b></div><p class="hoverEffect">${t.effect||'No additional effect.'}</p>`;}
+function showTowerHover(t){const card=$('#towerHoverCard');if(!card||state.screen!=='game')return;card.innerHTML=towerHoverHtml(t);card.classList.remove('hidden');}
+function hideTowerHover(){const card=$('#towerHoverCard');if(card)card.classList.add('hidden');}
+function fmtUpgradeNumber(v,suffix=''){const n=Math.round(v*100)/100;return `${Number.isInteger(n)?n:n.toFixed(2).replace(/0+$/,'').replace(/\.$/,'')}${suffix}`;}
+function upgradePreviewRows(d,u){const rows=[],cur20=1+.2*u,next20=1+.2*(u+1),cur10=1+.1*u,next10=1+.1*(u+1);if(d.dmg)rows.push(['Damage',scaledDamageText(d,u),scaledDamageText(d,u+1)]);if(d.slow)rows.push(['Slow',fmtUpgradeNumber(d.slow*cur10*100,'%'),fmtUpgradeNumber(d.slow*next10*100,'%')]);if(d.stun)rows.push(['Stun',fmtUpgradeNumber(d.stun*cur10,'s'),fmtUpgradeNumber(d.stun*next10,'s')]);if(d.burn)rows.push(['Burn / tick',fmtUpgradeNumber(d.burn*cur10),fmtUpgradeNumber(d.burn*next10)]);if(d.poison)rows.push(['Poison / tick',fmtUpgradeNumber(d.poison*cur10),fmtUpgradeNumber(d.poison*next10)]);if(d.push)rows.push(['Push',`${Math.round(d.push*cur10)} cells`,`${Math.round(d.push*next10)} cells`]);if(d.utility&&d.pulse){if(['armorDown','fireAmp','physicalArmorDown'].includes(d.pulse)&&d.power)rows.push(['Effect power',fmtUpgradeNumber(d.power*cur10*100,'%'),fmtUpgradeNumber(d.power*next10*100,'%')]);if(['freeze','stun'].includes(d.pulse)&&d.power)rows.push(['Effect duration',fmtUpgradeNumber(d.power*cur10,'s'),fmtUpgradeNumber(d.power*next10,'s')]);if(d.pulse==='corrode'){rows.push(['Armor reduction',fmtUpgradeNumber(d.power*cur10*100,'%'),fmtUpgradeNumber(d.power*next10*100,'%')]);rows.push(['Slow',fmtUpgradeNumber(d.slow*cur10*100,'%'),fmtUpgradeNumber(d.slow*next10*100,'%')]);}if(d.pulse==='blackhole'){rows.push(['Pull',`${Math.round(d.pull*cur10)} cells`,`${Math.round(d.pull*next10)} cells`]);rows.push(['Slow',fmtUpgradeNumber(d.slow*cur10*100,'%'),fmtUpgradeNumber(d.slow*next10*100,'%')]);}if(d.pulse==='undertow')rows.push(['Pull',`${Math.round(d.pull*cur10)} cells`,`${Math.round(d.pull*next10)} cells`]);}return rows;}
+function showUpgradeHover(){const tw=state.selectedTower,card=$('#towerHoverCard');if(!tw||!card||state.screen!=='game')return;const d=BY_ID[tw.id],cost=Math.ceil(d.cost*1.2);if(tw.upgrade>=3){card.innerHTML=`<h3>${d.name}</h3><div class="hoverSub">Maximum upgrade reached</div><div class="hoverStats"><span>Upgrade level</span><b>3 / 3</b></div>`;card.classList.remove('hidden');return;}const rows=upgradePreviewRows(d,tw.upgrade);card.innerHTML=`<h3>Upgrade Preview</h3><div class="hoverSub">${d.name} · Level ${tw.upgrade} → ${tw.upgrade+1} · <span class="gold">${cost}g</span></div>${rows.length?rows.map(r=>`<div class="upgradeLine"><span>${r[0]}</span><span class="from">${r[1]}</span><span class="arrow">→</span><span class="to">${r[2]}</span></div>`).join(''):'<p class="hoverEffect">This upgrade increases the tower level, but its displayed combat stats do not change.</p>'}<p class="hoverEffect">Attack range and attack speed remain unchanged.</p>`;card.classList.remove('hidden');}
+function renderTowerList(){const list=$('#towerList'),arches=availableArchetypes();$('#archTitle').textContent=arches.map(a=>ARCHETYPES[a].name).join(' + ');const active=$('.tab.active')?.dataset.tier||'all';list.innerHTML='';TOWERS.filter(t=>arches.includes(t.arch)&&(active==='all'||t.tier===active)).forEach(t=>{const b=document.createElement('button');b.className=`towerBtn tier-${t.tier}`;b.innerHTML=`<div class="nameRow"><span class="name">${t.name}</span><span class="cost">${t.cost}g</span></div><div class="combatLine"><span class="damageType ${t.utility?'support':t.type}">${towerDamageTypeLabel(t)}</span><span class="damageValue">${t.dmg?`${t.dmg[0]}–${t.dmg[1]} DMG`:'No direct DMG'}</span></div><div class="statLine"><span>Range ${t.range}</span><span>ATK ${towerAttackSpeedLabel(t)}</span></div><div class="sizeLine">${t.footprint}×${t.footprint} grid</div>`;b.onclick=()=>selectBuild(t.id,b);b.onmouseenter=()=>showTowerHover(t);b.onmouseleave=hideTowerHover;b.onfocus=()=>showTowerHover(t);b.onblur=hideTowerHover;list.appendChild(b);});}
 function selectBuild(id,btn){if(state.paused)return;state.selectedBuild=id;state.selectedTower=null;state.movingTower=null;$$('.towerBtn').forEach(b=>b.classList.remove('selected'));btn?.classList.add('selected');updateSelectionCard();}
 $$('.tab').forEach(t=>t.onclick=()=>{$$('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');renderTowerList();});
 
@@ -1004,7 +1059,7 @@ function updateSelectionCard(){
  const c=$('#selectionCard'),u=$('#upgradeBtn'),m=$('#moveBtn'),s=$('#sellBtn');u.disabled=m.disabled=s.disabled=true;
  if(state.selectedCreep&&(state.selectedCreep.dead||state.screen!=='game'))state.selectedCreep=null;
  $('#towerMenu').classList.toggle('hidden',!(state.selectedTower&&state.screen==='game'&&!state.movingTower));
- if(state.selectedTower){const tw=state.selectedTower,d=BY_ID[tw.id],upCost=Math.ceil(d.cost*1.2);c.innerHTML=`<h3>${d.name}</h3><span class="tag ${d.type}">${d.type}</span><span class="tag">${d.footprint}×${d.footprint}</span><div class="sep"></div><div class="kv"><span>Upgrade</span><b>${tw.upgrade}/3</b><span>HP</span><b>${tw.hp}/5</b><span>Kills</span><b>${tw.kills||0}</b><span>Range</span><b>${d.range}</b>${d.dmg?`<span>Damage</span><b>${scaledDamageText(d,tw.upgrade)}</b>`:''}<span>Interval</span><b>${d.interval||'—'}</b></div><p class="help">${d.effect}</p>`;u.disabled=tw.upgrade>=3||state.gold<upCost||state.paused;m.disabled=state.paused;s.disabled=state.paused;u.textContent=`Upgrade ${upCost}g`;m.textContent='Move Free';s.textContent=`Sell ${sellValue(tw)}g`;
+ if(state.selectedTower){const tw=state.selectedTower,d=BY_ID[tw.id],upCost=Math.ceil(d.cost*1.2);c.innerHTML=`<h3>${d.name}</h3><span class="tag ${d.type}">${d.type}</span><span class="tag">${d.footprint}×${d.footprint}</span><div class="sep"></div><div class="kv"><span>Upgrade</span><b>${tw.upgrade}/3</b><span>HP</span><b>${tw.hp}/5</b><span>Kills</span><b>${tw.kills||0}</b><span>Range</span><b>${d.range}</b>${d.dmg?`<span>Damage</span><b>${scaledDamageText(d,tw.upgrade)}</b>`:''}<span>Interval</span><b>${d.interval||'—'}</b></div><p class="help">${d.effect}</p>`;u.disabled=tw.upgrade>=3||state.gold<upCost||state.paused;m.disabled=state.paused;s.disabled=state.paused;u.textContent=`Upgrade ${upCost}g`;m.textContent='Move';s.textContent=`Sell ${sellValue(tw)}g`;
  }else if(state.selectedBuild){const d=BY_ID[state.selectedBuild];c.innerHTML=`<h3>${d.name}</h3><div class="kv"><span>Cost</span><b class="gold">${d.cost}</b><span>Footprint</span><b>${d.footprint}×${d.footprint}</b><span>Range</span><b>${d.range}</b>${d.dmg?`<span>Damage</span><b>${d.dmg[0]}–${d.dmg[1]}</b>`:''}<span>Targets</span><b>${d.target.join(', ')}</b></div><p class="help">${d.effect}</p>`;
  }else if(state.selectedCreep){const cr=state.selectedCreep,skinList=CREEP_SKINS[cr.kind],names={[cr.kind]:(skinList&&skinList[cr.skin||0]||{name:capitalize(cr.kind)}).name};
   const status=[cr.frozen>0?'Frozen':null,cr.stunned>0?'Stunned':null,cr.burn?'Burning':null,cr.poisons?.length?'Poisoned':null,combinedSlow(cr)>0?'Slowed':null].filter(Boolean).join(', ')||'None';
@@ -1781,7 +1836,7 @@ canvas.addEventListener('contextmenu',e=>{e.preventDefault();state.selectedBuild
 canvas.addEventListener('wheel',e=>{e.preventDefault();camera.zoom=clamp(camera.zoom*(e.deltaY<0?1.12:.89),.65,2.5);},{passive:false});
 window.addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(k==='escape'){togglePause();return;}keysHeld[k]=true;});window.addEventListener('keyup',e=>keysHeld[e.key.toLowerCase()]=false);
 
-$('#startWaveBtn').onclick=startWave;$('#togglePathBtn').onclick=()=>{state.pathVisible=!state.pathVisible;updateUI();autosave();};$('#undoBtn').onclick=undoLastBuild;$('#speedBtn').onclick=()=>{const speeds=[1,2,3],i=speeds.indexOf(state.speed);state.speed=speeds[(i+1)%speeds.length];updateUI();autosave();};$('#pauseBtn').onclick=togglePause;$('#resumeBtn').onclick=togglePause;$('#upgradeBtn').onclick=upgradeSelected;$('#sellBtn').onclick=sellSelected;$('#moveBtn').onclick=moveSelected;
+$('#startWaveBtn').onclick=startWave;$('#togglePathBtn').onclick=()=>{state.pathVisible=!state.pathVisible;updateUI();autosave();};$('#undoBtn').onclick=undoLastBuild;$('#speedBtn').onclick=()=>{const speeds=[1,2,3],i=speeds.indexOf(state.speed);state.speed=speeds[(i+1)%speeds.length];updateUI();autosave();};$('#pauseBtn').onclick=togglePause;$('#resumeBtn').onclick=togglePause;$('#upgradeBtn').onclick=upgradeSelected;$('#sellBtn').onclick=sellSelected;$('#moveBtn').onclick=moveSelected;$('#upgradeHoverTarget').onmouseenter=showUpgradeHover;$('#upgradeHoverTarget').onmouseleave=hideTowerHover;
 function upgradeSelected(){const tw=state.selectedTower;if(!tw||tw.upgrade>=3)return;const d=BY_ID[tw.id],cost=Math.ceil(d.cost*1.2);if(state.gold<cost)return;state.gold-=cost;tw.upgrade++;tw.totalValue+=cost;state.undoStack=[];updateUI();autosave();}
 function sellSelected(){const tw=state.selectedTower;if(!tw)return;state.gold+=sellValue(tw);state.towers.splice(state.towers.indexOf(tw),1);state.selectedTower=null;state.undoStack=[];afterMapChange();}
 function moveSelected(){const tw=state.selectedTower;if(!tw)return;state.movingTower=tw;state.selectedTower=null;updateSelectionCard();syncCursor();toast('Choose a new location — movement is free');}
