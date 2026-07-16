@@ -69,23 +69,23 @@ button{font-family:var(--pxfont);font-size:9px;line-height:1.5;text-transform:up
 #towerMenu{position:absolute;z-index:6;display:flex;gap:6px;padding:6px;background:#2b3563;border:3px solid var(--gold);box-shadow:4px 4px 0 #05070f,inset 0 2px 0 #3d4a87;right:12px;top:12px;left:auto;transform:none;pointer-events:auto}
 #towerMenu button{padding:7px 9px;font-size:8px}
 #towerMenu::after{display:none}
-#titleScreen{position:fixed;inset:0;z-index:40;overflow:hidden;background:#0a1024;color:var(--ink)}
-#titleBattleCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:pixelated;background:#101934}
-#titleScreen::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(5,8,20,.88) 0%,rgba(7,10,24,.70) 36%,rgba(7,10,24,.48) 62%,rgba(5,8,20,.70) 100%);pointer-events:none}
-#titleScreen::after{content:'';position:absolute;inset:0;z-index:1;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.025) 0 2px,rgba(0,0,0,.035) 2px 4px),radial-gradient(circle at 64% 44%,rgba(95,242,180,.12),transparent 36%);pointer-events:none}
-#titleMenuWrap{position:relative;z-index:2;width:100%;height:100%;display:flex;align-items:center;padding:clamp(24px,6vw,92px);pointer-events:none}
-#menuModal{pointer-events:auto}
-#menuModal.titleHome{width:min(430px,90vw);max-height:94vh;overflow:auto;padding:10px 8px;background:transparent;border:0;outline:0;box-shadow:none}
-#menuModal.titlePage{width:min(1020px,94vw);max-height:90vh;overflow:auto;background:rgba(20,27,58,.94);border:4px solid var(--bevel);outline:4px solid var(--plum);box-shadow:inset 0 4px 0 #333f74,8px 8px 0 #05070f;padding:20px}
-#menuModal.titleHome h1{font-family:var(--pxfont);font-size:clamp(29px,5vw,58px);line-height:1.15;margin:0 0 12px;color:var(--gold);letter-spacing:3px;text-shadow:4px 4px 0 #7a4a1f,8px 8px 0 rgba(5,7,15,.75)}
-#menuModal.titleHome .titleTagline{max-width:420px;margin:0 0 22px;font-size:25px;color:#e0e5ff;text-shadow:2px 2px 0 #11152e}
-#menuModal.titleHome .difficultyCurrent{display:block;margin:0 0 18px}
-.titleMainButtons{display:flex;flex-direction:column;align-items:stretch;gap:12px;width:min(310px,82vw)}
-.titleMainButtons .menuBtn{min-height:68px;padding:13px 16px;background:rgba(43,53,99,.94)}
+#titleScreen{position:fixed;inset:0;z-index:40;overflow:hidden;background:#0a1024;color:var(--ink);width:100vw;height:100vh}
+#titleBattleCanvas{position:absolute;inset:0;width:100vw;height:100vh;min-width:100%;min-height:100%;display:block;image-rendering:pixelated;background:#101934}
+#titleScreen::before{content:'';position:absolute;inset:0;z-index:1;background:rgba(5,8,20,.68);pointer-events:none}
+#titleScreen::after{content:'';position:absolute;inset:0;z-index:1;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.025) 0 2px,rgba(0,0,0,.035) 2px 4px),radial-gradient(circle at 50% 46%,rgba(95,242,180,.13),transparent 38%);pointer-events:none}
+#titleMenuWrap{position:relative;z-index:2;width:100%;height:100%;min-width:0;display:flex;align-items:center;justify-content:center;padding:clamp(18px,4vw,56px);overflow:hidden;pointer-events:none}
+#menuModal{pointer-events:auto;min-width:0;max-width:100%}
+#menuModal.titleHome{width:min(760px,calc(100vw - 36px));max-width:100%;max-height:94vh;overflow-y:auto;overflow-x:hidden;padding:14px 18px;text-align:center;background:transparent;border:0;outline:0;box-shadow:none}
+#menuModal.titlePage{width:min(1020px,calc(100vw - 36px));max-height:90vh;overflow:auto;background:rgba(20,27,58,.94);border:4px solid var(--bevel);outline:4px solid var(--plum);box-shadow:inset 0 4px 0 #333f74,8px 8px 0 #05070f;padding:20px}
+#menuModal.titleHome h1{font-family:var(--pxfont);font-size:clamp(28px,6vw,68px);line-height:1.15;margin:0 auto 14px;max-width:100%;white-space:nowrap;color:var(--gold);letter-spacing:clamp(1px,.5vw,4px);text-align:center;text-shadow:4px 4px 0 #7a4a1f,8px 8px 0 rgba(5,7,15,.75)}
+#menuModal.titleHome .titleTagline{max-width:650px;margin:0 auto 22px;font-size:25px;text-align:center;color:#e0e5ff;text-shadow:2px 2px 0 #11152e}
+#menuModal.titleHome .difficultyCurrent{display:block;margin:0 auto 18px;text-align:center}
+.titleMainButtons{display:flex;flex-direction:column;align-items:stretch;gap:12px;width:min(340px,100%);margin:0 auto}
+.titleMainButtons .menuBtn{width:100%;min-height:68px;padding:13px 16px;text-align:center;background:rgba(43,53,99,.94)}
 .titleMainButtons .menuBtn strong{display:block;font-family:var(--pxfont);font-size:11px;color:var(--gold);margin-bottom:3px}
 #menuModal.titlePage h1,#menuModal.titlePage h2{margin-top:0;color:var(--gold);font-family:var(--pxfont);text-shadow:2px 2px 0 #6b4118}
 .titleBattleVignette{position:absolute;inset:0;pointer-events:none}
-@media(max-width:720px){#titleMenuWrap{align-items:flex-end;padding:20px 18px 34px}#menuModal.titleHome{width:100%}#menuModal.titleHome h1{font-size:31px}.titleMainButtons{width:100%}}
+@media(max-width:720px){#titleMenuWrap{align-items:center;justify-content:center;padding:18px}#menuModal.titleHome{width:100%;padding:10px 4px}#menuModal.titleHome h1{font-size:clamp(25px,9vw,38px);letter-spacing:1px}.titleMainButtons{width:min(340px,100%)}#menuModal.titleHome .titleTagline{font-size:21px}}
 @media(max-width:1000px){#main{grid-template-columns:220px 1fr}.side.right{display:none}}@media(max-width:720px){#main{grid-template-columns:1fr}.side.left{position:absolute;left:0;top:50px;bottom:56px;width:250px;z-index:8;transform:translateX(-100%);transition:.2s}.side.left.open{transform:none}#topbar{font-size:16px}.levelGrid{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
@@ -570,7 +570,7 @@ function guideMonsterCompendium(){const monsters=[
  {kindId:'boss',kind:'Boss',stats:'Speed 0.55 · displacement resistance',desc:'Appears on the final wave. From Level 7 onward it can rush, shut down nearby towers, or apply a damage-debuff aura. Later bosses arrive with escorts.'}
  ];return `<div class="compendiumGrid">${monsters.map(m=>{
   const vars=(CREEP_SKINS[m.kindId]||[]).map((s,i)=>`<div class="dexMon"><canvas class="dexCv" data-kind="${m.kindId}" data-skin="${i}"></canvas><div class="small">${s.name}</div></div>`).join('');
-  return `<div class="card monsterCard"><h3>${m.kind}</h3><div class="dexRow">${vars}</div><div class="small gold">${m.stats}</div><p class="help">${m.desc}</p></div>`;}).join('')}</div><div class="card help"><h3>Variants</h3>Each monster has several looks that rotate between levels. Variants are purely cosmetic — stats depend only on the monster type and wave.</div><div class="card help"><h3>Wave Scaling</h3>Enemy durability is based on the current wave, not the level. Larger maps add more enemies only after the opening waves. Flying waves contain fewer units, while bosses conclude each level.</div>`;}
+  return `<div class="card monsterCard"><h3>${m.kind}</h3><div class="dexRow">${vars}</div><div class="small gold">${m.stats}</div><p class="help">${m.desc}</p></div>`;}).join('')}</div><div class="card help"><h3>Wave Scaling</h3>Enemy durability is based on the current wave, not the level. Larger maps add more enemies only after the opening waves. Flying waves contain fewer units, while bosses conclude each level.</div>`;}
 let dexTimer=null;
 function stopDexAnim(){if(dexTimer){clearInterval(dexTimer);dexTimer=null;}}
 function startDexAnim(){stopDexAnim();const cvs=$$('.dexCv');if(!cvs.length)return;const S=2;
@@ -1431,24 +1431,61 @@ function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.remove('hi
 function capitalize(s){return s?s[0].toUpperCase()+s.slice(1):'';}
 
 const titleCanvas=$('#titleBattleCanvas'),titleCtx=titleCanvas.getContext('2d');titleCtx.imageSmoothingEnabled=false;
-const titleDemo={time:0,spawn:0,shot:0,creeps:[],shots:[],bursts:[],towers:[{x:.23,y:.31,c:'#7be8d2'},{x:.34,y:.66,c:'#84d7ff'},{x:.57,y:.28,c:'#fff08c'},{x:.69,y:.60,c:'#ff9d58'},{x:.80,y:.40,c:'#c9a2ff'}]};
+const titleDemo={
+ time:0,spawn:0,creeps:[],shots:[],bursts:[],
+ towers:[
+  {x:.18,y:.31,id:'breeze_dart'},{x:.30,y:.68,id:'bubble_cannon'},
+  {x:.47,y:.27,id:'tracking_gun'},{x:.64,y:.66,id:'arc_tower'},
+  {x:.79,y:.35,id:'flare_battery'},{x:.88,y:.69,id:'rime_watcher'}
+ ]
+};
 function resizeTitleDemo(){const r=titleCanvas.getBoundingClientRect(),dpr=Math.min(2,devicePixelRatio||1),w=Math.max(1,Math.floor(r.width*dpr)),h=Math.max(1,Math.floor(r.height*dpr));if(titleCanvas.width!==w||titleCanvas.height!==h){titleCanvas.width=w;titleCanvas.height=h;titleCtx.setTransform(dpr,0,0,dpr,0,0);titleCtx.imageSmoothingEnabled=false;}}
 function titleRoutePoint(t,w,h,lane=0){const pts=lane%2?[[-.05,.28],[.20,.28],[.20,.70],[.48,.70],[.48,.38],[.76,.38],[1.06,.64]]:[[-.05,.60],[.17,.60],[.17,.36],[.43,.36],[.43,.68],[.72,.68],[.72,.30],[1.06,.30]];const total=pts.length-1,u=Math.max(0,Math.min(.999,t))*total,i=Math.floor(u),f=u-i;return{x:(pts[i][0]+(pts[i+1][0]-pts[i][0])*f)*w,y:(pts[i][1]+(pts[i+1][1]-pts[i][1])*f)*h};}
-function updateTitleDemo(dt){if($('#titleScreen').classList.contains('hidden'))return;titleDemo.time+=dt;titleDemo.spawn-=dt;if(titleDemo.spawn<=0){titleDemo.spawn=.52+Math.random()*.36;titleDemo.creeps.push({t:0,lane:(Math.random()*2)|0,speed:.035+Math.random()*.018,hp:2+((Math.random()*3)|0),air:Math.random()<.20,phase:Math.random()*6.28});}
+function titleCreepKind(){const r=Math.random();return r<.46?'basic':r<.63?'fast':r<.77?'armored':r<.89?'slow':'air';}
+function titleCanTarget(d,c){const target=c.kind==='air'?'air':'ground';return d.target?.includes(target);}
+function updateTitleDemo(dt){
+ if($('#titleScreen').classList.contains('hidden'))return;
+ titleDemo.time+=dt;titleDemo.spawn-=dt;
+ if(titleDemo.spawn<=0){
+  titleDemo.spawn=.50+Math.random()*.32;
+  const kind=titleCreepKind(),skins=CREEP_SKINS[kind]||[{name:kind}];
+  titleDemo.creeps.push({id:Math.random().toString(36),t:0,lane:(Math.random()*2)|0,speed:(kind==='fast'?.060:kind==='slow'?.027:kind==='armored'?.032:kind==='air'?.048:.039)+Math.random()*.008,hp:kind==='armored'?7:kind==='slow'?8:kind==='fast'?3:kind==='air'?4:5,kind,skin:(Math.random()*skins.length)|0,phase:Math.random()*6.28});
+ }
  const r=titleCanvas.getBoundingClientRect(),w=r.width,h=r.height;
- for(const c of titleDemo.creeps)c.t+=dt*c.speed*(c.air?1.15:1);
+ for(const c of titleDemo.creeps)c.t+=dt*c.speed;
  titleDemo.creeps=titleDemo.creeps.filter(c=>c.t<1.03&&c.hp>0);
- for(const tw of titleDemo.towers){tw.cd=(tw.cd||0)-dt;if(tw.cd>0)continue;const tx=tw.x*w,ty=tw.y*h;let best=null,bd=Infinity;for(const c of titleDemo.creeps){const p=titleRoutePoint(c.t,w,h,c.lane),d=Math.hypot(p.x-tx,p.y-ty);if(d<Math.min(w,h)*.29&&d<bd){bd=d;best=c;}}if(best){tw.cd=.30+Math.random()*.38;const p=titleRoutePoint(best.t,w,h,best.lane);titleDemo.shots.push({x:tx,y:ty,target:best,tx:p.x,ty:p.y,speed:520,c:tw.c});}}
- for(const s of titleDemo.shots){if(!s.target||s.target.hp<=0){s.dead=true;continue;}const p=titleRoutePoint(s.target.t,w,h,s.target.lane),dx=p.x-s.x,dy=p.y-s.y,d=Math.hypot(dx,dy);if(d<8){s.target.hp--;s.dead=true;titleDemo.bursts.push({x:p.x,y:p.y,t:.35,c:s.c});}else{const step=Math.min(d,s.speed*dt);s.x+=dx/d*step;s.y+=dy/d*step;}}
+ for(const tw of titleDemo.towers){
+  const d=BY_ID[tw.id];tw.cd=(tw.cd||0)-dt;if(tw.cd>0)continue;
+  const tx=tw.x*w,ty=tw.y*h;let best=null,bd=Infinity;
+  for(const c of titleDemo.creeps){if(!titleCanTarget(d,c))continue;const p=titleRoutePoint(c.t,w,h,c.lane),dd=Math.hypot(p.x-tx,p.y-ty);if(dd<Math.min(w,h)*.31&&dd<bd){bd=dd;best=c;}}
+  if(best){tw.cd=Math.max(.18,(d.interval||.75)*.42)+Math.random()*.10;const p=titleRoutePoint(best.t,w,h,best.lane);titleDemo.shots.push({x:tx,y:ty,target:best,speed:560,d});tw.recoil=.12;}
+ }
+ for(const tw of titleDemo.towers)tw.recoil=Math.max(0,(tw.recoil||0)-dt);
+ for(const s of titleDemo.shots){
+  if(!s.target||s.target.hp<=0){s.dead=true;continue;}
+  const p=titleRoutePoint(s.target.t,w,h,s.target.lane),dx=p.x-s.x,dy=p.y-s.y,dd=Math.hypot(dx,dy);
+  if(dd<9){s.target.hp-=1+(s.d.tier==='mid');s.dead=true;titleDemo.bursts.push({x:p.x,y:p.y,t:.32,c:archColor(s.d.arch)});}else{const step=Math.min(dd,s.speed*dt);s.x+=dx/dd*step;s.y+=dy/dd*step;}
+ }
  titleDemo.shots=titleDemo.shots.filter(s=>!s.dead);for(const b of titleDemo.bursts)b.t-=dt;titleDemo.bursts=titleDemo.bursts.filter(b=>b.t>0);
 }
-function drawTitlePixelTower(g,x,y,c,s){g.fillStyle='rgba(4,8,20,.42)';g.fillRect(Math.round(x-s*.44),Math.round(y+s*.20),Math.round(s*.88),Math.round(s*.24));g.fillStyle='#2b1c40';g.fillRect(Math.round(x-s*.34),Math.round(y-s*.12),Math.round(s*.68),Math.round(s*.50));g.fillStyle='#52628f';g.fillRect(Math.round(x-s*.27),Math.round(y-s*.07),Math.round(s*.54),Math.round(s*.36));g.fillStyle=c;g.fillRect(Math.round(x-s*.08),Math.round(y-s*.42),Math.round(s*.16),Math.round(s*.38));g.fillRect(Math.round(x-s*.25),Math.round(y-s*.35),Math.round(s*.50),Math.round(s*.12));g.fillStyle='#fff6e0';g.fillRect(Math.round(x-s*.04),Math.round(y-s*.38),Math.max(2,Math.round(s*.08)),Math.max(2,Math.round(s*.08)));}
-function renderTitleDemo(){if($('#titleScreen').classList.contains('hidden'))return;resizeTitleDemo();const r=titleCanvas.getBoundingClientRect(),w=r.width,h=r.height,g=titleCtx;g.clearRect(0,0,w,h);const cell=Math.max(22,Math.floor(Math.min(w,h)/24));for(let y=0;y<h;y+=cell)for(let x=0;x<w;x+=cell){g.fillStyle=((x/cell+y/cell)&1)?'#315d4a':'#35664f';g.fillRect(x,y,cell,cell);g.fillStyle='rgba(255,255,255,.035)';g.fillRect(x,y,cell,1);g.fillStyle='rgba(0,0,0,.12)';g.fillRect(x+cell-1,y,1,cell);}
- g.fillStyle='#776347';for(const box of [[.31,.06,.10,.30],[.52,.48,.12,.30],[.82,.08,.08,.24],[.05,.74,.24,.10]]){g.fillRect(Math.round(box[0]*w),Math.round(box[1]*h),Math.round(box[2]*w),Math.round(box[3]*h));g.fillStyle='#9d865e';g.fillRect(Math.round(box[0]*w),Math.round(box[1]*h),Math.round(box[2]*w),4);g.fillStyle='#776347';}
- for(let lane=0;lane<2;lane++){g.strokeStyle=lane?'rgba(255,159,104,.22)':'rgba(89,217,255,.22)';g.lineWidth=4;g.beginPath();for(let i=0;i<=120;i++){const p=titleRoutePoint(i/120,w,h,lane);i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y);}g.stroke();}
- const s=Math.max(24,Math.min(w,h)*.055);for(const tw of titleDemo.towers)drawTitlePixelTower(g,tw.x*w,tw.y*h,tw.c,s);
- for(const c of titleDemo.creeps){const p=titleRoutePoint(c.t,w,h,c.lane),bob=c.air?Math.sin(titleDemo.time*5+c.phase)*5:Math.abs(Math.sin(titleDemo.time*8+c.phase))*2,cs=c.air?s*.42:s*.36;g.fillStyle='rgba(5,8,18,.36)';g.fillRect(Math.round(p.x-cs*.35),Math.round(p.y+cs*.30),Math.round(cs*.70),Math.max(3,Math.round(cs*.13)));g.fillStyle=c.air?'#c9a2ff':'#63d878';g.fillRect(Math.round(p.x-cs*.34),Math.round(p.y-cs*.24-bob),Math.round(cs*.68),Math.round(cs*.50));g.fillStyle='#effcff';g.fillRect(Math.round(p.x-cs*.18),Math.round(p.y-cs*.12-bob),Math.max(2,Math.round(cs*.12)),Math.max(2,Math.round(cs*.13)));g.fillRect(Math.round(p.x+cs*.07),Math.round(p.y-cs*.12-bob),Math.max(2,Math.round(cs*.12)),Math.max(2,Math.round(cs*.13)));}
- for(const sh of titleDemo.shots){g.fillStyle=sh.c;g.fillRect(Math.round(sh.x-3),Math.round(sh.y-3),6,6);g.fillStyle='#fff';g.fillRect(Math.round(sh.x-1),Math.round(sh.y-1),2,2);}for(const b of titleDemo.bursts){const a=Math.max(0,b.t/.35);g.globalAlpha=a;g.strokeStyle=b.c;g.lineWidth=3;g.strokeRect(Math.round(b.x-12*(1-a)),Math.round(b.y-12*(1-a)),Math.round(24*(1-a)+4),Math.round(24*(1-a)+4));g.globalAlpha=1;}}
+function renderTitleDemo(){
+ if($('#titleScreen').classList.contains('hidden'))return;
+ resizeTitleDemo();const r=titleCanvas.getBoundingClientRect(),w=r.width,h=r.height,g=titleCtx;g.clearRect(0,0,w,h);
+ const cell=Math.max(22,Math.floor(Math.min(w,h)/24));
+ for(let y=0;y<h;y+=cell)for(let x=0;x<w;x+=cell){g.fillStyle=((x/cell+y/cell)&1)?WF.grassA:WF.grassB;g.fillRect(x,y,cell,cell);g.fillStyle='rgba(255,255,255,.035)';g.fillRect(x,y,cell,1);g.fillStyle='rgba(0,0,0,.12)';g.fillRect(x+cell-1,y,1,cell);}
+ // Terrain uses the same cliff palette as the actual maps.
+ for(const box of [[.31,.06,.10,.30],[.52,.48,.12,.30],[.82,.08,.08,.24],[.05,.74,.24,.10]]){const x=Math.round(box[0]*w),y=Math.round(box[1]*h),bw=Math.round(box[2]*w),bh=Math.round(box[3]*h);g.fillStyle=WF.cliffFace;g.fillRect(x,y,bw,bh);g.fillStyle=WF.cliffTop;g.fillRect(x,y,bw,Math.max(6,Math.round(bh*.62)));g.fillStyle=WF.cliffLight;g.fillRect(x,y,bw,3);g.fillStyle=WF.cliffDark;g.fillRect(x,y+bh-4,bw,4);}
+ for(let lane=0;lane<2;lane++){g.strokeStyle=lane?'rgba(255,159,104,.18)':'rgba(89,217,255,.18)';g.lineWidth=3;g.beginPath();for(let i=0;i<=120;i++){const p=titleRoutePoint(i/120,w,h,lane);i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y);}g.stroke();}
+ const towerSize=Math.max(58,Math.min(92,Math.min(w,h)*.105));
+ for(const tw of titleDemo.towers){const d=BY_ID[tw.id],cv=getTowerCv(d),dw=towerSize*(d.footprint===3?1.16:1),dh=dw*cv.height/cv.width,push=(tw.recoil||0)>0?3:0;g.drawImage(cv,Math.round(tw.x*w-dw/2),Math.round(tw.y*h-dh+push),Math.round(dw),Math.round(dh));}
+ for(const c of titleDemo.creeps){
+  const p=titleRoutePoint(c.t,w,h,c.lane),frames=getCreepFrames(c.kind,c.skin),fps=c.kind==='fast'?11:c.kind==='slow'?5:c.kind==='air'?9:7,idx=Math.floor((titleDemo.time+c.phase)*fps)%frames.length,cv=frames[idx];
+  const base=c.kind==='boss'?82:c.kind==='armored'?58:c.kind==='slow'?60:c.kind==='air'?48:c.kind==='fast'?45:48,size=Math.max(base*.85,Math.min(base*1.35,Math.min(w,h)*.072)),dh=size*cv.height/cv.width,bob=c.kind==='air'?Math.sin(titleDemo.time*5+c.phase)*5:Math.abs(Math.sin(titleDemo.time*8+c.phase))*2;
+  g.save();if(c.t>.55){g.translate(p.x,p.y);g.scale(-1,1);g.drawImage(cv,-size/2,-dh-bob,size,dh);}else g.drawImage(cv,p.x-size/2,p.y-dh-bob,size,dh);g.restore();
+ }
+ for(const sh of titleDemo.shots){const cv=getProjCv(sh.d),sz=Math.max(15,Math.min(24,Math.min(w,h)*.026)),p=titleRoutePoint(sh.target?.t||0,w,h,sh.target?.lane||0);g.save();g.translate(sh.x,sh.y);g.rotate(Math.atan2(p.y-sh.y,p.x-sh.x));g.drawImage(cv,-sz/2,-sz/2,sz,sz);g.restore();}
+ for(const b of titleDemo.bursts){const a=Math.max(0,b.t/.32),rad=6+(1-a)*18;g.globalAlpha=a;g.strokeStyle=b.c;g.lineWidth=3;g.strokeRect(Math.round(b.x-rad),Math.round(b.y-rad),Math.round(rad*2),Math.round(rad*2));g.globalAlpha=1;}
+}
 function loop(now){const raw=Math.min(.05,(now-last)/1000);last=now;update(raw*state.speed);updateTitleDemo(raw);render();renderTitleDemo();requestAnimationFrame(loop);}showMainMenu();requestAnimationFrame(loop);
 </script>
 </body>
