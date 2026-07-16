@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-<title>A Mazing TD</title>
+<title>Mazehold</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f1530;--panel:#1a2140;--panel2:#232c56;--ink:#f3ecff;--muted:#a9b0d6;--gold:#ffd95e;--danger:#ff6d84;--ok:#7df2a1;--ground:#8abfe0;--air:#c9a2ff;--line:#39427a;--accent:#5ff2b4;--plum:#2b1c40;--bevel:#4d5aa0;--pxfont:'Press Start 2P',monospace;--bodyfont:'VT323',monospace}
@@ -60,7 +60,7 @@ button{font-family:var(--pxfont);font-size:9px;line-height:1.5;text-transform:up
 .meter{height:10px;background:#12182f;border:2px solid var(--line);overflow:hidden}.meter>div{height:100%;background:#5fd88a;box-shadow:inset 0 3px 0 #a8ffcb}
 .sep{height:3px;background:var(--line);margin:9px 0}
 .help{font-size:19px;line-height:1.3;color:#c3cbf0}
-.checkbox{display:flex;align-items:center;gap:7px;margin:6px 0}.debugGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.guideNav{display:flex;gap:7px;flex-wrap:wrap;position:sticky;top:-20px;z-index:3;background:var(--panel);padding:8px 0 12px}.guideSection{margin-top:12px}.guideArch{border-left:6px solid var(--arch-color,var(--accent));padding-left:10px;margin:18px 0 10px}.guideTable{width:100%;border-collapse:collapse;font-size:16px}.guideTable th,.guideTable td{border:2px solid var(--line);padding:6px 7px;text-align:left;vertical-align:top}.guideTable th{font-family:var(--pxfont);font-size:7px;color:var(--gold);background:#192142;position:sticky;top:38px}.guideTable tr:nth-child(even) td{background:rgba(53,65,117,.24)}.guideStat{white-space:nowrap}.settingRange{width:min(420px,100%);accent-color:var(--gold)}.settingValue{display:inline-block;min-width:64px;color:var(--gold);font-family:var(--pxfont);font-size:9px}.compendiumGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}.monsterCard{margin:0}.difficultyCurrent{color:var(--gold);font-family:var(--pxfont);font-size:9px}
+.checkbox{display:flex;align-items:center;gap:7px;margin:6px 0}.debugGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.guideNav{display:flex;gap:7px;flex-wrap:wrap;position:sticky;top:-20px;z-index:3;background:var(--panel);padding:8px 0 12px}.guideSection{margin-top:12px}.guideArch{border-left:6px solid var(--arch-color,var(--accent));padding-left:10px;margin:18px 0 10px}.guideTable{width:100%;border-collapse:collapse;font-size:16px}.guideTable th,.guideTable td{border:2px solid var(--line);padding:6px 7px;text-align:left;vertical-align:top}.guideTable th{font-family:var(--pxfont);font-size:7px;color:var(--gold);background:#192142;position:sticky;top:38px}.guideTable tr:nth-child(even) td{background:rgba(53,65,117,.24)}.guideStat{white-space:nowrap}.settingRange{width:min(420px,100%);accent-color:var(--gold)}.settingValue{display:inline-block;min-width:64px;color:var(--gold);font-family:var(--pxfont);font-size:9px}.compendiumGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}.monsterCard{margin:0}.dexRow{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 10px}.dexMon{text-align:center}.dexMon canvas{image-rendering:pixelated;background:#57b25b;border:3px solid var(--plum);box-shadow:2px 2px 0 #0a0d1f;display:block;margin:0 auto 4px}.dexMon .small{font-size:15px}.difficultyCurrent{color:var(--gold);font-family:var(--pxfont);font-size:9px}
 .toast{position:absolute;left:50%;top:62px;transform:translateX(-50%);background:#2f3a6e;border:3px solid var(--gold);padding:8px 16px;box-shadow:4px 4px 0 #05070f;z-index:15;pointer-events:none;font-family:var(--pxfont);font-size:10px}
 .countdown{position:absolute;left:50%;top:25%;transform:translate(-50%,-50%);font-family:var(--pxfont);font-size:26px;color:#ff8592;text-shadow:3px 3px 0 #5f1925;z-index:14;pointer-events:none}
 .legend{position:absolute;right:10px;bottom:10px;background:rgba(26,33,64,.95);border:3px solid var(--plum);padding:6px 9px;font-size:16px;z-index:4;box-shadow:3px 3px 0 #0a0d1f}
@@ -69,13 +69,30 @@ button{font-family:var(--pxfont);font-size:9px;line-height:1.5;text-transform:up
 #towerMenu{position:absolute;z-index:6;display:flex;gap:6px;padding:6px;background:#2b3563;border:3px solid var(--gold);box-shadow:4px 4px 0 #05070f,inset 0 2px 0 #3d4a87;right:12px;top:12px;left:auto;transform:none;pointer-events:auto}
 #towerMenu button{padding:7px 9px;font-size:8px}
 #towerMenu::after{display:none}
+#titleScreen{position:fixed;inset:0;z-index:40;overflow:hidden;background:#0a1024;color:var(--ink)}
+#titleBattleCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:pixelated;background:#101934}
+#titleScreen::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(5,8,20,.88) 0%,rgba(7,10,24,.70) 36%,rgba(7,10,24,.48) 62%,rgba(5,8,20,.70) 100%);pointer-events:none}
+#titleScreen::after{content:'';position:absolute;inset:0;z-index:1;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.025) 0 2px,rgba(0,0,0,.035) 2px 4px),radial-gradient(circle at 64% 44%,rgba(95,242,180,.12),transparent 36%);pointer-events:none}
+#titleMenuWrap{position:relative;z-index:2;width:100%;height:100%;display:flex;align-items:center;padding:clamp(24px,6vw,92px);pointer-events:none}
+#menuModal{pointer-events:auto}
+#menuModal.titleHome{width:min(430px,90vw);max-height:94vh;overflow:auto;padding:10px 8px;background:transparent;border:0;outline:0;box-shadow:none}
+#menuModal.titlePage{width:min(1020px,94vw);max-height:90vh;overflow:auto;background:rgba(20,27,58,.94);border:4px solid var(--bevel);outline:4px solid var(--plum);box-shadow:inset 0 4px 0 #333f74,8px 8px 0 #05070f;padding:20px}
+#menuModal.titleHome h1{font-family:var(--pxfont);font-size:clamp(29px,5vw,58px);line-height:1.15;margin:0 0 12px;color:var(--gold);letter-spacing:3px;text-shadow:4px 4px 0 #7a4a1f,8px 8px 0 rgba(5,7,15,.75)}
+#menuModal.titleHome .titleTagline{max-width:420px;margin:0 0 22px;font-size:25px;color:#e0e5ff;text-shadow:2px 2px 0 #11152e}
+#menuModal.titleHome .difficultyCurrent{display:block;margin:0 0 18px}
+.titleMainButtons{display:flex;flex-direction:column;align-items:stretch;gap:12px;width:min(310px,82vw)}
+.titleMainButtons .menuBtn{min-height:68px;padding:13px 16px;background:rgba(43,53,99,.94)}
+.titleMainButtons .menuBtn strong{display:block;font-family:var(--pxfont);font-size:11px;color:var(--gold);margin-bottom:3px}
+#menuModal.titlePage h1,#menuModal.titlePage h2{margin-top:0;color:var(--gold);font-family:var(--pxfont);text-shadow:2px 2px 0 #6b4118}
+.titleBattleVignette{position:absolute;inset:0;pointer-events:none}
+@media(max-width:720px){#titleMenuWrap{align-items:flex-end;padding:20px 18px 34px}#menuModal.titleHome{width:100%}#menuModal.titleHome h1{font-size:31px}.titleMainButtons{width:100%}}
 @media(max-width:1000px){#main{grid-template-columns:220px 1fr}.side.right{display:none}}@media(max-width:720px){#main{grid-template-columns:1fr}.side.left{position:absolute;left:0;top:50px;bottom:56px;width:250px;z-index:8;transform:translateX(-100%);transition:.2s}.side.left.open{transform:none}#topbar{font-size:16px}.levelGrid{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
-<div id="app">
+<div id="app" class="hidden">
   <div id="topbar">
-    <div class="logo">A MAZING TD</div>
+    <div class="logo">MAZEHOLD</div>
     <div class="stat">Gold <b id="goldText" class="gold">0</b></div>
     <div class="stat">Lives <b id="livesText">15</b></div>
     <div class="stat">LEVEL <span id="levelText">1</span> · WAVE <span id="waveText">0</span>/<span id="waveMaxText">10</span></div>
@@ -120,8 +137,12 @@ button{font-family:var(--pxfont);font-size:9px;line-height:1.5;text-transform:up
   </div>
 </div>
 
-<div id="menuOverlay" class="overlay">
-  <div class="modal" id="menuModal"></div>
+<div id="titleScreen">
+  <canvas id="titleBattleCanvas"></canvas>
+  <div id="titleMenuWrap"><div id="menuModal" class="titleHome"></div></div>
+</div>
+<div id="menuOverlay" class="overlay hidden">
+  <div class="modal" id="resultModal"></div>
 </div>
 <div id="pauseOverlay" class="overlay hidden">
   <div class="modal">
@@ -261,7 +282,115 @@ function levelDimensions(level){
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;}}
 function cpBox(cp,s){const o=Math.floor((s-1)/2);return {x:cp.x-o,y:cp.y-o,w:s,h:s};}
 function cpZoneRect(cp){return cpBox(cp,5);}
+
+const LEVEL15_LAYOUT=[
+ '...........######..######........#......',
+ '...........######..######........#......',
+ '............#####..#####.........#......',
+ '.............####..#####.........#......',
+ '.............####..#####.........#......',
+ '.............####..####..........#......',
+ '.............####..####..........#......',
+ '..............###..####..........#......',
+ '..............###..####..........#......',
+ '..............###..###...........#......',
+ '..............###..##............#......',
+ '..............###..##...................',
+ '..............###..##...................',
+ '..............###..##...................',
+ '..............###..##.......#...........',
+ '.......#......###..##.......#...........',
+ '.......##.....###..##......##...........',
+ '.......##.....###..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......###.....##..##......##...........',
+ '.......##......##..##......##...........',
+ '.......##......##..##......##...........',
+ '.......#.......##..##......##...........',
+ '...............##..##......##...........',
+ '...............##..##......##...........',
+ '...............##..##......##...........',
+ '...............##..##......##...........',
+ '...............##..##......##...........',
+ '...............##..##......##...........',
+ '...............##..##......##...........',
+ '...............##..##......##...........',
+ '...............##..##......#............',
+ '...............##..##......#............',
+ '...............##..##......#............',
+ '...............##..##..................#',
+ '#..............##..##..................#',
+ '#..............##..##.................##',
+ '##.............##..#.................###',
+ '###............##..#................####',
+ '###............##..#..............######',
+ '####...........##..#.............#######',
+ '#####...........#..#............########',
+ '######..........#..#...........#########',
+ '#######.........#..#..........##########',
+ '########........#..#.........###########',
+ '#########...................############',
+ '##########.................#############',
+ '##########.................#############',
+ '###########...............##############',
+ '############.............###############'
+];
+function terrainRectsFromGrid(grid){
+ const rects=[];let active=new Map();
+ for(let y=0;y<grid.length;y++){
+  const runs=[];let x=0;
+  while(x<grid[y].length){if(grid[y][x]!==2){x++;continue;}const start=x;while(x<grid[y].length&&grid[y][x]===2)x++;runs.push({x:start,w:x-start});}
+  const next=new Map();
+  for(const run of runs){const k=`${run.x}:${run.w}`,prev=active.get(k);if(prev){prev.h++;next.set(k,prev);}else{const r={x:run.x,y,w:run.w,h:1};rects.push(r);next.set(k,r);}}
+  active=next;
+ }
+ return rects;
+}
+function makeLevel15Map(){
+ const w=40,h=64,grid=LEVEL15_LAYOUT.map(row=>[...row].map(ch=>ch==='#'?2:0));
+ const spawns=[{x:0,y:0,w:2,h:2},{x:38,y:0,w:2,h:2},{x:17,y:0,w:2,h:2}];
+ const exits=[{x:18,y:62,w:2,h:2}];
+ const checkpoints=[{x:6,y:29,w:1,h:1},{x:29,y:29,w:1,h:1}];
+ for(const r of [...spawns,...exits,...checkpoints])for(let yy=r.y;yy<r.y+r.h;yy++)for(let xx=r.x;xx<r.x+r.w;xx++)grid[yy][xx]=0;
+ return {w,h,grid,spawns,exits,checkpoints,terrain:terrainRectsFromGrid(grid),decor:[],airExit:null,routeCheckpointIndices:[[0],[1],[]],routeUnlockWaves:[1,1,11],customLayout:'level15'};
+}
+
+function makeLevel7Map(){
+ const {w,h}=levelDimensions(7),grid=Array.from({length:h},()=>Array(w).fill(2));
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+  const topBar=y<=10;
+  const bottomBar=y>=39;
+  const diagonalT=(y-8)/(41-8);
+  const diagonalCenter=25+(3-25)*diagonalT;
+  const diagonal=y>=7&&y<=42&&Math.abs(x-diagonalCenter)<=5;
+  const upperBend=y>=6&&y<=15&&x>=18;
+  const lowerBend=y>=34&&y<=43&&x<=10;
+  if(topBar||bottomBar||diagonal||upperBend||lowerBend)grid[y][x]=0;
+ }
+ const spawns=[{x:0,y:0,w:2,h:2}];
+ const exits=[{x:w-2,y:h-2,w:2,h:2}];
+ const checkpoints=[{x:w-5,y:8,w:1,h:1},{x:4,y:h-9,w:1,h:1}];
+ for(const r of [...spawns,...exits,...checkpoints])for(let yy=r.y;yy<r.y+r.h;yy++)for(let xx=r.x;xx<r.x+r.w;xx++)grid[yy][xx]=0;
+ return {w,h,grid,spawns,exits,checkpoints,terrain:terrainRectsFromGrid(grid),decor:[],airExit:null,routeCheckpointIndices:[[0,1]],routeUnlockWaves:[1],customLayout:'level7'};
+}
+
 function makeMap(level,stage=1){
+ if(level===15)return makeLevel15Map();
+ if(level===7)return makeLevel7Map();
  const {w,h}=levelDimensions(level);
  const spawns=[],exits=[],checkpoints=[];
  const addRect=(arr,x,y,rw,rh)=>arr.push({x:Math.max(0,Math.min(w-rw,Math.floor(x))),y:Math.max(0,Math.min(h-rh,Math.floor(y))),w:rw,h:rh});
@@ -344,9 +473,17 @@ function routeSchedule(wave,max,routeCount,isBoss=false){
  let active=1;const progress=max<=1?1:(wave-1)/(max-1);
  if(routeCount>=2&&progress>=.30)active=2;
  if(routeCount>=3&&progress>=.66)active=3;
- if(isBoss)active=routeCount;
- const offset=(wave-1)%routeCount;
- const activeRouteIndices=Array.from({length:Math.min(active,routeCount)},(_,i)=>(offset+i)%routeCount);
+ const unlocks=map?.routeUnlockWaves||Array(routeCount).fill(1);
+ const available=Array.from({length:routeCount},(_,i)=>i).filter(i=>wave>=(unlocks[i]||1));
+ if(isBoss)active=available.length;
+ const required=available.filter(i=>(unlocks[i]||1)>1);
+ if(required.length&&available.length>required.length)active=Math.max(active,required.length+1);
+ active=Math.min(active,available.length);
+ const normal=available.filter(i=>!required.includes(i)),activeRouteIndices=[];
+ const normalSlots=Math.max(0,active-required.length),offset=normal.length?(wave-1)%normal.length:0;
+ for(let i=0;i<Math.min(normalSlots,normal.length);i++)activeRouteIndices.push(normal[(offset+i)%normal.length]);
+ for(const i of required)if(activeRouteIndices.length<active)activeRouteIndices.push(i);
+ for(const i of available)if(activeRouteIndices.length<active&&!activeRouteIndices.includes(i))activeRouteIndices.push(i);
  const routeStartFractions=activeRouteIndices.map((_,i)=>i===0?0:i===1?.25:.52);
  return {activeRoutes:activeRouteIndices.length,activeRouteIndices,routeStartFractions};
 }
@@ -365,7 +502,7 @@ function generateWavePlan(level,stage,wave){
  const lateWaveRamp=clamp((wave-4)/Math.max(1,max-4),0,1);
  const sizePressure=areaScale*Math.pow(lateWaveRamp,1.35);
  const baseCount=9+Math.floor(wave*2.2)+Math.round(18*sizePressure);
- const flyingCountScale=wave<=5?.22:wave<=10?.30:wave<=15?.38:.44;
+ const flyingCountScale=wave<=5?.30:wave<=10?.38:wave<=15?.46:.52;
  let count=Math.round(baseCount*(type==='flying'?flyingCountScale:type==='fast'?.7:type==='armored'?.72:type==='slow'?.78:1));
  // HP is wave-driven only: a Wave 5 creep has the same base HP on every level.
  const hpBase=Math.round(18+wave*7+Math.max(0,wave-10)*4);
@@ -376,7 +513,8 @@ function generateWavePlan(level,stage,wave){
  // Rewards track wave growth and partially compensate for late map-size pressure,
  // while the separate maze grant funds route construction and checkpoints.
  const combatBase=26*(1+(wave-1)*.07);
- const combatRewardTarget=Math.round(combatBase*(1+sizePressure*.35));
+ let combatRewardTarget=Math.round(combatBase*(1+sizePressure*.35));
+ if(type==='flying')combatRewardTarget=Math.round(combatRewardTarget*1.15);
  const mazeGrant=Math.round(7+(map?.checkpoints.length||0)*3+schedule.activeRoutes*2+Math.floor(area/1100)*2+(wave<=3?2:0));
  const rewardTarget=combatRewardTarget+mazeGrant;
  const unitSpeed=type==='flying'?Math.min(1.82,1.12+wave*.03):null;
@@ -390,22 +528,33 @@ function generateWavePlan(level,stage,wave){
  count=Math.max(type==='flying'?3:1,count);
  const reward=Math.max(1,Math.floor(combatRewardTarget/count)),rewardRemainder=Math.max(0,combatRewardTarget-reward*count);
  const spawnGap=type==='fast'?.38:type==='flying'?(level<=3?1.15:level<=7?.95:.78):type==='armored'?.8:type==='slow'?1:.62;
- const tutorialHint=level===1&&wave===5?'Flying creeps are fewer and slower, but ignore the ground maze. Every archetype now has a low-tier tower that can hit them.':level===1&&wave===1?'Build towers to shape the ground route before starting the wave.':'';
+ const tutorialHint=level===1&&wave===5?'Flying creeps travel through every checkpoint. Dedicated anti-air towers deal bonus damage, while mixed-target towers are less efficient against them.':level===1&&wave===1?'Build towers to shape the ground route before starting the wave.':'';
  return {type,count,hp,reward,rewardRemainder,combatRewardTarget,mazeGrant,rewardTarget,spawnGap,unitSpeed,isBoss:false,specialBoss:false,routeCount,...schedule,tutorialHint};
 }
 
 function difficultyName(d){return d==='veryhard'?'Very Hard':capitalize(d);}
+function enterTitleScreen(mode='page'){
+ stopDexAnim();
+ state.screen='menu';state.phase='menu';state.difficulty=prefs.difficulty;
+ $('#app').classList.add('hidden');
+ $('#titleScreen').classList.remove('hidden');
+ $('#menuOverlay').classList.add('hidden');
+ $('#pauseOverlay').classList.add('hidden');
+ const modal=$('#menuModal');modal.className=mode==='home'?'titleHome':'titlePage';
+}
 function showMainMenu(){
- state.screen='menu';state.phase='menu';state.difficulty=prefs.difficulty;$('#menuOverlay').classList.remove('hidden');
- $('#menuModal').innerHTML=`<h1>A Mazing TD</h1><p class="help">Build the maze. Control the checkpoints. Break the wave.</p><p class="difficultyCurrent">Difficulty: ${difficultyName(prefs.difficulty)} · WASD: ${Math.round(prefs.wasdSensitivity*100)}%</p><div class="menuGrid"><button class="menuBtn" id="startGame"><strong>Start</strong><br><span class="small">Select a level, then choose an archetype.</span></button><button class="menuBtn" id="difficultyMenu"><strong>Difficulty</strong><br><span class="small">Current: ${difficultyName(prefs.difficulty)}</span></button><button class="menuBtn" id="startSettings"><strong>Settings</strong><br><span class="small">Adjust WASD camera sensitivity.</span></button><button class="menuBtn" id="guideMenu"><strong>Guide</strong><br><span class="small">Rules, tower catalogue, and monster compendium.</span></button></div>`;
+ enterTitleScreen('home');
+ $('#menuModal').innerHTML=`<h1>MAZEHOLD</h1><p class="titleTagline">Forge the path. Hold the checkpoints. Break the horde.</p><p class="difficultyCurrent">Difficulty: ${difficultyName(prefs.difficulty)}</p><div class="titleMainButtons"><button class="menuBtn" id="startGame"><strong>Start</strong><span class="small">Choose a level and archetype.</span></button><button class="menuBtn" id="difficultyMenu"><strong>Difficulty</strong><span class="small">Current: ${difficultyName(prefs.difficulty)}</span></button><button class="menuBtn" id="startSettings"><strong>Settings</strong><span class="small">Adjust camera controls.</span></button><button class="menuBtn" id="guideMenu"><strong>Guide</strong><span class="small">Rules, towers, and monster compendium.</span></button></div>`;
  $('#startGame').onclick=showLevelSelect;$('#difficultyMenu').onclick=showDifficulty;$('#startSettings').onclick=showStartSettings;$('#guideMenu').onclick=()=>showGuide('how');
 }
-function showLevelSelect(){let html=`<h2>Select Level</h2><p class="help">Difficulty: <b class="gold">${difficultyName(prefs.difficulty)}</b></p><div class="levelGrid">`;for(let i=1;i<=15;i++)html+=`<button class="levelBtn" data-lvl="${i}">${i}</button>`;html+='</div><div class="sep"></div><button class="secondary" id="backMenu">Back</button>';$('#menuModal').innerHTML=html;$$('.levelBtn').forEach(b=>b.onclick=()=>{state.level=+b.dataset.lvl;showArchetypes();});$('#backMenu').onclick=showMainMenu;}
+function showLevelSelect(){enterTitleScreen('page');let html=`<h2>Select Level</h2><p class="help">Difficulty: <b class="gold">${difficultyName(prefs.difficulty)}</b></p><div class="levelGrid">`;for(let i=1;i<=15;i++)html+=`<button class="levelBtn" data-lvl="${i}">${i}</button>`;html+='</div><div class="sep"></div><button class="secondary" id="backMenu">Back</button>';$('#menuModal').innerHTML=html;$$('.levelBtn').forEach(b=>b.onclick=()=>{state.level=+b.dataset.lvl;showArchetypes();});$('#backMenu').onclick=showMainMenu;}
 function showDifficulty(){
+ enterTitleScreen('page');
  $('#menuModal').innerHTML=`<h2>Difficulty</h2><p class="help">This setting applies to every newly started level until you change it.</p><div class="menuGrid"><button class="menuBtn diff ${prefs.difficulty==='standard'?'active':''}" data-d="standard"><strong>Standard</strong><br>15 lives · unlimited planning</button><button class="menuBtn diff ${prefs.difficulty==='hard'?'active':''}" data-d="hard"><strong>Hard</strong><br>10 lives · 60-second planning</button><button class="menuBtn diff ${prefs.difficulty==='veryhard'?'active':''}" data-d="veryhard"><strong>Very Hard</strong><br>5 lives · 30-second planning</button></div><div class="sep"></div><button class="secondary" id="backMenu">Back</button>`;
  $$('.diff').forEach(b=>b.onclick=()=>{prefs.difficulty=b.dataset.d;state.difficulty=prefs.difficulty;localStorage.setItem('amazingTD_difficulty',prefs.difficulty);showDifficulty();});$('#backMenu').onclick=showMainMenu;
 }
 function showStartSettings(){
+ enterTitleScreen('page');
  $('#menuModal').innerHTML=`<h2>Settings</h2><div class="card"><h3>Camera Controls</h3><p class="help">Adjust how quickly the camera moves while holding W, A, S, or D.</p><label for="wasdSensitivity">WASD sensitivity: <span id="wasdValue" class="settingValue">${Math.round(prefs.wasdSensitivity*100)}%</span></label><br><input class="settingRange" id="wasdSensitivity" type="range" min="0.5" max="2" step="0.1" value="${prefs.wasdSensitivity}"><div class="small">50% is precise · 100% is default · 200% is fastest</div></div><button class="secondary" id="backMenu">Back</button>`;
  $('#wasdSensitivity').oninput=e=>{prefs.wasdSensitivity=clamp(Number(e.target.value),.5,2);$('#wasdValue').textContent=`${Math.round(prefs.wasdSensitivity*100)}%`;localStorage.setItem('amazingTD_wasd_sensitivity',String(prefs.wasdSensitivity));};$('#backMenu').onclick=showMainMenu;
 }
@@ -413,29 +562,45 @@ function towerDamageLabel(t){return t.dmg?`${t.dmg[0]}–${t.dmg[1]}`:'—';}
 function towerTargetLabel(t){return (t.target||[]).map(x=>capitalize(x)).join(', ');}
 function guideTowerCatalogue(){return Object.entries(ARCHETYPES).map(([id,a])=>{const rows=TOWERS.filter(t=>t.arch===id).map(t=>`<tr><td><b>${t.name}</b><br><span class="small">${capitalize(t.tier)}</span></td><td class="guideStat">${t.cost}g</td><td class="guideStat">${towerDamageLabel(t)}</td><td class="guideStat">${t.interval||'—'}</td><td class="guideStat">${t.range}</td><td>${towerTargetLabel(t)}</td><td class="guideStat">${t.footprint}×${t.footprint}</td><td>${t.effect||'—'}</td></tr>`).join('');return `<section class="guideArch" style="--arch-color:${a.color}"><h2 style="color:${a.color}">${a.name}</h2><p class="help">${a.desc}</p><table class="guideTable"><thead><tr><th>Tower</th><th>Cost</th><th>Damage</th><th>Interval</th><th>Range</th><th>Targets</th><th>Size</th><th>Effect</th></tr></thead><tbody>${rows}</tbody></table></section>`;}).join('');}
 function guideMonsterCompendium(){const monsters=[
- {name:'Dew Slime',kind:'Basic ground',stats:'Speed 1.65 · 100% base HP',desc:'The standard ground creep. Follows every checkpoint in order and uses the maze created by towers.'},
- {name:'Fox Imp',kind:'Fast ground',stats:'Speed 3.10 · 72% base HP',desc:'Very fast but fragile. Long open lanes are dangerous against this creep.'},
- {name:'Knight Beetle',kind:'Armored ground',stats:'Speed 1.10 · 130% base HP · scaling armor',desc:'Reduces non-fixed damage through armor. Magic and armor-reduction effects are especially valuable.'},
- {name:'Tortoise Golem',kind:'Slow ground',stats:'Speed 0.85 · 165% base HP',desc:'Slow-moving durability test that gives damage-over-time towers more time to work.'},
- {name:'Flutterbat',kind:'Flying',stats:'Speed 1.12–1.82 · 82% base HP · reduced wave count',desc:'Ignores terrain and towers, but must visit every checkpoint in order before flying to its paired exit.'},
- {name:'Ogre King',kind:'Boss',stats:'Speed 0.55 · displacement resistance',desc:'Appears on the final wave. From Level 7 onward it can rush, shut down nearby towers, or apply a damage-debuff aura. Later bosses arrive with escorts.'}
- ];return `<div class="compendiumGrid">${monsters.map(m=>`<div class="card monsterCard"><h3>${m.name}</h3><span class="tag">${m.kind}</span><div class="sep"></div><div class="small gold">${m.stats}</div><p class="help">${m.desc}</p></div>`).join('')}</div><div class="card help"><h3>Wave Scaling</h3>Enemy durability is based on the current wave, not the level. Larger maps add more enemies only after the opening waves. Flying waves contain fewer units, while bosses conclude each level.</div>`;}
+ {kindId:'basic',kind:'Basic ground',stats:'Speed 1.65 · 100% base HP',desc:'The standard ground creep. Follows every checkpoint in order and uses the maze created by towers.'},
+ {kindId:'fast',kind:'Fast ground',stats:'Speed 3.10 · 72% base HP',desc:'Very fast but fragile. Long open lanes are dangerous against this creep.'},
+ {kindId:'armored',kind:'Armored ground',stats:'Speed 1.10 · 130% base HP · scaling armor',desc:'Reduces non-fixed damage through armor. Magic and armor-reduction effects are especially valuable.'},
+ {kindId:'slow',kind:'Slow ground',stats:'Speed 0.85 · 165% base HP',desc:'Slow-moving durability test that gives damage-over-time towers more time to work.'},
+ {kindId:'air',kind:'Flying',stats:'Speed 1.12–1.82 · 82% base HP · 30–52% wave density',desc:'Ignores terrain and towers, but must visit every checkpoint before its paired exit. Flying waves pay 15% extra combat bounty; air-only towers deal +25% damage while mixed-target towers deal 5% less.'},
+ {kindId:'boss',kind:'Boss',stats:'Speed 0.55 · displacement resistance',desc:'Appears on the final wave. From Level 7 onward it can rush, shut down nearby towers, or apply a damage-debuff aura. Later bosses arrive with escorts.'}
+ ];return `<div class="compendiumGrid">${monsters.map(m=>{
+  const vars=(CREEP_SKINS[m.kindId]||[]).map((s,i)=>`<div class="dexMon"><canvas class="dexCv" data-kind="${m.kindId}" data-skin="${i}"></canvas><div class="small">${s.name}</div></div>`).join('');
+  return `<div class="card monsterCard"><h3>${m.kind}</h3><div class="dexRow">${vars}</div><div class="small gold">${m.stats}</div><p class="help">${m.desc}</p></div>`;}).join('')}</div><div class="card help"><h3>Variants</h3>Each monster has several looks that rotate between levels. Variants are purely cosmetic — stats depend only on the monster type and wave.</div><div class="card help"><h3>Wave Scaling</h3>Enemy durability is based on the current wave, not the level. Larger maps add more enemies only after the opening waves. Flying waves contain fewer units, while bosses conclude each level.</div>`;}
+let dexTimer=null;
+function stopDexAnim(){if(dexTimer){clearInterval(dexTimer);dexTimer=null;}}
+function startDexAnim(){stopDexAnim();const cvs=$$('.dexCv');if(!cvs.length)return;const S=2;
+ for(const cv of cvs){const fr=getCreepFrames(cv.dataset.kind,+cv.dataset.skin)[0];cv.width=fr.width*S;cv.height=fr.height*S+8;}
+ let f=0;
+ const draw=()=>{if(!document.body.contains(cvs[0])){stopDexAnim();return;}
+  for(const cv of cvs){const frames=getCreepFrames(cv.dataset.kind,+cv.dataset.skin);const g=cv.getContext('2d');g.imageSmoothingEnabled=false;g.clearRect(0,0,cv.width,cv.height);
+   const fr=frames[f%frames.length];const air=cv.dataset.kind==='air';const hop=air?4+[0,1,2,1][f%4]:[0,2,3,2][f%4];
+   g.drawImage(fr,0,8-hop,fr.width*S,fr.height*S);}
+  f++;};
+ draw();dexTimer=setInterval(draw,150);}
 function showGuide(tab='how'){
+ enterTitleScreen('page');
  const nav=`<div class="guideNav"><button class="secondary guideTab ${tab==='how'?'active':''}" data-guide="how">How to Play</button><button class="secondary guideTab ${tab==='towers'?'active':''}" data-guide="towers">Archetypes & Towers</button><button class="secondary guideTab ${tab==='monsters'?'active':''}" data-guide="monsters">Monster Compendium</button></div>`;
  let body='';
  if(tab==='how')body=`<div class="guideSection"><div class="card help"><h3>Objective</h3>Survive every wave. Each creep that reaches an exit costs one life. Clear the final boss wave to complete the level.</div><div class="card help"><h3>Build the Maze</h3>Select a tower and place it on clear grid cells. Ground creeps reroute around towers, allowing you to create long paths. Towers can be moved freely during planning, and Undo Build reverses recent placements.</div><div class="card help"><h3>Checkpoints</h3>Every ground and flying creep must visit all checkpoints in order. Checkpoints are the focal point of the maze. If a ground checkpoint is tightly enclosed, its valid capture area expands step by step up to 5×5. Completely blocking all routes triggers a warning before creeps attack a blocking tower.</div><div class="card help"><h3>Combat and Economy</h3>Kills award combat bounty. Completing a wave also grants maze income based on map size, checkpoints, and active routes. Perfect waves award a small bonus. Towers can be upgraded three times; upgrades improve power but not range or attack interval.</div><div class="card help"><h3>Controls</h3>WASD moves the camera. Mouse wheel zooms. Right-click cancels placement or selection. Escape pauses. Use the speed button for 1×–3× simulation speed.</div></div>`;
  else if(tab==='towers')body=`<div class="guideSection">${guideTowerCatalogue()}</div>`;
  else body=`<div class="guideSection">${guideMonsterCompendium()}</div>`;
  $('#menuModal').innerHTML=`<h1>Guide</h1>${nav}${body}<div class="sep"></div><button class="secondary" id="backMenu">Back</button>`;$$('.guideTab').forEach(b=>b.onclick=()=>showGuide(b.dataset.guide));$('#backMenu').onclick=showMainMenu;
+ if(tab==='monsters')startDexAnim();else stopDexAnim();
 }
-function showArchetypes(){let html=`<h2>Level ${state.level}: Choose Archetype</h2><p class="help">Difficulty: <b class="gold">${difficultyName(prefs.difficulty)}</b><br>The archetype is locked for the entire level. Level preview: ${previewText(state.level)}</p><div class="menuGrid">`;for(const [id,a] of Object.entries(ARCHETYPES))html+=`<button class="menuBtn archetypeBtn" data-a="${id}"><strong style="color:${a.color}">${a.name}</strong>${a.desc}<br><span class="small">${TOWERS.filter(t=>t.arch===id).length} towers</span></button>`;html+=`</div><div class="sep"></div><button class="secondary" id="backLevels">Back</button>`;$('#menuModal').innerHTML=html;$$('.archetypeBtn').forEach(b=>b.onclick=()=>{state.archetype=b.dataset.a;state.difficulty=prefs.difficulty;startLevel();});$('#backLevels').onclick=showLevelSelect;}
-function previewText(l){const {w,h}=levelDimensions(l),waves=getWaveMax(l);if(l===1)return `10-wave tutorial · ${w}×${h} map · flying at Wave 5 · boss at Wave 10`;const parts=[`${waves} waves`,`${w}×${h} map`,l>=3?'terrain / irregular edges':'open terrain',l>=5?'multiple routes · two checkpoints':'one checkpoint',l>=7?'special-ability boss':'boss finale'];return parts.join(' · ')}
+function showArchetypes(){enterTitleScreen('page');let html=`<h2>Level ${state.level}: Choose Archetype</h2><p class="help">Difficulty: <b class="gold">${difficultyName(prefs.difficulty)}</b><br>The archetype is locked for the entire level. Level preview: ${previewText(state.level)}</p><div class="menuGrid">`;for(const [id,a] of Object.entries(ARCHETYPES))html+=`<button class="menuBtn archetypeBtn" data-a="${id}"><strong style="color:${a.color}">${a.name}</strong>${a.desc}<br><span class="small">${TOWERS.filter(t=>t.arch===id).length} towers</span></button>`;html+=`</div><div class="sep"></div><button class="secondary" id="backLevels">Back</button>`;$('#menuModal').innerHTML=html;$$('.archetypeBtn').forEach(b=>b.onclick=()=>{state.archetype=b.dataset.a;state.difficulty=prefs.difficulty;startLevel();});$('#backLevels').onclick=showLevelSelect;}
+function previewText(l){const {w,h}=levelDimensions(l),waves=getWaveMax(l);if(l===1)return `10-wave tutorial · ${w}×${h} map · flying at Wave 5 · boss at Wave 10`;if(l===7)return `${waves} waves · custom ${w}×${h} Z-shaped map · one spawn · two bend checkpoints · special-ability boss`;if(l===15)return `${waves} waves · custom ${w}×${h} layout · three spawns · Spawn 3 unlocks on Wave 11 · split checkpoints`;const parts=[`${waves} waves`,`${w}×${h} map`,l>=3?'terrain / irregular edges':'open terrain',l>=5?'multiple routes · two checkpoints':'one checkpoint',l>=7?'special-ability boss':'boss finale'];return parts.join(' · ');}
 function continueSave(){const raw=localStorage.getItem('amazingTD_save');if(!raw){toast('No autosave found');return;}try{const s=JSON.parse(raw);Object.assign(state,s.meta);state.level=clamp(state.level||1,1,15);state.stage=1;startLevel(true,s);}catch(e){toast('Autosave could not be loaded');}}
 
 function startLevel(fromSave=false,save=null){
+ $('#titleScreen').classList.add('hidden');$('#app').classList.remove('hidden');$('#menuOverlay').classList.add('hidden');
  state.screen='game';state.level=clamp(state.level||1,1,15);state.stage=1;state.wave=fromSave?Math.min(save.meta.wave||0,getWaveMax(state.level)):0;state.waveMax=getWaveMax(state.level);state.lives=fromSave?save.meta.lives:livesFor(state.difficulty);state.gold=fromSave?save.meta.gold:startingGold(state.level);state.pathVisible=fromSave?save.meta.pathVisible:true;state.speed=fromSave?save.meta.speed:1;state.towers=[];state.creeps=[];state.projectiles=[];state.particles=[];state.effects=[];state.selectedBuild=null;state.selectedTower=null;state.movingTower=null;state.paused=false;state.phase='build';state.buildTimer=buildTimeFor(state.difficulty);state.blockedTimer=0;state.breachTarget=null;state.waveLeaked=0;state.undoStack=[];map=makeMap(state.level,1);
  if(fromSave&&save.towers)state.towers=save.towers.map(x=>({...x,kills:x.kills||0,data:BY_ID[x.id]}));
- wavePlan=state.wave>=state.waveMax?null:generateWavePlan(state.level,1,state.wave+1);resetCamera();renderTowerList();updateUI();$('#menuOverlay').classList.add('hidden');$('#pauseOverlay').classList.add('hidden');if(!fromSave&&state.level===1)toast('Tutorial Level: flying arrives on Wave 5, boss on Wave 10');
+ wavePlan=state.wave>=state.waveMax?null:generateWavePlan(state.level,1,state.wave+1);resetCamera();renderTowerList();updateUI();$('#pauseOverlay').classList.add('hidden');if(!fromSave&&state.level===1)toast('Tutorial Level: flying arrives on Wave 5, boss on Wave 10');
  const stageStart=readStageStart();
  if(!fromSave||!stageStart||!stageStartMatches(stageStart))saveStageStart();
  autosave();
@@ -463,7 +628,7 @@ function updateUI(){
   waveCard.innerHTML=`${state.wave>=state.waveMax&&state.phase==='build'?'<h3>Level Cleared</h3><div class="help good">All waves complete.</div><div class="sep"></div>':''}<div class="waveList">${rows.join('')}</div>`;
   waveCard.dataset.key=waveCardKey;
  }
- $('#rulesCard').innerHTML=`${map?.checkpoints.length||0} checkpoint(s)<br>${map?.spawns.length||0} spawn(s)<br>${map?.exits.length||0} exit(s)<br>${map?.terrain.length||0} terrain feature(s)<br><br>${state.difficulty==='standard'?'Unlimited planning':state.difficulty==='hard'?'60-second planning':'30-second planning'}`;
+ $('#rulesCard').innerHTML=`${map?.checkpoints.length||0} checkpoint(s)<br>${map?.spawns.length||0} spawn(s)<br>${map?.exits.length||0} exit(s)<br>${map?.terrain.length||0} terrain feature(s)${map?.customLayout==='level7'?'<br><br><span class="good">Custom Z-shaped battlefield with one route through both bends.</span>':map?.customLayout==='level15'?'<br><br><span class="good">Spawn 3 unlocks on Wave 11 and bypasses checkpoints.</span>':''}<br><br>${state.difficulty==='standard'?'Unlimited planning':state.difficulty==='hard'?'60-second planning':'30-second planning'}`;
  const plannedRoutes=wavePlan?.activeRouteIndices||[0];
  $('#legend').innerHTML=(map?.spawns.length||1)>1?plannedRoutes.map(i=>`<div><span class="dot" style="background:${routeColor(i)}"></span>Route ${i+1} → Exit ${i+1}</div>`).join(''):`<div><span class="dot g"></span>Ground route</div><div><span class="dot a"></span>Flying route</div>`;
  $('#undoBtn').disabled=state.phase!=='build'||state.paused||!(state.undoStack?.length);
@@ -475,7 +640,7 @@ function updateSelectionCard(){
  $('#towerMenu').classList.toggle('hidden',!(state.selectedTower&&state.screen==='game'&&!state.movingTower));
  if(state.selectedTower){const tw=state.selectedTower,d=BY_ID[tw.id],upCost=Math.ceil(d.cost*1.2);c.innerHTML=`<h3>${d.name}</h3><span class="tag ${d.type}">${d.type}</span><span class="tag">${d.footprint}×${d.footprint}</span><div class="sep"></div><div class="kv"><span>Upgrade</span><b>${tw.upgrade}/3</b><span>HP</span><b>${tw.hp}/5</b><span>Kills</span><b>${tw.kills||0}</b><span>Range</span><b>${d.range}</b>${d.dmg?`<span>Damage</span><b>${scaledDamageText(d,tw.upgrade)}</b>`:''}<span>Interval</span><b>${d.interval||'—'}</b></div><p class="help">${d.effect}</p>`;u.disabled=tw.upgrade>=3||state.gold<upCost||state.paused;m.disabled=state.paused;s.disabled=state.paused;u.textContent=`Upgrade ${upCost}g`;m.textContent='Move Free';s.textContent=`Sell ${sellValue(tw)}g`;
  }else if(state.selectedBuild){const d=BY_ID[state.selectedBuild];c.innerHTML=`<h3>${d.name}</h3><div class="kv"><span>Cost</span><b class="gold">${d.cost}</b><span>Footprint</span><b>${d.footprint}×${d.footprint}</b><span>Range</span><b>${d.range}</b>${d.dmg?`<span>Damage</span><b>${d.dmg[0]}–${d.dmg[1]}</b>`:''}<span>Targets</span><b>${d.target.join(', ')}</b></div><p class="help">${d.effect}</p>`;
- }else if(state.selectedCreep){const cr=state.selectedCreep,names={basic:'Dew Slime',fast:'Fox Imp',armored:'Knight Beetle',slow:'Tortoise Golem',air:'Flutterbat',boss:'Ogre King'};
+ }else if(state.selectedCreep){const cr=state.selectedCreep,skinList=CREEP_SKINS[cr.kind],names={[cr.kind]:(skinList&&skinList[cr.skin||0]||{name:capitalize(cr.kind)}).name};
   const status=[cr.frozen>0?'Frozen':null,cr.stunned>0?'Stunned':null,cr.burn?'Burning':null,cr.poisons?.length?'Poisoned':null,combinedSlow(cr)>0?'Slowed':null].filter(Boolean).join(', ')||'None';
   c.innerHTML=`<h3>${names[cr.kind]||cr.kind}</h3><span class="tag ${cr.kind==='air'?'flying':''}">${cr.kind}</span><div class="sep"></div><div class="kv"><span>HP</span><b>${Math.max(0,Math.ceil(cr.hp))}/${cr.maxHp}</b><span>Armor</span><b>${cr.armor||0}</b><span>Speed</span><b>${cr.speed.toFixed(2)}</b><span>Bounty</span><b class="gold">${cr.reward}g</b><span>Status</span><b>${status}</b></div>`;
  }else c.textContent='Click a tower or creep to inspect it, or pick one to build.';
@@ -494,10 +659,11 @@ function checkpointZoneGoals(cp,forBreak=false,size=5){const z=cpBox(cp,size),go
   else if(!gridBlocked(x,y))goals.push({x,y});
  }return goals;}
 function inCpBox(cp,x,y,s){const b=cpBox(cp,s||1);return x>=b.x&&y>=b.y&&x<b.x+b.w&&y<b.y+b.h;}
+function checkpointIndicesForRoute(spawnIndex=0){const custom=map?.routeCheckpointIndices?.[spawnIndex%map.spawns.length];return Array.isArray(custom)?custom:map.checkpoints.map((_,i)=>i);}
 function getRouteForSpawn(spawnIndex=0,air=false){
- const s=rectCenter(map.spawns[spawnIndex%map.spawns.length]),e=rectCenter(map.exits[spawnIndex%map.exits.length]);
- if(air){const points=[s];for(const cp of map.checkpoints)points.push({x:cp.x,y:cp.y});points.push(e);return points;}
- const points=[s];for(const cp of map.checkpoints){const g=checkpointGoals(cp);points.push(g[Math.floor(g.length/2)]||{x:cp.x,y:cp.y});}points.push(e);return points;
+ const s=rectCenter(map.spawns[spawnIndex%map.spawns.length]),e=rectCenter(map.exits[spawnIndex%map.exits.length]),cpIndices=checkpointIndicesForRoute(spawnIndex);
+ if(air){const points=[s];for(const i of cpIndices){const cp=map.checkpoints[i];points.push({x:cp.x,y:cp.y});}points.push(e);return points;}
+ const points=[s];for(const i of cpIndices){const cp=map.checkpoints[i],g=checkpointGoals(cp);points.push(g[Math.floor(g.length/2)]||{x:cp.x,y:cp.y});}points.push(e);return points;
 }
 function rectCenter(r){return {x:r.x+(r.w-1)/2,y:r.y+(r.h-1)/2}}
 function nearestOpenCell(p){return {x:clamp(Math.round(p.x),0,map.w-1),y:clamp(Math.round(p.y),0,map.h-1)}}
@@ -508,9 +674,9 @@ function astar(start,goals,allowBreak=false){start=nearestOpenCell(start);const 
 }
 function heur(p,goals){let v=1e9;for(const g of goals)v=Math.min(v,Math.abs(p.x-g.x)+Math.abs(p.y-g.y));return v;}
 function towerAt(x,y){return state.towers.find(t=>x>=t.x&&y>=t.y&&x<t.x+t.footprint&&y<t.y+t.footprint)||null;}
-function computeGroundPath(spawnIndex=0,from=null,objIndex=0,allowBreak=false){let start=from||rectCenter(map.spawns[spawnIndex%map.spawns.length]),full=[];for(let i=objIndex;i<map.checkpoints.length;i++){const cp=map.checkpoints[i];let p=null,used=0;
+function computeGroundPath(spawnIndex=0,from=null,objIndex=0,allowBreak=false){let start=from||rectCenter(map.spawns[spawnIndex%map.spawns.length]),full=[];const cpIndices=checkpointIndicesForRoute(spawnIndex);for(let step=objIndex;step<cpIndices.length;step++){const cp=map.checkpoints[cpIndices[step]];let p=null,used=0;
  for(let s=1;s<=5&&!p;s++){const goals=checkpointZoneGoals(cp,allowBreak,s);if(!goals.length)continue;p=astar(start,goals,allowBreak);used=s;}
- if(p&&used>1){if(!full.expanded)full.expanded={};full.expanded[i]=used;}if(!p)return null;if(full.length)full.pop();full.push(...p);start=p[p.length-1];}const exit=map.exits[spawnIndex%map.exits.length];const goals=[];for(let y=exit.y;y<exit.y+exit.h;y++)for(let x=exit.x;x<exit.x+exit.w;x++)goals.push({x,y});const p=astar(start,goals,allowBreak);if(!p)return null;if(full.length)full.pop();full.push(...p);return full;}
+ if(p&&used>1){if(!full.expanded)full.expanded={};full.expanded[step]=used;}if(!p)return null;if(full.length)full.pop();full.push(...p);start=p[p.length-1];}const exit=map.exits[spawnIndex%map.exits.length];const goals=[];for(let y=exit.y;y<exit.y+exit.h;y++)for(let x=exit.x;x<exit.x+exit.w;x++)goals.push({x,y});const p=astar(start,goals,allowBreak);if(!p)return null;if(full.length)full.pop();full.push(...p);return full;}
 function computeBreachTarget(spawnIndex=0,from=null,objIndex=0){const p=computeGroundPath(spawnIndex,from,objIndex,true);if(!p)return null;for(const c of p){const tw=towerAt(c.x,c.y);if(tw)return tw;}return null;}
 function plannedRouteIndices(){return wavePlan?.activeRouteIndices?.length?wavePlan.activeRouteIndices:map.spawns.map((_,i)=>i);}
 function allRoutesValid(){for(const i of plannedRouteIndices()){if(!computeGroundPath(i))return false;}return true;}
@@ -530,12 +696,12 @@ function updateBlockedState(resetIfValid=false){const valid=allRoutesValid();if(
 function findCheckpointBlocker(){for(const cp of map.checkpoints){const z=cpZoneRect(cp);const t=state.towers.find(t=>rectsOverlap(towerRect(t),z));if(t)return t;}return state.towers[0]||null;}
 
 function startWave(){if(state.phase!=='build'||state.paused)return;if(state.wave>=state.waveMax){finishStage();return;}state.wave++;state.phase='wave';state.spawned=0;state.spawnClock=0;state.undoStack=[];wavePlan=generateWavePlan(state.level,1,state.wave);state.pathVisibleBeforeWave=state.pathVisible;updateUI();const intro=state.level===1&&state.wave===5?'FLYING CREEPS: they ignore your maze':state.level===1&&state.wave===10?'BOSS WAVE: prepare for a high-HP target':wavePlan.isBoss?(wavePlan.specialBoss?'EMPOWERED BOSS WAVE':'BOSS WAVE'):`${capitalize(wavePlan.type)} wave`;toast(intro);autosave();}
-function spawnCreep(){const p=wavePlan;const routePool=p.activeRouteIndices?.length?p.activeRouteIndices:[0];const progress=state.spawned/Math.max(1,p.count);const eligible=routePool.filter((_,i)=>progress>=(p.routeStartFractions?.[i]||0));const unlocked=eligible.length?eligible:[routePool[0]];const spawnIndex=unlocked[state.spawned%unlocked.length]%map.spawns.length;const s=rectCenter(map.spawns[spawnIndex]);const bossUnit=p.isBoss&&state.spawned===0;const waveKind=bossUnit?'boss':p.isBoss?(p.escortType||'basic'):p.type;const kind=waveKind==='flying'?'air':waveKind;const hp=bossUnit?(p.bossHP||p.hp):p.isBoss?(p.escortHp||Math.max(1,Math.floor(p.hp*.18))):p.hp;const reward=bossUnit?(p.bossReward??p.rewardTarget):(p.isBoss?(p.escortReward||1):p.reward+(state.spawned<(p.rewardRemainder||0)?1:0));const c={id:Math.random().toString(36),kind,x:s.x,y:s.y,hp,maxHp:hp,armor:kind==='armored'?5+Math.floor(state.wave/4):0,speed:kind==='fast'?3.1:kind==='armored'?1.1:kind==='slow'?.85:kind==='boss'?.55:kind==='air'?(p.unitSpeed||1.45):1.65,reward,route:spawnIndex,objIndex:0,path:kind==='air'?getRouteForSpawn(spawnIndex,true):computeGroundPath(spawnIndex),pathIndex:0,history:[],effects:[],burn:null,poisons:[],freezeImmune:0,stunImmune:0,frozen:0,stunned:0,dead:false,nextCell:null,attackCd:0,bossSkillCd:kind==='boss'&&state.level>=7?6:999,speedBoostTimer:0};state.creeps.push(c);state.spawned++;}
+function spawnCreep(){const p=wavePlan;const routePool=p.activeRouteIndices?.length?p.activeRouteIndices:[0];const progress=state.spawned/Math.max(1,p.count);const eligible=routePool.filter((_,i)=>progress>=(p.routeStartFractions?.[i]||0));const unlocked=eligible.length?eligible:[routePool[0]];const spawnIndex=unlocked[state.spawned%unlocked.length]%map.spawns.length;const s=rectCenter(map.spawns[spawnIndex]);const bossUnit=p.isBoss&&state.spawned===0;const waveKind=bossUnit?'boss':p.isBoss?(p.escortType||'basic'):p.type;const kind=waveKind==='flying'?'air':waveKind;const hp=bossUnit?(p.bossHP||p.hp):p.isBoss?(p.escortHp||Math.max(1,Math.floor(p.hp*.18))):p.hp;const reward=bossUnit?(p.bossReward??p.rewardTarget):(p.isBoss?(p.escortReward||1):p.reward+(state.spawned<(p.rewardRemainder||0)?1:0));const c={id:Math.random().toString(36),kind,skin:skinFor(kind),x:s.x,y:s.y,hp,maxHp:hp,armor:kind==='armored'?5+Math.floor(state.wave/4):0,speed:kind==='fast'?3.1:kind==='armored'?1.1:kind==='slow'?.85:kind==='boss'?.55:kind==='air'?(p.unitSpeed||1.45):1.65,reward,route:spawnIndex,objIndex:0,path:kind==='air'?getRouteForSpawn(spawnIndex,true):computeGroundPath(spawnIndex),pathIndex:0,history:[],effects:[],burn:null,poisons:[],freezeImmune:0,stunImmune:0,frozen:0,stunned:0,dead:false,nextCell:null,attackCd:0,bossSkillCd:kind==='boss'&&state.level>=7?6:999,speedBoostTimer:0};state.creeps.push(c);state.spawned++;}
 function updateWave(dt){if(state.spawned<wavePlan.count){state.spawnClock-=dt;if(state.spawnClock<=0){spawnCreep();state.spawnClock=wavePlan.spawnGap;}}
  if(state.spawned>=wavePlan.count&&state.creeps.every(c=>c.dead)){const leaked=state.waveLeaked||0,grant=wavePlan.mazeGrant||0;state.gold+=grant;if(leaked===0){const bonus=Math.max(1,Math.floor((wavePlan.combatRewardTarget||wavePlan.rewardTarget)*.05));state.gold+=bonus;toast(`Maze grant +${grant}g · Perfect +${bonus}g`);}else toast(`Maze grant +${grant}g`);state.waveLeaked=0;state.phase='build';state.buildTimer=buildTimeFor(state.difficulty);wavePlan=state.wave>=state.waveMax?null:generateWavePlan(state.level,1,state.wave+1);updateUI();autosave();if(state.wave>=state.waveMax)toast('Level cleared — continue when ready');}
 }
-function finishStage(){state.achievements[`${state.level}-${state.difficulty}`]=true;localStorage.setItem('amazingTD_ach',JSON.stringify(state.achievements));$('#menuOverlay').classList.remove('hidden');const finalLevel=state.level>=15;$('#menuModal').innerHTML=`<h1>Level ${state.level} Complete</h1><p>You cleared all ${state.waveMax} waves on <b>${difficultyName(state.difficulty)}</b>.</p><div class="menuGrid">${finalLevel?'':`<button class="menuBtn" id="nextLevel"><strong>Next Level</strong></button>`}<button class="menuBtn" id="levelMenu"><strong>Level Select</strong></button></div>`;if(!finalLevel)$('#nextLevel').onclick=()=>{state.level=Math.min(15,state.level+1);showArchetypes();};$('#levelMenu').onclick=showLevelSelect;}
-function loseLevel(){state.phase='lost';$('#menuOverlay').classList.remove('hidden');$('#menuModal').innerHTML=`<h1>Defeat</h1><p>The exit portal was breached too many times.</p><div class="menuGrid"><button class="menuBtn" id="retry"><strong>Retry Level</strong></button><button class="menuBtn" id="levelMenu"><strong>Level Select</strong></button></div>`;$('#retry').onclick=()=>startLevel();$('#levelMenu').onclick=showLevelSelect;}
+function finishStage(){state.achievements[`${state.level}-${state.difficulty}`]=true;localStorage.setItem('amazingTD_ach',JSON.stringify(state.achievements));$('#menuOverlay').classList.remove('hidden');const finalLevel=state.level>=15;$('#resultModal').innerHTML=`<h1>Level ${state.level} Complete</h1><p>You cleared all ${state.waveMax} waves on <b>${difficultyName(state.difficulty)}</b>.</p><div class="menuGrid">${finalLevel?'':`<button class="menuBtn" id="nextLevel"><strong>Next Level</strong></button>`}<button class="menuBtn" id="levelMenu"><strong>Level Select</strong></button></div>`;if(!finalLevel)$('#nextLevel').onclick=()=>{state.level=Math.min(15,state.level+1);showArchetypes();};$('#levelMenu').onclick=showLevelSelect;}
+function loseLevel(){state.phase='lost';$('#menuOverlay').classList.remove('hidden');$('#resultModal').innerHTML=`<h1>Defeat</h1><p>The exit portal was breached too many times.</p><div class="menuGrid"><button class="menuBtn" id="retry"><strong>Retry Level</strong></button><button class="menuBtn" id="levelMenu"><strong>Level Select</strong></button></div>`;$('#retry').onclick=()=>startLevel();$('#levelMenu').onclick=showLevelSelect;}
 
 function update(dt){if(state.screen!=='game'||state.paused)return;state.time+=dt;const move=12*prefs.wasdSensitivity*dt/camera.zoom;if(keysHeld.w)camera.y-=move;if(keysHeld.s)camera.y+=move;if(keysHeld.a)camera.x-=move;if(keysHeld.d)camera.x+=move;
  if(state.phase==='build'&&state.buildTimer!=null){state.buildTimer-=dt;if(state.buildTimer<=0)startWave();}
@@ -555,8 +721,8 @@ function moveGround(c,amt,dt){const rev=state.mapRev||0;
   if(!c.path){c.pathFailRev=rev;attemptBreach(c,dt);return;}c.pathFailRev=-1;}
  let target=c.path[Math.min(c.pathIndex+1,c.path.length-1)];c.nextCell=target;if(!target){leakCreep(c);return;}const dx=target.x-c.x,dy=target.y-c.y,d=Math.hypot(dx,dy);if(d<.05){c.x=target.x;c.y=target.y;c.history.push({x:c.x,y:c.y});if(c.history.length>120)c.history.shift();c.pathIndex++;
    const cx=Math.round(c.x),cy=Math.round(c.y);
-   const exp=(c.path&&c.path.expanded)||{};
-   for(let i=c.objIndex;i<map.checkpoints.length;i++){const cp=map.checkpoints[i];if(inCpBox(cp,cx,cy,exp[i]||1)){c.objIndex=i+1;c.path=computeGroundPath(c.route,{x:c.x,y:c.y},c.objIndex);c.pathIndex=0;break;}}
+   const exp=(c.path&&c.path.expanded)||{},cpIndices=checkpointIndicesForRoute(c.route);
+   for(let step=c.objIndex;step<cpIndices.length;step++){const cp=map.checkpoints[cpIndices[step]];if(inCpBox(cp,cx,cy,exp[step]||1)){c.objIndex=step+1;c.path=computeGroundPath(c.route,{x:c.x,y:c.y},c.objIndex);c.pathIndex=0;break;}}
    if(map.exits.some(r=>cellInRect(Math.round(c.x),Math.round(c.y),r)))leakCreep(c);
  }else{const step=Math.min(d,amt);c.x+=dx/d*step;c.y+=dy/d*step;}}
 function attemptBreach(c,dt=.016){const tw=state.breachTarget;if(!tw||state.towers.indexOf(tw)<0)return;const rev=state.mapRev||0;
@@ -568,9 +734,9 @@ function attemptBreach(c,dt=.016){const tw=state.breachTarget;if(!tw||state.towe
   if(dd<.06)c.breachIdx=Math.min(c.breachIdx+1,p.length-1);
   else{const step=Math.min(dd,c.speed*dt);c.x+=dx/dd*step;c.y+=dy/dd*step;}
  }else if(state.blockedTimer<=0){c.attackCd-=dt;if(c.attackCd<=0){tw.hp--;c.attackCd=.75;particle(tx,ty,'#ff6d7a',2);if(tw.hp<=0){state.towers.splice(state.towers.indexOf(tw),1);state.breachTarget=null;afterMapChange();}}}}
-function moveAir(c,amt){const route=getRouteForSpawn(c.route,true);const target=route[Math.min(c.pathIndex+1,route.length-1)];if(!target){leakCreep(c);return;}const dx=target.x-c.x,dy=target.y-c.y,d=Math.hypot(dx,dy);if(d<.08){c.x=target.x;c.y=target.y;c.pathIndex++;c.objIndex=Math.min(map.checkpoints.length,c.pathIndex);if(c.pathIndex>=route.length-1)leakCreep(c);}else{const step=Math.min(d,amt);c.x+=dx/d*step;c.y+=dy/d*step;}}
+function moveAir(c,amt){const route=getRouteForSpawn(c.route,true),cpCount=checkpointIndicesForRoute(c.route).length;const target=route[Math.min(c.pathIndex+1,route.length-1)];if(!target){leakCreep(c);return;}const dx=target.x-c.x,dy=target.y-c.y,d=Math.hypot(dx,dy);if(d<.08){c.x=target.x;c.y=target.y;c.pathIndex++;c.objIndex=Math.min(cpCount,c.pathIndex);if(c.pathIndex>=route.length-1)leakCreep(c);}else{const step=Math.min(d,amt);c.x+=dx/d*step;c.y+=dy/d*step;}}
 function leakCreep(c){if(c.dead)return;c.dead=true;state.lives--;state.waveLeaked=(state.waveLeaked||0)+1;particle(c.x,c.y,'#ff596c',12);if(state.lives<=0)loseLevel();}
-function killCreep(c,sourceTower=null){if(c.dead)return;c.dead=true;if(sourceTower&&state.towers.includes(sourceTower))sourceTower.kills=(sourceTower.kills||0)+1;state.gold+=c.reward;particle(c.x,c.y,'#ffe36d',8,'burst');}
+function killCreep(c,sourceTower=null){if(c.dead)return;c.dead=true;if(sourceTower&&state.towers.includes(sourceTower))sourceTower.kills=(sourceTower.kills||0)+1;state.gold+=c.reward;goldPopup(c.x,c.y,c.reward);particle(c.x,c.y,'#ffe36d',8,'burst');}
 function updateDots(c,dt){if(c.burn){c.burn.t-=dt;c.burn.tick-=dt;if(c.burn.tick<=0){dealRaw(c,c.burn.dmg,'magic',c.burn.sourceTower);c.burn.tick=1;}if(c.burn.t<=0)c.burn=null;}for(const p of c.poisons){p.t-=dt;p.tick-=dt;if(p.tick<=0){dealRaw(c,p.dmg,'magic',p.sourceTower);p.tick=1;}}c.poisons=c.poisons.filter(p=>p.t>0);c.effects=c.effects.filter(e=>(e.t-=dt)>0);}
 function combinedSlow(c){let remain=1;for(const e of c.effects)if(e.kind==='slow')remain*=1-e.power;let slow=1-remain;return Math.min(c.kind==='boss'?.35:.65,slow);}
 function updateBossSkill(c,dt){if(state.level<7)return;c.bossSkillCd-=dt;if(c.bossSkillCd>0)return;c.bossSkillCd=Math.max(7,12-state.level*.18);const mode=pick(['speed','disable','aura']);const nearby=state.towers.filter(t=>dist({x:t.x+t.footprint/2,y:t.y+t.footprint/2},c)<9);if(mode==='speed'){c.speedBoostTimer=Math.max(c.speedBoostTimer||0,4);particle(c.x,c.y,'#ffe08a',20);toast('Boss used Sudden Rush');return;}if(mode==='disable'){for(const t of nearby)t.disabled=Math.max(t.disabled,3.5);particle(c.x,c.y,'#d9b8ff',18);toast('Boss used Tower Shutdown');return;}for(const t of nearby)t.suppressed=Math.max(t.suppressed||0,5);particle(c.x,c.y,'#a88ad4',22);toast('Boss released a Debuff Aura');}
@@ -582,6 +748,7 @@ function effectiveRange(tw,d){let r=d.range;for(const a of nearbyAuras(tw))if(a.
 function findTargets(tw,d){const p={x:tw.x+tw.footprint/2-.5,y:tw.y+tw.footprint/2-.5},r=effectiveRange(tw,d);let a=state.creeps.filter(c=>!c.dead&&validTarget(d,c)&&dist(p,c)<=r&&(d.minRange?dist(p,c)>=d.minRange:true));if(d.lock&&tw.targetId){const old=a.find(c=>c.id===tw.targetId);if(old)return [old];}
  a.sort((x,y)=>dist(p,x)-dist(p,y)||(vulnerability(y,d.type)-vulnerability(x,d.type))||(x.hp-y.hp));if(d.line&&a.length){let best=a[0],score=-1;for(const c of a){const s=lineVictims(p,c,d).length;if(s>score){score=s;best=c;}}a=[best];}return a.slice(0,d.multi||1);}
 function validTarget(d,c){return d.target.includes(c.kind==='air'?'air':'ground');}
+function airTowerScale(d,c){if(c.kind!=='air')return 1;let m=d.airScale||1;const airOnly=d.target?.length===1&&d.target[0]==='air',mixed=d.target?.includes('air')&&d.target?.includes('ground');if(airOnly)m*=1.25;else if(mixed)m*=.95;return m;}
 function vulnerability(c,type){if(c.kind==='air')return type==='flying'?1.5:type==='physical'?.75:1;if(c.kind==='armored')return type==='magic'?1.5:type==='physical'?.7:1;if(c.kind==='boss')return 1;return type==='physical'?1.25:type==='flying'?.75:1;}
 function fireTower(tw,d,targets){if(d.lock)tw.targetId=targets[0].id;if(d.line){const p={x:tw.x+tw.footprint/2-.5,y:tw.y+tw.footprint/2-.5};for(const c of lineVictims(p,targets[0],d))hitCreep(tw,d,c,1);state.effects.push({kind:'beam',x1:p.x,y1:p.y,x2:targets[0].x,y2:targets[0].y,t:.12,color:'#9ee7ff'});return;}
  for(const c of targets){if(d.beam){hitCreep(tw,d,c,1);state.effects.push({kind:'beam',x1:tw.x+tw.footprint/2-.5,y1:tw.y+tw.footprint/2-.5,x2:c.x,y2:c.y,t:.18,color:'#ff8b67'});}else{state.projectiles.push({x:tw.x+tw.footprint/2-.5,y:tw.y+tw.footprint/2-.5,target:c,tw,d,speed:18});if(d.arch==='fire')particle(tw.x+tw.footprint/2-.5,tw.y+tw.footprint/2-.7,'#ff9d58',1,'ember');}}}
@@ -589,10 +756,10 @@ function lineVictims(p,target,d){const ax=target.x-p.x,ay=target.y-p.y,len=Math.
 function updateProjectiles(dt){for(const p of state.projectiles){if(p.dead||!p.target||p.target.dead){p.dead=true;continue;}const dx=p.target.x-p.x,dy=p.target.y-p.y,d=Math.hypot(dx,dy);if(d<.25){impactProjectile(p);p.dead=true;}else{const s=Math.min(d,p.speed*dt);p.x+=dx/d*s;p.y+=dy/d*s;}}state.projectiles=state.projectiles.filter(p=>!p.dead);}
 function impactProjectile(p){const d=p.d,c=p.target;if(d.splash){for(const v of state.creeps.filter(x=>!x.dead&&validTarget(d,x)&&dist(x,c)<=d.splash))hitCreep(p.tw,d,v,v===c?1:.65);}else hitCreep(p.tw,d,c,1);if(d.chain){let prev=c,seen=new Set([c.id]),scale=.7;for(let i=0;i<d.chain;i++){const n=state.creeps.filter(x=>!x.dead&&!seen.has(x.id)&&validTarget(d,x)&&dist(x,prev)<=3).sort((a,b)=>dist(a,prev)-dist(b,prev))[0];if(!n)break;hitCreep(p.tw,d,n,scale);state.effects.push({kind:'beam',x1:prev.x,y1:prev.y,x2:n.x,y2:n.y,t:.12,color:'#fff08c'});seen.add(n.id);prev=n;scale*=.72;}}
 }
-function hitCreep(tw,d,c,scale=1){let mult=1+.2*(tw.upgrade||0);for(const a of nearbyAuras(tw)){if(a.kind==='damageTrade')mult+=a.power;if(a.kind==='slowDamage'&&combinedSlow(c)>0)mult+=a.power;}if(tw.suppressed>0)mult*=.7;if(d.groundScale&&c.kind!=='air')mult*=d.groundScale;if(d.airScale&&c.kind==='air')mult*=d.airScale;if(d.bonusFrozen&&c.frozen>0)mult*=1+d.bonusFrozen;else if(d.bonusSlowed&&combinedSlow(c)>0)mult*=1+d.bonusSlowed;if(d.isolatedBonus&&state.creeps.filter(x=>!x.dead&&dist(x,c)<2.2).length===1)mult*=1+d.isolatedBonus;if(d.execute&&c.hp/c.maxHp<.3)mult*=1+d.execute;
+function hitCreep(tw,d,c,scale=1){let mult=1+.2*(tw.upgrade||0);for(const a of nearbyAuras(tw)){if(a.kind==='damageTrade')mult+=a.power;if(a.kind==='slowDamage'&&combinedSlow(c)>0)mult+=a.power;}if(tw.suppressed>0)mult*=.7;if(d.groundScale&&c.kind!=='air')mult*=d.groundScale;if(c.kind==='air')mult*=airTowerScale(d,c);if(d.bonusFrozen&&c.frozen>0)mult*=1+d.bonusFrozen;else if(d.bonusSlowed&&combinedSlow(c)>0)mult*=1+d.bonusSlowed;if(d.isolatedBonus&&state.creeps.filter(x=>!x.dead&&dist(x,c)<2.2).length===1)mult*=1+d.isolatedBonus;if(d.execute&&c.hp/c.maxHp<.3)mult*=1+d.execute;
  const roll=d.dmg?rand(d.dmg[0],d.dmg[1]):0;let damage=floorDamage(roll*mult*scale*vulnerability(c,d.type));if(!d.fixed)damage=Math.max(1,damage-Math.floor(c.armor||0));dealRaw(c,damage,d.type,tw);applyOnHit(c,d,tw);particle(c.x,c.y,archColor(d.arch),1,ARCH_PARTICLE[d.arch]||'spark');}
 function dealRaw(c,damage,type,sourceTower=null){c.hp-=Math.max(0,Math.floor(damage));if(c.hp<=0)killCreep(c,sourceTower);}
-function applyOnHit(c,d,tw){const up=1+.1*(tw.upgrade||0);if(d.slow)addEffect(c,'slow',d.slow*up,d.duration||2);if(d.stun&&c.stunImmune<=0){c.stunned=Math.max(c.stunned,d.stun*up);c.stunImmune=.5;}if(d.burn){const dmg=d.burn*up;if(!c.burn||dmg>=c.burn.dmg)c.burn={dmg,t:d.duration||3,tick:1,sourceTower:tw};else{c.burn.t=d.duration||3;c.burn.sourceTower=tw;}}if(d.poison){const source=d.id,existing=c.poisons.filter(p=>p.source===source).length,scale=[1,.7,.5,.35,.25][Math.min(existing,4)];c.poisons.push({source,dmg:d.poison*up*scale,t:d.duration||4,tick:1,sourceTower:tw});}if(d.push)pushBack(c,Math.round(d.push*up));}
+function applyOnHit(c,d,tw){const up=1+.1*(tw.upgrade||0),airMod=airTowerScale(d,c);if(d.slow)addEffect(c,'slow',d.slow*up,d.duration||2);if(d.stun&&c.stunImmune<=0){c.stunned=Math.max(c.stunned,d.stun*up);c.stunImmune=.5;}if(d.burn){const dmg=d.burn*up*airMod;if(!c.burn||dmg>=c.burn.dmg)c.burn={dmg,t:d.duration||3,tick:1,sourceTower:tw};else{c.burn.t=d.duration||3;c.burn.sourceTower=tw;}}if(d.poison){const source=d.id,existing=c.poisons.filter(p=>p.source===source).length,scale=[1,.7,.5,.35,.25][Math.min(existing,4)];c.poisons.push({source,dmg:d.poison*up*scale*airMod,t:d.duration||4,tick:1,sourceTower:tw});}if(d.push)pushBack(c,Math.round(d.push*up));}
 function addEffect(c,kind,power,t){c.effects.push({kind,power,t});}
 function pushBack(c,blocks){if(!c.history.length)return;const max=c.kind==='boss'?1:blocks;const idx=Math.max(0,c.history.length-1-max),p=c.history[idx];if(p){c.x=p.x;c.y=p.y;c.path=computeGroundPath(c.route,{x:c.x,y:c.y},c.objIndex);c.pathIndex=0;c.history=c.history.slice(0,idx+1);}}
 function pullBack(c,blocks){pushBack(c,blocks)}
@@ -605,13 +772,14 @@ function updateUtility(tw,d,dt){if(d.aura)return;tw.pulseTimer=(tw.pulseTimer??d
  if(d.pulse==='blackhole'&&targets.length){const c=targets.sort((a,b)=>b.x-a.x)[0];for(const v of state.creeps.filter(x=>!x.dead&&x.kind!=='air'&&dist(x,c)<=d.radius)){pullBack(v,Math.round(d.pull*up));addEffect(v,'slow',d.slow*up,d.duration);}}
  if(d.pulse==='stun')targets.forEach(c=>{if(c.stunImmune<=0){c.stunned=d.power*up;c.stunImmune=.5;}});
  if(d.pulse==='physicalArmorDown')targets.forEach(c=>c.effects.push({kind:'physicalArmorDown',power:d.power*up,t:d.duration}));
- if(d.pulse==='damageAll')targets.forEach(c=>{let damage=Math.floor(rand(d.dmg[0],d.dmg[1])*(1+.2*(tw.upgrade||0))*vulnerability(c,d.type));damage=Math.max(1,damage-Math.floor(c.armor||0));dealRaw(c,damage,d.type,tw);particle(c.x,c.y,'#fff08c');});
+ if(d.pulse==='damageAll')targets.forEach(c=>{let damage=Math.floor(rand(d.dmg[0],d.dmg[1])*(1+.2*(tw.upgrade||0))*vulnerability(c,d.type)*airTowerScale(d,c));damage=Math.max(1,damage-Math.floor(c.armor||0));dealRaw(c,damage,d.type,tw);particle(c.x,c.y,'#fff08c');});
  if(d.pulse==='corrode')targets.forEach(c=>{c.effects.push({kind:'armorDown',power:d.power*up,t:d.duration});addEffect(c,'slow',d.slow*up,d.duration)});
  if(d.pulse==='undertow')targets.forEach(c=>pullBack(c,Math.round(d.pull*up)));
  state.effects.push({kind:'ring',x:p.x,y:p.y,r:d.range,t:.35,color:ARCHETYPES[d.arch].color});
 }
 function updateEffects(dt){for(const e of state.effects)e.t-=dt;state.effects=state.effects.filter(e=>e.t>0);}
 function particle(x,y,color,n=1,shape='spark'){for(let i=0;i<n;i++)state.particles.push({x,y,vx:rand(-1,1),vy:rand(-1,1),t:rand(.25,.6),color,shape,rot:rand(0,Math.PI*2)});}
+function goldPopup(x,y,amount){if(!amount)return;state.particles.push({x:x+rand(-.12,.12),y:y-.15,vx:rand(-.035,.035),vy:-.32,t:1,color:'#ffd95e',shape:'gold',amount});}
 function updateParticles(dt){for(const p of state.particles){p.x+=p.vx*dt*3;p.y+=p.vy*dt*3;p.t-=dt;}state.particles=state.particles.filter(p=>p.t>0);}
 
 
@@ -878,18 +1046,48 @@ function getTowerCv(d){
 }
 
 /* ---------- CREEP SPRITES : chibi WF critters, 4-frame bounce sheets ---------- */
-function getCreepFrames(kind){
- if(GFX.creep[kind])return GFX.creep[kind];
+const CREEP_SKINS={
+ basic:[{name:'Dew Slime'},{name:'Puffshroom'},{name:'Berry Blob'}],
+ fast:[{name:'Fox Imp'},{name:'Zephyr Wisp'}],
+ armored:[{name:'Knight Beetle'},{name:'Acorn Warden'}],
+ slow:[{name:'Tortoise Golem'},{name:'Moss Snail'}],
+ air:[{name:'Flutterbat'},{name:'Storm Crow'}],
+ boss:[{name:'Ogre King'},{name:'Fungal Titan'}]};
+function skinFor(kind){const list=CREEP_SKINS[kind];if(!list||list.length<2)return 0;const off={basic:0,fast:1,armored:2,slow:3,air:4,boss:5}[kind]||0;return (state.level+off)%list.length;}
+function getCreepFrames(kind,skin=0){
+ const key=kind+':'+(skin||0);
+ if(GFX.creep[key])return GFX.creep[key];
  const frames=[];const N=4;
  for(let f=0;f<N;f++){
   const big=kind==='boss',S=big?52:32,cv=mkCv(S,S+6),g=cv.getContext('2d'),p=P(g);
   const cx=S/2,base=S-4,k=[0,.10,.02,-.08][f],hop=[0,1,2,1][f];
   const ell=(ex,ey,rx,ry,c)=>{g.fillStyle=c;g.beginPath();g.ellipse(ex,ey,rx,ry,0,0,Math.PI*2);g.fill();};
-  if(kind==='basic'){ // dewdrop slime
+  if(kind==='basic'&&skin===1){ // puffshroom — bouncy mushroom
+   const bw=10*(1+k*.8),bh=7*(1-k),by=base-bh;
+   ell(cx,by+1,5.5,bh*.75,'#f2e3c2');
+   p(cx-4,by,3,3,'#fff');p(cx+2,by,3,3,'#fff');p(cx-3,by+1,2,2,'#3a2a20');p(cx+3,by+1,2,2,'#3a2a20');
+   p(cx-1,by+4,3,1,'#8a5f4a');
+   ell(cx,by-bh+1,bw,bh*.75,'#e05a4e');ell(cx,by-bh,bw-2,bh*.6,'#ff7a6a');
+   p(cx-6,by-bh-1,3,3,'#ffe9dd');p(cx+3,by-bh,3,3,'#ffe9dd');p(cx-1,by-bh-3,2,2,'#ffe9dd');
+   p(cx-7,by+1,2,2,'#ff9db5',.7);p(cx+6,by+1,2,2,'#ff9db5',.7);
+  }else if(kind==='basic'&&skin===2){ // berry blob — pink slime with a sprout
+   const bw=11*(1+k),bh=8.5*(1-k),by=base-bh;
+   ell(cx,by,bw,bh,'#d94f7e');ell(cx,by-1,bw-2,bh-2,'#ff7ba6');ell(cx-bw*.3,by-bh*.35,bw*.32,bh*.28,'#ffc3d8');
+   p(cx-2,by-bh-2,4,3,'#57b25b');p(cx+1,by-bh-4,2,3,'#3fae56');
+   p(cx-5,by-2,3,4,'#fff');p(cx+3,by-2,3,4,'#fff');p(cx-4,by-1,2,2,'#40182a');p(cx+4,by-1,2,2,'#40182a');
+   p(cx-1,by+3,3,1,'#40182a');p(cx-7,by+2,1,1,'#8a2c4d');p(cx+6,by-3,1,1,'#8a2c4d');p(cx,by+1,1,1,'#8a2c4d');
+  }else if(kind==='basic'){ // dewdrop slime
    const bw=11*(1+k),bh=8.5*(1-k),by=base-bh;
    ell(cx,by,bw,bh,'#3fae56');ell(cx,by-1,bw-2,bh-2,'#63d878');ell(cx-bw*.3,by-bh*.35,bw*.32,bh*.28,'#b8f7c0');
    p(cx-5,by-2,3,4,'#fff');p(cx+3,by-2,3,4,'#fff');p(cx-4,by-1,2,2,'#25352a');p(cx+4,by-1,2,2,'#25352a');
    p(cx-1,by+3,3,1,'#1d4029');p(cx-8,by+1,2,2,'#ff9db5',.7);p(cx+7,by+1,2,2,'#ff9db5',.7);
+  }else if(kind==='fast'&&skin===1){ // zephyr wisp — teal ghost-flame
+   const by=base-10-hop;
+   g.fillStyle='#57d8c4';g.beginPath();g.moveTo(cx-6,by+3);g.lineTo(cx-11,by+7+(f%2?1:-1));g.lineTo(cx-3,by+6);g.closePath();g.fill();
+   ell(cx,by,7.5,7*(1-k*.4),'#6fe8d2');ell(cx,by-1,5.5,5,'#b8fff1');
+   p(cx-2,by-9+(f%2),4,4,'#6fe8d2');p(cx-1,by-11+(f%2),2,3,'#b8fff1');
+   p(cx-4,by-1,3,3,'#0e4a44');p(cx+2,by-1,3,3,'#0e4a44');p(cx-3,by,1,1,'#fff');p(cx+3,by,1,1,'#fff');
+   p(cx-1,by+3,2,1,'#0e4a44');
   }else if(kind==='fast'){ // zippy fox imp
    const by=base-9-hop;
    p(cx-7,by-5,3,4,'#f5b23e');p(cx+5,by-5,3,4,'#f5b23e');p(cx-6,by-4,1,2,'#ff7d8e'); // ears
@@ -898,6 +1096,13 @@ function getCreepFrames(kind){
    p(cx-1,by+2,2,1,'#3a2410');
    const l=f%2?2:-2;p(cx-5+l,base-2,3,3,'#d68f28');p(cx+3-l,base-2,3,3,'#d68f28'); // feet
    p(cx+8,by-6+f,4,2,'#ffd45e');ell(cx-9,by+3,3,2,'#f5b23e'); // tail + dash
+  }else if(kind==='armored'&&skin===1){ // acorn warden — banded acorn
+   const by=base-9-(f%2);
+   ell(cx,by+1,8.5,7.5,'#a9784e');
+   ell(cx,by-3,8,5,'#6e4a2a');p(cx-8,by-4,16,2,'#8a5f38');p(cx-1,by-9,3,3,'#6e4a2a');
+   p(cx-7,by+2,14,3,'#8d9aa9');p(cx-5,by+2,2,2,'#ccd6ee');p(cx+4,by+2,2,2,'#ccd6ee');
+   p(cx-4,by-1,3,3,'#fff');p(cx+2,by-1,3,3,'#fff');p(cx-3,by,2,2,'#2e2013');p(cx+3,by,2,2,'#2e2013');
+   p(cx-4,base-2,3,3,'#5c3d22');p(cx+2,base-2,3,3,'#5c3d22');
   }else if(kind==='armored'){ // round knight beetle
    const by=base-9-(f%2);
    ell(cx,by,9,8,'#7c8bb0');ell(cx,by-2.5,8,5.5,'#aeb9d8');p(cx-6,by-6,12,3,'#ccd6ee'); // helm shine
@@ -905,6 +1110,14 @@ function getCreepFrames(kind){
    p(cx-2,by-9,4,3,'#ff7d8e');p(cx-1,by-11,2,2,'#ff7d8e'); // plume
    p(cx-9,by+2,4,5,'#ccd6ee');p(cx-8,by+3,2,2,'#ffd95e'); // shield
    p(cx-4,base-2,3,3,'#3c4460');p(cx+2,base-2,3,3,'#3c4460');
+  }else if(kind==='slow'&&skin===1){ // moss snail
+   const by=base-7-(f>1?1:0);
+   ell(cx-1,base-3,10,3.5,'#9fd489');ell(cx-1,base-4,8,2.5,'#c3eab0');
+   ell(cx+2,by-2,7.5,6.5,'#8a6b3d');ell(cx+2,by-2,5.5,4.5,'#c9a25a');ell(cx+3,by-2.5,3,2.5,'#8a6b3d');p(cx+3,by-3,2,2,'#e0c084');
+   p(cx+1,by-8,3,2,'#79c46a');p(cx+7,by+1,2,2,'#79c46a');
+   p(cx-9,by+1,5,5,'#b8e3a0');p(cx-10,by-4,2,4,'#b8e3a0');p(cx-6,by-5,2,5,'#b8e3a0');
+   p(cx-10,by-6,2,2,'#2a3d22');p(cx-6,by-7,2,2,'#2a3d22');
+   p(cx-8,by+2,2,2,'#2a3d22');p(cx-6,by+3,1,1,'#fff');
   }else if(kind==='slow'){ // mossy tortoise golem
    const by=base-8-(f>1?1:0);
    ell(cx,by,10.5,8,'#a97748');ell(cx,by-1.5,9,6,'#c99a63');
@@ -912,6 +1125,15 @@ function getCreepFrames(kind){
    p(cx-7,by-6,3,2,'#79c46a');p(cx+6,by-2,2,2,'#79c46a'); // moss
    p(cx+7,by+1,6,5,'#d8b071');p(cx+9,by+2,2,2,'#2e2013'); // head + eye
    p(cx-7,base-2,4,3,'#8a5f38');p(cx+1,base-2,4,3,'#8a5f38');
+  }else if(kind==='air'&&skin===1){ // storm crow
+   const by=base-13,wf=[-4,-1,3,-1][f];
+   g.fillStyle='#3f4a7d';g.beginPath();g.moveTo(cx-6,by);g.lineTo(cx-14,by+wf-3);g.lineTo(cx-13,by+wf+3);g.closePath();g.fill();
+   g.beginPath();g.moveTo(cx+6,by);g.lineTo(cx+14,by+wf-3);g.lineTo(cx+13,by+wf+3);g.closePath();g.fill();
+   p(cx-13,by+wf-2,3,2,'#7d8ecc');p(cx+10,by+wf-2,3,2,'#7d8ecc');
+   ell(cx,by+1,7,5.5,'#57628f');ell(cx-1,by+2.5,4.5,3,'#8b97c9');
+   ell(cx+4,by-4,4,3.5,'#57628f');
+   p(cx+7,by-5,4,2,'#ffd45e');p(cx+4,by-6,2,2,'#fff');p(cx+5,by-6,1,1,'#101528');
+   p(cx-10,by+3,4,2,'#3f4a7d');p(cx-12,by+2,3,2,'#3f4a7d');
   }else if(kind==='air'){ // lavender flutterbat
    const by=base-13,wf=[-4,-1,3,-1][f];
    g.fillStyle='#8a68c9';g.beginPath();g.moveTo(cx-6,by);g.lineTo(cx-14,by+wf-3);g.lineTo(cx-13,by+wf+3);g.closePath();g.fill();
@@ -921,6 +1143,17 @@ function getCreepFrames(kind){
    p(cx-5,by-7,3,4,'#a483e0');p(cx+2,by-7,3,4,'#a483e0');
    p(cx-4,by-2,3,3,'#ffe36d');p(cx+2,by-2,3,3,'#ffe36d');p(cx-3,by-1,1,2,'#2b1c40');p(cx+3,by-1,1,2,'#2b1c40');
    p(cx-2,by+3,1,2,'#fff');p(cx+1,by+3,1,2,'#fff');
+  }else if(skin===1){ // fungal titan — boss mushroom
+   const by=base-16,bk=[0,.05,0,-.04][f];
+   ell(cx,by+4,16,13*(1+bk),'#c9a25a');ell(cx,by+7,10,7,'#e6cf9a');
+   ell(cx,by-8,20,9,'#b04a6e');ell(cx,by-10,17,7,'#d96b8e');
+   p(cx-12,by-14,4,4,'#ffe1ea');p(cx+6,by-13,4,4,'#ffe1ea');p(cx-2,by-16,4,3,'#ffe1ea');
+   p(cx-16,by-6,3,2,'#8f3a58');p(cx+13,by-6,3,2,'#8f3a58');
+   p(cx-8,by-2,5,2,'#5c3d22');p(cx+3,by-2,5,2,'#5c3d22');
+   p(cx-7,by,4,4,'#fff29e');p(cx+3,by,4,4,'#fff29e');p(cx-6,by+1,2,2,'#7c2f45');p(cx+4,by+1,2,2,'#7c2f45');
+   p(cx-4,by+6,8,3,'#4a2c18');p(cx-4,by+5,2,3,'#fff');p(cx+2,by+5,2,3,'#fff');
+   p(cx-15,by+9,6,6,'#a9814a');p(cx+9,by+9,6,6,'#a9814a');
+   p(cx-6,base-2,5,3,'#8a6b3d');p(cx+2,base-2,5,3,'#8a6b3d');
   }else{ // boss ogre king
    const by=base-16,bk=[0,.05,0,-.04][f];
    ell(cx,by+3,17,14*(1+bk),'#8f5bc4');ell(cx,by+6,11,8,'#b98fe0');
@@ -935,7 +1168,7 @@ function getCreepFrames(kind){
   }
   outlinePass(cv);frames.push(cv);
  }
- GFX.creep[kind]=frames;return frames;
+ GFX.creep[key]=frames;return frames;
 }
 function getProjCv(d){
  const arch=d.arch||'wind',v=((d.id||'').length+(d.id||'a').charCodeAt(0))%2,key=arch+v;
@@ -1025,10 +1258,10 @@ function syncScene(tr){
   m.material.opacity=tw.disabled>0?.55:1;m.material.transparent=true;});
  // creeps
  const alive=state.creeps.filter(c=>!c.dead);
- syncPool(GL.creepPool,alive,c=>{const body=new THREE.Mesh(GL.quad,matOf(getCreepFrames(c.kind)[0]));
+ syncPool(GL.creepPool,alive,c=>{const body=new THREE.Mesh(GL.quad,matOf(getCreepFrames(c.kind,c.skin)[0]));
   const sh=new THREE.Mesh(GL.quad,matOf(getShadowCv()));sh.renderOrder=2;sh.material=sh.material.clone();sh.material.opacity=c.kind==='air'?.25:.4;
   GL.scene.add(sh);GL.scene.add(body);body.parts=[body,sh];body.sh=sh;body.ph=strHash(c.id)*6;return body;},
- (c,m)=>{const frames=getCreepFrames(c.kind),fps=c.kind==='fast'?11:c.kind==='slow'?5:c.kind==='air'?9:7;
+ (c,m)=>{const frames=getCreepFrames(c.kind,c.skin),fps=c.kind==='fast'?11:c.kind==='slow'?5:c.kind==='air'?9:7;
   const stopped=c.frozen>0||c.stunned>0;
   const idx=stopped?0:Math.floor((state.time+m.ph)*fps)%frames.length;
   const mat=matOf(frames[idx]);if(m.material!==mat)m.material=mat;
@@ -1051,6 +1284,7 @@ function syncScene(tr){
 
 /* ---------- CORE RENDER ---------- */
 function render(){
+ if(state.screen!=='game'||$('#app').classList.contains('hidden'))return;
  resizeCanvas();ctx.clearRect(0,0,canvas.width,canvas.height);
  if(!map)return;
  ensureMapBaked();
@@ -1075,7 +1309,7 @@ function draw2DWorld(tr){
  ctx.drawImage(GFX.mapCv,o.x,o.y,map.w*tr.cell,map.h*tr.cell);
  const draws=[];
  for(const tw of state.towers)draws.push({y:tw.y+tw.footprint,f:()=>{const cv=getTowerCv(BY_ID[tw.id]),fp=tw.footprint,wW=fp*1.32*tr.cell,wH=wW*cv.height/cv.width;const p=worldToScreen(tw.x+fp/2,tw.y+fp-.04,tr);ctx.globalAlpha=tw.disabled>0?.55:1;ctx.drawImage(cv,p.x-wW/2,p.y-wH,wW,wH);ctx.globalAlpha=1;}});
- for(const c of state.creeps){if(c.dead)continue;draws.push({y:c.y+.5,f:()=>{const frames=getCreepFrames(c.kind),fps=c.kind==='fast'?11:c.kind==='slow'?5:c.kind==='air'?9:7;const stopped=c.frozen>0||c.stunned>0;const ph=strHash(c.id)*6,idx=stopped?0:Math.floor((state.time+ph)*fps)%frames.length;const cv=frames[idx],size=(CREEP_SIZE[c.kind]||1)*tr.cell,hgt=size*cv.height/cv.width;const hop=stopped?0:(c.kind==='air'?.30+Math.sin(state.time*4+ph)*.07:Math.abs(Math.sin((state.time+ph)*(fps*.8)))*.05)*tr.cell;const p=worldToScreen(c.x+.5,c.y+.5,tr);
+ for(const c of state.creeps){if(c.dead)continue;draws.push({y:c.y+.5,f:()=>{const frames=getCreepFrames(c.kind,c.skin),fps=c.kind==='fast'?11:c.kind==='slow'?5:c.kind==='air'?9:7;const stopped=c.frozen>0||c.stunned>0;const ph=strHash(c.id)*6,idx=stopped?0:Math.floor((state.time+ph)*fps)%frames.length;const cv=frames[idx],size=(CREEP_SIZE[c.kind]||1)*tr.cell,hgt=size*cv.height/cv.width;const hop=stopped?0:(c.kind==='air'?.30+Math.sin(state.time*4+ph)*.07:Math.abs(Math.sin((state.time+ph)*(fps*.8)))*.05)*tr.cell;const p=worldToScreen(c.x+.5,c.y+.5,tr);
   ctx.globalAlpha=c.kind==='air'?.25:.4;const sc=getShadowCv();ctx.drawImage(sc,p.x-size*.36,p.y+size*.10,size*.72,size*.30);ctx.globalAlpha=1;
   const next=c.nextCell||c.path?.[Math.min(c.pathIndex+1,(c.path?.length||1)-1)];const flip=next&&next.x<c.x;
   ctx.save();ctx.translate(p.x,p.y-hop-size*.14);if(flip)ctx.scale(-1,1);ctx.drawImage(cv,-size/2,-hgt/2,size,hgt);ctx.restore();}});}
@@ -1133,6 +1367,7 @@ function drawEffects(tr){
  }
  for(const p of state.particles){ctx.globalAlpha=clamp(p.t*2,0,1);const sp=worldToScreen(p.x+.5,p.y+.5,tr),s=Math.max(3,tr.cell*.14);
   switch(p.shape){
+   case 'gold':{ctx.save();ctx.globalCompositeOperation='source-over';ctx.globalAlpha=clamp(p.t,0,1);ctx.font=`${Math.max(8,Math.round(tr.cell*.24))}px 'Press Start 2P', monospace`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='miter';ctx.lineWidth=Math.max(2,Math.round(tr.cell*.07));ctx.strokeStyle='#3d2708';ctx.strokeText(`+${p.amount}g`,q(sp.x),q(sp.y));ctx.fillStyle='#ffd95e';ctx.fillText(`+${p.amount}g`,q(sp.x),q(sp.y));ctx.restore();break;}
    case 'feather':{ctx.save();ctx.translate(sp.x,sp.y-((.6-p.t)*tr.cell*.3));ctx.rotate(p.rot+p.t*4);ctx.fillStyle='#eafffa';ctx.fillRect(-s,-1,s*2,2);ctx.fillStyle=p.color;ctx.fillRect(-s,1,s*1.4,1);ctx.restore();break;}
    case 'ember':{const rise=(.6-p.t)*tr.cell*.6;ctx.fillStyle=p.color;ctx.fillRect(q(sp.x-s/2),q(sp.y-s/2-rise),s,s);ctx.fillStyle='#fff2aa';ctx.fillRect(q(sp.x-1),q(sp.y-1-rise),2,2);break;}
    case 'snow':{ctx.fillStyle='#e8f8ff';ctx.fillRect(q(sp.x-1),q(sp.y-s),2,s*2);ctx.fillRect(q(sp.x-s),q(sp.y-1),s*2,2);break;}
@@ -1195,7 +1430,26 @@ function autosave(){if(state.screen!=='game')return;localStorage.setItem('amazin
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.remove('hidden');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.add('hidden'),1800);}
 function capitalize(s){return s?s[0].toUpperCase()+s.slice(1):'';}
 
-function loop(now){const raw=Math.min(.05,(now-last)/1000);last=now;update(raw*state.speed);render();requestAnimationFrame(loop);}showMainMenu();requestAnimationFrame(loop);
+const titleCanvas=$('#titleBattleCanvas'),titleCtx=titleCanvas.getContext('2d');titleCtx.imageSmoothingEnabled=false;
+const titleDemo={time:0,spawn:0,shot:0,creeps:[],shots:[],bursts:[],towers:[{x:.23,y:.31,c:'#7be8d2'},{x:.34,y:.66,c:'#84d7ff'},{x:.57,y:.28,c:'#fff08c'},{x:.69,y:.60,c:'#ff9d58'},{x:.80,y:.40,c:'#c9a2ff'}]};
+function resizeTitleDemo(){const r=titleCanvas.getBoundingClientRect(),dpr=Math.min(2,devicePixelRatio||1),w=Math.max(1,Math.floor(r.width*dpr)),h=Math.max(1,Math.floor(r.height*dpr));if(titleCanvas.width!==w||titleCanvas.height!==h){titleCanvas.width=w;titleCanvas.height=h;titleCtx.setTransform(dpr,0,0,dpr,0,0);titleCtx.imageSmoothingEnabled=false;}}
+function titleRoutePoint(t,w,h,lane=0){const pts=lane%2?[[-.05,.28],[.20,.28],[.20,.70],[.48,.70],[.48,.38],[.76,.38],[1.06,.64]]:[[-.05,.60],[.17,.60],[.17,.36],[.43,.36],[.43,.68],[.72,.68],[.72,.30],[1.06,.30]];const total=pts.length-1,u=Math.max(0,Math.min(.999,t))*total,i=Math.floor(u),f=u-i;return{x:(pts[i][0]+(pts[i+1][0]-pts[i][0])*f)*w,y:(pts[i][1]+(pts[i+1][1]-pts[i][1])*f)*h};}
+function updateTitleDemo(dt){if($('#titleScreen').classList.contains('hidden'))return;titleDemo.time+=dt;titleDemo.spawn-=dt;if(titleDemo.spawn<=0){titleDemo.spawn=.52+Math.random()*.36;titleDemo.creeps.push({t:0,lane:(Math.random()*2)|0,speed:.035+Math.random()*.018,hp:2+((Math.random()*3)|0),air:Math.random()<.20,phase:Math.random()*6.28});}
+ const r=titleCanvas.getBoundingClientRect(),w=r.width,h=r.height;
+ for(const c of titleDemo.creeps)c.t+=dt*c.speed*(c.air?1.15:1);
+ titleDemo.creeps=titleDemo.creeps.filter(c=>c.t<1.03&&c.hp>0);
+ for(const tw of titleDemo.towers){tw.cd=(tw.cd||0)-dt;if(tw.cd>0)continue;const tx=tw.x*w,ty=tw.y*h;let best=null,bd=Infinity;for(const c of titleDemo.creeps){const p=titleRoutePoint(c.t,w,h,c.lane),d=Math.hypot(p.x-tx,p.y-ty);if(d<Math.min(w,h)*.29&&d<bd){bd=d;best=c;}}if(best){tw.cd=.30+Math.random()*.38;const p=titleRoutePoint(best.t,w,h,best.lane);titleDemo.shots.push({x:tx,y:ty,target:best,tx:p.x,ty:p.y,speed:520,c:tw.c});}}
+ for(const s of titleDemo.shots){if(!s.target||s.target.hp<=0){s.dead=true;continue;}const p=titleRoutePoint(s.target.t,w,h,s.target.lane),dx=p.x-s.x,dy=p.y-s.y,d=Math.hypot(dx,dy);if(d<8){s.target.hp--;s.dead=true;titleDemo.bursts.push({x:p.x,y:p.y,t:.35,c:s.c});}else{const step=Math.min(d,s.speed*dt);s.x+=dx/d*step;s.y+=dy/d*step;}}
+ titleDemo.shots=titleDemo.shots.filter(s=>!s.dead);for(const b of titleDemo.bursts)b.t-=dt;titleDemo.bursts=titleDemo.bursts.filter(b=>b.t>0);
+}
+function drawTitlePixelTower(g,x,y,c,s){g.fillStyle='rgba(4,8,20,.42)';g.fillRect(Math.round(x-s*.44),Math.round(y+s*.20),Math.round(s*.88),Math.round(s*.24));g.fillStyle='#2b1c40';g.fillRect(Math.round(x-s*.34),Math.round(y-s*.12),Math.round(s*.68),Math.round(s*.50));g.fillStyle='#52628f';g.fillRect(Math.round(x-s*.27),Math.round(y-s*.07),Math.round(s*.54),Math.round(s*.36));g.fillStyle=c;g.fillRect(Math.round(x-s*.08),Math.round(y-s*.42),Math.round(s*.16),Math.round(s*.38));g.fillRect(Math.round(x-s*.25),Math.round(y-s*.35),Math.round(s*.50),Math.round(s*.12));g.fillStyle='#fff6e0';g.fillRect(Math.round(x-s*.04),Math.round(y-s*.38),Math.max(2,Math.round(s*.08)),Math.max(2,Math.round(s*.08)));}
+function renderTitleDemo(){if($('#titleScreen').classList.contains('hidden'))return;resizeTitleDemo();const r=titleCanvas.getBoundingClientRect(),w=r.width,h=r.height,g=titleCtx;g.clearRect(0,0,w,h);const cell=Math.max(22,Math.floor(Math.min(w,h)/24));for(let y=0;y<h;y+=cell)for(let x=0;x<w;x+=cell){g.fillStyle=((x/cell+y/cell)&1)?'#315d4a':'#35664f';g.fillRect(x,y,cell,cell);g.fillStyle='rgba(255,255,255,.035)';g.fillRect(x,y,cell,1);g.fillStyle='rgba(0,0,0,.12)';g.fillRect(x+cell-1,y,1,cell);}
+ g.fillStyle='#776347';for(const box of [[.31,.06,.10,.30],[.52,.48,.12,.30],[.82,.08,.08,.24],[.05,.74,.24,.10]]){g.fillRect(Math.round(box[0]*w),Math.round(box[1]*h),Math.round(box[2]*w),Math.round(box[3]*h));g.fillStyle='#9d865e';g.fillRect(Math.round(box[0]*w),Math.round(box[1]*h),Math.round(box[2]*w),4);g.fillStyle='#776347';}
+ for(let lane=0;lane<2;lane++){g.strokeStyle=lane?'rgba(255,159,104,.22)':'rgba(89,217,255,.22)';g.lineWidth=4;g.beginPath();for(let i=0;i<=120;i++){const p=titleRoutePoint(i/120,w,h,lane);i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y);}g.stroke();}
+ const s=Math.max(24,Math.min(w,h)*.055);for(const tw of titleDemo.towers)drawTitlePixelTower(g,tw.x*w,tw.y*h,tw.c,s);
+ for(const c of titleDemo.creeps){const p=titleRoutePoint(c.t,w,h,c.lane),bob=c.air?Math.sin(titleDemo.time*5+c.phase)*5:Math.abs(Math.sin(titleDemo.time*8+c.phase))*2,cs=c.air?s*.42:s*.36;g.fillStyle='rgba(5,8,18,.36)';g.fillRect(Math.round(p.x-cs*.35),Math.round(p.y+cs*.30),Math.round(cs*.70),Math.max(3,Math.round(cs*.13)));g.fillStyle=c.air?'#c9a2ff':'#63d878';g.fillRect(Math.round(p.x-cs*.34),Math.round(p.y-cs*.24-bob),Math.round(cs*.68),Math.round(cs*.50));g.fillStyle='#effcff';g.fillRect(Math.round(p.x-cs*.18),Math.round(p.y-cs*.12-bob),Math.max(2,Math.round(cs*.12)),Math.max(2,Math.round(cs*.13)));g.fillRect(Math.round(p.x+cs*.07),Math.round(p.y-cs*.12-bob),Math.max(2,Math.round(cs*.12)),Math.max(2,Math.round(cs*.13)));}
+ for(const sh of titleDemo.shots){g.fillStyle=sh.c;g.fillRect(Math.round(sh.x-3),Math.round(sh.y-3),6,6);g.fillStyle='#fff';g.fillRect(Math.round(sh.x-1),Math.round(sh.y-1),2,2);}for(const b of titleDemo.bursts){const a=Math.max(0,b.t/.35);g.globalAlpha=a;g.strokeStyle=b.c;g.lineWidth=3;g.strokeRect(Math.round(b.x-12*(1-a)),Math.round(b.y-12*(1-a)),Math.round(24*(1-a)+4),Math.round(24*(1-a)+4));g.globalAlpha=1;}}
+function loop(now){const raw=Math.min(.05,(now-last)/1000);last=now;update(raw*state.speed);updateTitleDemo(raw);render();renderTitleDemo();requestAnimationFrame(loop);}showMainMenu();requestAnimationFrame(loop);
 </script>
 </body>
 </html>
