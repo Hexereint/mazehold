@@ -16,7 +16,7 @@ button{font-family:var(--pxfont);font-size:9px;line-height:1.5;text-transform:up
 .logo{font-family:var(--pxfont);font-size:13px;color:var(--gold);text-shadow:2px 2px 0 #7a4a1f}
 .stat{padding:4px 10px;background:#2b3563;border:3px solid var(--plum);box-shadow:inset 0 2px 0 #414e8c,inset 0 -2px 0 #1b2244;white-space:nowrap;font-size:21px}.stat.withIcon{display:flex;align-items:center;gap:7px}.pixelIcon{display:inline-block;position:relative;width:17px;height:17px;flex:0 0 17px;image-rendering:pixelated}.pixelIcon::before,.pixelIcon::after{content:"";position:absolute;width:3px;height:3px}.pixelCoin::before{left:1px;top:1px;background:#7a4a1f;box-shadow:3px 0 #7a4a1f,6px 0 #7a4a1f,9px 0 #7a4a1f,12px 0 #7a4a1f,0 3px #7a4a1f,3px 3px #ffd95e,6px 3px #ffd95e,9px 3px #ffd95e,12px 3px #7a4a1f,0 6px #7a4a1f,3px 6px #ffd95e,6px 6px #fff0a0,9px 6px #ffd95e,12px 6px #7a4a1f,0 9px #7a4a1f,3px 9px #ffd95e,6px 9px #ffd95e,9px 9px #ffd95e,12px 9px #7a4a1f,3px 12px #7a4a1f,6px 12px #7a4a1f,9px 12px #7a4a1f}.pixelHeart::before{left:1px;top:2px;background:#7c1f31;box-shadow:3px 0 #ff6d84,9px 0 #ff6d84,12px 0 #7c1f31,0 3px #ff6d84,3px 3px #ff8f9e,6px 3px #ff6d84,9px 3px #ff8f9e,12px 3px #ff6d84,0 6px #7c1f31,3px 6px #ff6d84,6px 6px #ff6d84,9px 6px #ff6d84,12px 6px #7c1f31,3px 9px #7c1f31,6px 9px #ff6d84,9px 9px #7c1f31,6px 12px #7c1f31}
 .spacer{flex:1}.small{font-size:17px;color:var(--muted)}
-#main{display:grid;grid-template-columns:270px 1fr 290px;min-height:0}
+#main{display:grid;grid-template-columns:340px minmax(0,1fr) 290px;min-height:0}
 .side{background:var(--panel);border-right:4px solid var(--plum);overflow:auto;padding:10px}.side.right{border-right:0;border-left:4px solid var(--plum)}
 #canvasWrap{position:relative;overflow:hidden;background:#141b33}
 #glCanvas,#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:pixelated}#glCanvas{background:#141b33;z-index:1}#gameCanvas{background:transparent;cursor:default;z-index:2}
@@ -51,8 +51,8 @@ button{font-family:var(--pxfont);font-size:9px;line-height:1.5;text-transform:up
 .menuBtn{background:#2b3563;border:3px solid var(--plum);color:#fff;padding:14px;text-align:left;box-shadow:inset 0 3px 0 #3d4a87,inset 0 -3px 0 #1e2549,4px 4px 0 #0a0d1f;cursor:pointer;font-family:var(--bodyfont);font-size:19px;text-transform:none;letter-spacing:0}
 .menuBtn:hover{background:#354175}.menuBtn.locked{opacity:.35}.menuBtn.active{border-color:var(--gold);box-shadow:inset 0 3px 0 #3d4a87,inset 0 -3px 0 #1e2549,4px 4px 0 #0a0d1f,0 0 0 2px var(--gold)}
 .levelGrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
-.levelBtn{padding:10px;background:#2b3563;border:3px solid var(--plum);color:white;box-shadow:inset 0 3px 0 #3d4a87,inset 0 -3px 0 #1e2549,3px 3px 0 #0a0d1f;cursor:pointer}
-.levelBtn:hover{background:#354175}
+.levelBtn{position:relative;padding:10px;background:#2b3563;border:3px solid var(--plum);color:white;box-shadow:inset 0 3px 0 #3d4a87,inset 0 -3px 0 #1e2549,3px 3px 0 #0a0d1f;cursor:pointer}
+.levelBtn:hover{background:#354175}.levelStar{position:absolute;right:3px;top:3px;color:var(--gold);font-family:var(--pxfont);font-size:10px;line-height:1;text-shadow:1px 1px 0 #6b4118;pointer-events:none}
 .archetypeBtn{min-height:135px;height:100%;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;text-align:left}.archetypeBtn strong{display:block;flex:0 0 auto;width:100%;font-family:var(--pxfont);font-size:10px;line-height:1.5;color:var(--gold);margin:0 0 8px}.archetypeDesc{display:block;flex:1 1 auto;width:100%;text-align:left;line-height:1.25}.archetypeCount{display:block;flex:0 0 auto;width:100%;margin-top:10px;text-align:left}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .tabs{display:flex;gap:4px;margin-bottom:8px;position:sticky;top:0;background:var(--panel);padding:4px 0;z-index:2}
@@ -61,7 +61,7 @@ button{font-family:var(--pxfont);font-size:9px;line-height:1.5;text-transform:up
 .meter{height:10px;background:#12182f;border:2px solid var(--line);overflow:hidden}.meter>div{height:100%;background:#5fd88a;box-shadow:inset 0 3px 0 #a8ffcb}
 .sep{height:3px;background:var(--line);margin:9px 0}
 .help{font-size:19px;line-height:1.3;color:#c3cbf0}
-.checkbox{display:flex;align-items:center;gap:7px;margin:6px 0}.debugGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.guideNav{display:flex;gap:7px;flex-wrap:wrap;position:sticky;top:-20px;z-index:3;background:var(--panel);padding:8px 0 12px}.guideSection{margin-top:12px}.guideArch{border-left:6px solid var(--arch-color,var(--accent));padding-left:10px;margin:18px 0 10px}.guideTable{width:100%;border-collapse:collapse;font-size:16px}.guideTable th,.guideTable td{border:2px solid var(--line);padding:6px 7px;text-align:left;vertical-align:top}.guideTable th{font-family:var(--pxfont);font-size:7px;color:var(--gold);background:#192142;position:sticky;top:38px}.guideTable tr:nth-child(even) td{background:rgba(53,65,117,.24)}.guideStat{white-space:nowrap}.settingRange{width:min(420px,100%);accent-color:var(--gold)}.settingValue{display:inline-block;min-width:64px;color:var(--gold);font-family:var(--pxfont);font-size:9px}.compendiumGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}.monsterCard{margin:0}.dexRow{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 10px}.dexMon{text-align:center}.dexMon canvas{image-rendering:pixelated;background:#57b25b;border:3px solid var(--plum);box-shadow:2px 2px 0 #0a0d1f;display:block;margin:0 auto 4px}.dexMon .small{font-size:15px}.difficultyCurrent{color:var(--gold);font-family:var(--pxfont);font-size:9px}
+.checkbox{display:flex;align-items:center;gap:7px;margin:6px 0}.guideNav{display:flex;gap:7px;flex-wrap:wrap;position:sticky;top:-20px;z-index:3;background:var(--panel);padding:8px 0 12px}.guideSection{margin-top:12px}.guideArch{border-left:6px solid var(--arch-color,var(--accent));padding-left:10px;margin:18px 0 10px}.guideTable{width:100%;border-collapse:collapse;font-size:16px}.guideTable th,.guideTable td{border:2px solid var(--line);padding:6px 7px;text-align:left;vertical-align:top}.guideTable th{font-family:var(--pxfont);font-size:7px;color:var(--gold);background:#192142;position:sticky;top:38px}.guideTable tr:nth-child(even) td{background:rgba(53,65,117,.24)}.guideStat{white-space:nowrap}.settingRange{width:min(420px,100%);accent-color:var(--gold)}.settingValue{display:inline-block;min-width:64px;color:var(--gold);font-family:var(--pxfont);font-size:9px}.compendiumGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}.monsterCard{margin:0}.dexRow{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 10px}.dexMon{text-align:center}.dexMon canvas{image-rendering:pixelated;background:#57b25b;border:3px solid var(--plum);box-shadow:2px 2px 0 #0a0d1f;display:block;margin:0 auto 4px}.dexMon .small{font-size:15px}.difficultyCurrent{color:var(--gold);font-family:var(--pxfont);font-size:9px}
 .toast{position:absolute;left:50%;top:62px;transform:translateX(-50%);background:#2f3a6e;border:3px solid var(--gold);padding:8px 16px;box-shadow:4px 4px 0 #05070f;z-index:15;pointer-events:none;font-family:var(--pxfont);font-size:10px}
 .countdown{position:absolute;left:50%;top:25%;transform:translate(-50%,-50%);font-family:var(--pxfont);font-size:26px;color:#ff8592;text-shadow:3px 3px 0 #5f1925;z-index:14;pointer-events:none}
 .legend{position:absolute;right:10px;bottom:10px;background:rgba(26,33,64,.95);border:3px solid var(--plum);padding:6px 9px;font-size:16px;z-index:4;box-shadow:3px 3px 0 #0a0d1f}
@@ -88,7 +88,7 @@ button{font-family:var(--pxfont);font-size:9px;line-height:1.5;text-transform:up
 #menuModal.titlePage h1,#menuModal.titlePage h2{margin-top:0;color:var(--gold);font-family:var(--pxfont);text-shadow:2px 2px 0 #6b4118}
 .titleBattleVignette{position:absolute;inset:0;pointer-events:none}
 @media(max-width:720px){#titleMenuWrap{align-items:center;justify-content:center;padding:18px}#menuModal.titleHome{width:100%;padding:10px 4px}#menuModal.titleHome h1{font-size:clamp(25px,9vw,38px);letter-spacing:1px}.titleMainButtons{width:min(340px,100%)}#menuModal.titleHome .titleTagline{font-size:21px}.titleMainButtons .menuBtn strong{font-size:13px}}
-@media(max-width:1000px){#main{grid-template-columns:220px 1fr}.side.right{display:none}}@media(max-width:720px){#main{grid-template-columns:1fr}.side.left{position:absolute;left:0;top:50px;bottom:56px;width:250px;z-index:8;transform:translateX(-100%);transition:.2s}.side.left.open{transform:none}#topbar{font-size:16px}.levelGrid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:1100px){#main{grid-template-columns:290px minmax(0,1fr)}.side.right{display:none}}@media(max-width:720px){#main{grid-template-columns:1fr}.side.left{position:absolute;left:0;top:50px;bottom:56px;width:min(320px,88vw);z-index:8;transform:translateX(-100%);transition:.2s}.side.left.open{transform:none}#topbar{font-size:16px}.levelGrid{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
@@ -153,7 +153,7 @@ button{font-family:var(--pxfont);font-size:9px;line-height:1.5;text-transform:up
     <div class="menuGrid">
       <button class="menuBtn" id="resumeBtn"><strong>Resume</strong><br><span class="small">Return to the battle.</span></button>
       <button class="menuBtn" id="restartStageBtn"><strong>Restart Level</strong><br><span class="small">Return to the beginning of the current level.</span></button>
-      <button class="menuBtn" id="settingsBtn"><strong>Settings & Debug</strong><br><span class="small">Display, audio, and test tools.</span></button>
+      <button class="menuBtn" id="settingsBtn"><strong>Settings</strong><br><span class="small">Camera and display options.</span></button>
       <button class="menuBtn" id="quitBtn"><strong>Quit to Menu</strong><br><span class="small">Current level progress is autosaved.</span></button>
     </div>
     <div id="settingsArea" class="hidden" style="margin-top:14px"></div>
@@ -170,6 +170,7 @@ const key=(x,y)=>`${x},${y}`;
 const floorDamage=v=>Math.max(0,Math.floor(v));
 const rand=(a,b)=>a+Math.random()*(b-a);
 const pick=a=>a[(Math.random()*a.length)|0];
+const capitalize=s=>String(s??'').replace(/(^|[\s_-])([a-z])/g,(_,p,c)=>p+c.toUpperCase());
 const COLORS={ground:'#a9e7ff',air:'#d9b8ff',danger:'#ff5f70',checkpoint:'#ffe36d',spawn:'#7df2a1',exit:'#ff8c93'};
 const ROUTE_COLORS=['#59d9ff','#ff9f68','#d79cff','#7df2a1','#ffd95e','#ff78c8'];
 function routeColor(i,air=false){if((map?.spawns.length||1)<=1)return air?COLORS.air:COLORS.ground;return ROUTE_COLORS[i%ROUTE_COLORS.length];}
@@ -272,9 +273,128 @@ T('pressure_jet','water','Pressure Jet','high',185,[34,46],1.8,17,['ground'],'ma
 const BY_ID=Object.fromEntries(TOWERS.map(t=>[t.id,t]));
 
 const savedDifficulty=localStorage.getItem('amazingTD_difficulty');
+const savedAchievements=(()=>{try{return JSON.parse(localStorage.getItem('amazingTD_ach')||'{}')||{};}catch{return {};}})();
 const prefs={difficulty:['standard','hard','veryhard'].includes(savedDifficulty)?savedDifficulty:'standard',wasdSensitivity:clamp(Number(localStorage.getItem('amazingTD_wasd_sensitivity'))||1,.5,2)};
+// ================= AUDIO: procedural chiptune SFX + music (Web Audio) =================
+const AUDIO=(()=>{
+ let ctx=null,master=null,sfxBus=null,musicBus=null,noiseBuf=null,unlocked=false;
+ const P={
+  sfxVol:clamp(Number(localStorage.getItem('mazehold_sfx_vol')??.8),0,1),
+  musicVol:clamp(Number(localStorage.getItem('mazehold_music_vol')??.5),0,1),
+  sfxOn:localStorage.getItem('mazehold_sfx_on')!=='0',
+  musicOn:localStorage.getItem('mazehold_music_on')!=='0'};
+ function ensure(){if(ctx)return true;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;
+  try{ctx=new AC();}catch(e){return false;}
+  master=ctx.createGain();master.gain.value=1;master.connect(ctx.destination);
+  sfxBus=ctx.createGain();sfxBus.gain.value=P.sfxOn?P.sfxVol:0;sfxBus.connect(master);
+  musicBus=ctx.createGain();musicBus.gain.value=P.musicOn?P.musicVol:0;musicBus.connect(master);
+  noiseBuf=ctx.createBuffer(1,Math.max(1,Math.floor(ctx.sampleRate*.8)),ctx.sampleRate);
+  const d=noiseBuf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  return true;}
+ function ready(){return !!ctx&&ctx.state==='running';}
+ function unlock(){if(!ensure())return;if(ctx.state==='suspended')ctx.resume();if(!unlocked){unlocked=true;music._onUnlock();}}
+ function env(g,t,a,peak,dur){g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(Math.max(.0001,peak),t+a);g.gain.exponentialRampToValueAtTime(.0001,t+dur);}
+ function tone(o){if(!ready())return;const t=ctx.currentTime+(o.delay||0);
+  const osc=ctx.createOscillator();osc.type=o.type||'square';
+  const jit=o.jitter??.03,f0=Math.max(24,o.f0*(1+(Math.random()*2-1)*jit));
+  osc.frequency.setValueAtTime(f0,t);
+  if(o.f1)osc.frequency.exponentialRampToValueAtTime(Math.max(24,o.f1),t+(o.slideDur||o.dur));
+  const g=ctx.createGain();env(g,t,o.attack||.004,o.vol??.2,o.dur);
+  osc.connect(g);g.connect(o.bus||sfxBus);osc.start(t);osc.stop(t+o.dur+.06);}
+ function noiz(o){if(!ready())return;const t=ctx.currentTime+(o.delay||0);
+  const s=ctx.createBufferSource();s.buffer=noiseBuf;s.loop=true;
+  const fl=ctx.createBiquadFilter();fl.type=o.ftype||'bandpass';fl.Q.value=o.q??1;
+  fl.frequency.setValueAtTime(o.f0||1200,t);
+  if(o.f1)fl.frequency.exponentialRampToValueAtTime(Math.max(40,o.f1),t+o.dur);
+  const g=ctx.createGain();env(g,t,o.attack||.003,o.vol??.15,o.dur);
+  s.connect(fl);fl.connect(g);g.connect(o.bus||sfxBus);s.start(t);s.stop(t+o.dur+.06);}
+ const SND={
+  shot_wind:()=>noiz({ftype:'bandpass',f0:2400,f1:850,q:1.3,dur:.12,vol:.09}),
+  shot_frost:()=>{tone({type:'triangle',f0:1568,dur:.22,vol:.11,jitter:.01});tone({type:'triangle',f0:2093,dur:.16,vol:.06,delay:.02,jitter:.01});},
+  shot_fire:()=>{tone({type:'sawtooth',f0:330,f1:110,dur:.14,vol:.13});noiz({ftype:'lowpass',f0:2600,f1:450,dur:.12,vol:.07});},
+  shot_tech:()=>tone({type:'square',f0:1760,f1:420,dur:.09,vol:.10}),
+  shot_earth:()=>{tone({type:'triangle',f0:150,f1:52,dur:.16,vol:.22});noiz({ftype:'lowpass',f0:420,dur:.08,vol:.10});},
+  shot_lightning:()=>{tone({type:'square',f0:2500,f1:170,dur:.07,vol:.09});noiz({ftype:'highpass',f0:3200,dur:.05,vol:.07});},
+  shot_poison:()=>tone({type:'sine',f0:520,f1:180,dur:.13,vol:.15,jitter:.06}),
+  shot_water:()=>{tone({type:'sine',f0:620,f1:960,dur:.09,vol:.12});tone({type:'sine',f0:960,f1:400,dur:.08,vol:.08,delay:.05});},
+  hit:()=>tone({type:'square',f0:880,f1:590,dur:.035,vol:.045}),
+  kill:()=>{tone({type:'square',f0:660,f1:930,dur:.07,vol:.13,jitter:.02});tone({type:'square',f0:1320,dur:.09,vol:.09,delay:.055,jitter:.02});},
+  leak:()=>{tone({type:'triangle',f0:392,f1:175,dur:.22,vol:.2,jitter:0});tone({type:'triangle',f0:262,f1:130,dur:.28,vol:.16,delay:.12,jitter:0});},
+  place:()=>{tone({type:'triangle',f0:190,f1:92,dur:.09,vol:.24});noiz({ftype:'lowpass',f0:900,dur:.05,vol:.08,delay:.01});},
+  place_error:()=>tone({type:'sawtooth',f0:150,f1:112,dur:.16,vol:.13,jitter:0}),
+  move:()=>noiz({ftype:'bandpass',f0:800,f1:2400,q:1.5,dur:.14,vol:.10}),
+  upgrade:()=>{[523,659,784].forEach((f,i)=>tone({type:'square',f0:f,dur:.10,vol:.12,delay:i*.07,jitter:0}));},
+  sell:()=>{tone({type:'square',f0:1046,dur:.06,vol:.10,jitter:0});tone({type:'square',f0:784,dur:.08,vol:.09,delay:.06,jitter:0});},
+  ui:()=>tone({type:'square',f0:820,f1:700,dur:.04,vol:.06,jitter:0}),
+  wave_start:()=>{[220,277,330].forEach((f,i)=>tone({type:'sawtooth',f0:f,dur:.32,vol:.09,delay:i*.02,jitter:0}));},
+  wave_clear:()=>{[659,784,1046].forEach((f,i)=>tone({type:'triangle',f0:f,dur:.14,vol:.14,delay:i*.09,jitter:0}));},
+  breach_warn:()=>{tone({type:'square',f0:740,dur:.14,vol:.13,jitter:0});tone({type:'square',f0:554,dur:.16,vol:.13,delay:.17,jitter:0});tone({type:'square',f0:740,dur:.14,vol:.11,delay:.38,jitter:0});tone({type:'square',f0:554,dur:.16,vol:.11,delay:.55,jitter:0});},
+  tower_break:()=>{noiz({ftype:'lowpass',f0:1400,f1:180,dur:.30,vol:.24});tone({type:'triangle',f0:130,f1:42,dur:.26,vol:.2});},
+  boss:()=>{tone({type:'sawtooth',f0:98,dur:.5,vol:.15,jitter:0});tone({type:'sawtooth',f0:110,dur:.5,vol:.12,delay:.25,jitter:0});},
+  portal:()=>{tone({type:'sine',f0:300,f1:900,dur:.3,vol:.12});tone({type:'sine',f0:450,f1:1350,dur:.3,vol:.08,delay:.04});},
+  victory:()=>{[523,659,784,1046,784,1046].forEach((f,i)=>tone({type:'square',f0:f,dur:.14,vol:.12,delay:i*.11,jitter:0}));},
+  defeat:()=>{[440,392,330,262].forEach((f,i)=>tone({type:'triangle',f0:f,dur:.22,vol:.15,delay:i*.16,jitter:0}));}
+ };
+ const GATE={hit:70,ui:60,shot_wind:55,shot_frost:55,shot_fire:55,shot_tech:55,shot_earth:55,shot_lightning:55,shot_poison:55,shot_water:55,kill:50};
+ const lastAt={};
+ function play(name){if(!P.sfxOn||!SND[name])return;if(!ready())return;
+  const now=performance.now(),g=GATE[name]??110;
+  if(lastAt[name]&&now-lastAt[name]<g)return;lastAt[name]=now;
+  SND[name]();}
+ const music=(()=>{
+  const BPM={build:92,wave:132};
+  const PAT={
+   build:{
+    bass:[[0,110,4],[8,130.8,4],[16,164.8,4],[24,146.8,4]],
+    lead:[[4,329.6,2],[12,392,2],[14,440,2],[20,523.3,1],[22,440,2],[28,392,3]],
+    kick:[],hat:[0,8,16,24]},
+   wave:{
+    bass:[[0,110,1],[2,110,1],[4,220,1],[6,110,1],[8,130.8,1],[10,130.8,1],[12,261.6,1],[14,130.8,1],[16,164.8,1],[18,164.8,1],[20,329.6,1],[22,164.8,1],[24,146.8,1],[26,146.8,1],[28,293.7,1],[30,146.8,1]],
+    lead:[[0,440,2],[4,523.3,1],[6,587.3,1],[8,659.3,2],[12,587.3,1],[14,523.3,1],[16,440,2],[20,392,1],[22,440,1],[24,523.3,2],[28,659.3,1],[30,587.3,1]],
+    kick:[0,8,16,24],hat:[4,12,20,28]}};
+  let timer=null,step=0,nextT=0,cur='build',pending=null,active=false,ducked=false;
+  function stepDur(){return 60/BPM[cur]/4;}
+  function targetVol(){return P.musicOn?(ducked?P.musicVol*.35:P.musicVol):0;}
+  function applyVol(ramp=.25){if(musicBus&&ready())musicBus.gain.linearRampToValueAtTime(Math.max(.0001,targetVol()),ctx.currentTime+ramp);}
+  function scheduleStep(s,t){const p=PAT[cur],dur=stepDur(),del=Math.max(0,t-ctx.currentTime);
+   for(const [st,f,len] of p.bass)if(st===s)tone({type:cur==='wave'?'square':'triangle',f0:f,dur:dur*len*.92,vol:cur==='wave'?.085:.075,attack:.006,jitter:0,delay:del,bus:musicBus});
+   for(const [st,f,len] of p.lead)if(st===s)tone({type:cur==='wave'?'square':'triangle',f0:f,dur:dur*len*.9,vol:cur==='wave'?.06:.055,attack:.01,jitter:0,delay:del,bus:musicBus});
+   if(p.kick.includes(s)){tone({type:'sine',f0:140,f1:48,dur:.11,vol:.2,jitter:0,delay:del,bus:musicBus});noiz({ftype:'lowpass',f0:900,dur:.04,vol:.06,delay:del,bus:musicBus});}
+   if(p.hat.includes(s))noiz({ftype:'highpass',f0:6200,dur:.03,vol:cur==='wave'?.035:.02,delay:del,bus:musicBus});}
+  function tick(){if(!ready()||!active)return;
+   if(nextT<ctx.currentTime-.5)nextT=ctx.currentTime+.05;
+   while(nextT<ctx.currentTime+.16){
+    if(step===0&&pending&&pending!==cur){cur=pending;pending=null;applyVol(.5);}
+    scheduleStep(step,nextT);
+    step=(step+1)%32;nextT+=stepDur();}}
+  function start(mode){cur=mode||'build';pending=null;active=true;ducked=false;
+   if(!ready())return;
+   step=0;nextT=ctx.currentTime+.06;applyVol(.15);
+   if(!timer)timer=setInterval(tick,30);}
+  function stop(){active=false;pending=null;if(timer){clearInterval(timer);timer=null;}
+   if(ready())musicBus.gain.linearRampToValueAtTime(.0001,ctx.currentTime+.4);}
+  function setMode(m){if(!active)return;if(m!==cur)pending=m;}
+  function duck(on){ducked=!!on;applyVol(.25);}
+  function _onUnlock(){if(active&&!timer){step=0;nextT=ctx.currentTime+.06;applyVol(.2);timer=setInterval(tick,30);}}
+  return {start,stop,setMode,duck,_onUnlock,get mode(){return cur},get active(){return active}};
+ })();
+ function setSfxVol(v){P.sfxVol=clamp(v,0,1);localStorage.setItem('mazehold_sfx_vol',String(P.sfxVol));if(sfxBus)sfxBus.gain.value=P.sfxOn?P.sfxVol:0;}
+ function setMusicVol(v){P.musicVol=clamp(v,0,1);localStorage.setItem('mazehold_music_vol',String(P.musicVol));if(ready())musicBus.gain.linearRampToValueAtTime(Math.max(.0001,P.musicOn?P.musicVol:0),ctx.currentTime+.1);}
+ function setSfxOn(on){P.sfxOn=!!on;localStorage.setItem('mazehold_sfx_on',on?'1':'0');if(sfxBus)sfxBus.gain.value=P.sfxOn?P.sfxVol:0;}
+ function setMusicOn(on){P.musicOn=!!on;localStorage.setItem('mazehold_music_on',on?'1':'0');if(ready())musicBus.gain.linearRampToValueAtTime(Math.max(.0001,P.musicOn?P.musicVol:0),ctx.currentTime+.15);}
+ return {play,music,unlock,setSfxVol,setMusicVol,setSfxOn,setMusicOn,get prefs(){return P},get isReady(){return ready();}};
+})();
+document.addEventListener('pointerdown',()=>AUDIO.unlock(),{capture:true});
+document.addEventListener('keydown',()=>AUDIO.unlock(),{capture:true});
+document.addEventListener('pointerdown',e=>{if(e.target&&e.target.closest&&e.target.closest('button'))AUDIO.play('ui');},true);
+function audioSettingsHTML(){const p=AUDIO.prefs;return `<div class="card"><h3>Audio</h3><label class="checkbox"><input id="sfxOn" type="checkbox" ${p.sfxOn?'checked':''}> Sound effects</label><label for="sfxVol">SFX volume: <span id="sfxVolValue" class="settingValue">${Math.round(p.sfxVol*100)}%</span></label><br><input class="settingRange" id="sfxVol" type="range" min="0" max="1" step="0.05" value="${p.sfxVol}"><label class="checkbox"><input id="musicOn" type="checkbox" ${p.musicOn?'checked':''}> Music</label><label for="musicVol">Music volume: <span id="musicVolValue" class="settingValue">${Math.round(p.musicVol*100)}%</span></label><br><input class="settingRange" id="musicVol" type="range" min="0" max="1" step="0.05" value="${p.musicVol}"></div>`;}
+function wireAudioSettings(){const sv=$('#sfxVol'),mv=$('#musicVol'),so=$('#sfxOn'),mo=$('#musicOn');
+ if(sv)sv.oninput=e=>{AUDIO.setSfxVol(Number(e.target.value));$('#sfxVolValue').textContent=`${Math.round(AUDIO.prefs.sfxVol*100)}%`;AUDIO.play('ui');};
+ if(mv)mv.oninput=e=>{AUDIO.setMusicVol(Number(e.target.value));$('#musicVolValue').textContent=`${Math.round(AUDIO.prefs.musicVol*100)}%`;};
+ if(so)so.onchange=e=>AUDIO.setSfxOn(e.target.checked);
+ if(mo)mo.onchange=e=>AUDIO.setMusicOn(e.target.checked);}
 const CAMERA_MOVE_SPEED=18;
-const state={screen:'menu',mode:'campaign',level:1,stage:1,wave:0,waveMax:10,difficulty:prefs.difficulty,archetype:'wind',secondaryArchetype:null,secondArchetypeUnlocked:false,phase:'menu',gold:0,lives:15,towers:[],creeps:[],projectiles:[],particles:[],effects:[],selectedBuild:null,selectedTower:null,movingTower:null,pathVisible:true,paused:false,speed:1,time:0,buildTimer:null,blockedTimer:0,breachTarget:null,debug:false,achievements:{},carryGold:null,carryLives:null,undoStack:[]};
+const state={screen:'menu',mode:'campaign',level:1,stage:1,wave:0,waveMax:10,difficulty:prefs.difficulty,archetype:'wind',secondaryArchetype:null,secondArchetypeUnlocked:false,phase:'menu',gold:0,lives:15,towers:[],creeps:[],projectiles:[],particles:[],effects:[],selectedBuild:null,selectedTower:null,movingTower:null,pathVisible:true,paused:false,speed:1,time:0,buildTimer:null,blockedTimer:0,breachTarget:null,achievements:savedAchievements,carryGold:null,carryLives:null,undoStack:[]};
 const camera={x:0,y:0,zoom:1};
 const canvas=$('#gameCanvas'),ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
 let map=null,last=performance.now(),keysHeld={},pointer={x:0,y:0,gridX:-1,gridY:-1},wavePlan=null,saveThrottle=0;
@@ -282,10 +402,15 @@ let cameraDrag={active:false,pointerId:null,startX:0,startY:0,lastX:0,lastY:0,mo
 
 function levelDimensions(level){
  if(level===1)return {w:20,h:40};
+ if(level===2)return {w:20,h:20};
  if(level===5)return {w:20,h:40};
+ if(level===6)return {w:40,h:40};
  if(level===8)return {w:60,h:30};
+ if(level===10)return {w:40,h:40};
+ if(level===11)return {w:24,h:35};
  if(level===12)return {w:46,h:46};
- if(level===13)return {w:40,h:82};
+ if(level===13)return {w:40,h:62};
+ if(level===14)return {w:33,h:56};
  return {w:Math.min(40,20+Math.floor((level-1)*1.5)),h:Math.min(64,40+Math.floor((level-1)*1.8))};
 }
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;}}
@@ -343,6 +468,57 @@ function makeLevel5Map(){
  return {w,h,grid,spawns,exits,checkpoints,terrain:terrainRectsFromGrid(grid),decor:[],airExit:null,routeCheckpointIndices:[[0,1],[1]],routeUnlockWaves:[1,4],customLayout:'level5'};
 }
 
+const LEVEL6_LAYOUT=[
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '........................................',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+ '############................############',
+];
+function makeLevel6Map(){
+ const w=40,h=40,grid=LEVEL6_LAYOUT.map(row=>[...row].map(ch=>ch==='#'?2:0));
+ const spawns=[{x:0,y:19,w:2,h:2},{x:19,y:38,w:2,h:2}];
+ const exits=[{x:38,y:19,w:2,h:2},{x:19,y:0,w:2,h:2}];
+ const checkpoints=[{x:20,y:19,w:1,h:1}];
+ for(const r of [...spawns,...exits,...checkpoints])for(let yy=r.y;yy<r.y+r.h;yy++)for(let xx=r.x;xx<r.x+r.w;xx++)grid[yy][xx]=0;
+ return {w,h,grid,spawns,exits,checkpoints,terrain:terrainRectsFromGrid(grid),decor:[],airExit:null,routeCheckpointIndices:[[0],[0]],routeExitIndices:[0,1],routeUnlockWaves:[1,1],customLayout:'level6'};
+}
+
 const LEVEL8_LAYOUT=[
  '............####################################............',
  '...............##############################...............',
@@ -382,6 +558,104 @@ function makeLevel8Map(){
  const checkpoints=[{x:14,y:14,w:1,h:1},{x:45,y:14,w:1,h:1}];
  for(const r of [...spawns,...exits,...checkpoints])for(let yy=r.y;yy<r.y+r.h;yy++)for(let xx=r.x;xx<r.x+r.w;xx++)grid[yy][xx]=0;
  return {w,h,grid,spawns,exits,checkpoints,terrain:terrainRectsFromGrid(grid),decor:[],airExit:null,routeCheckpointIndices:[[0],[1]],routeUnlockWaves:[1,1],customLayout:'level8'};
+}
+
+const LEVEL10_LAYOUT=[
+ '###################..###################',
+ '#......................................#',
+ '#......................................#',
+ '#......................................#',
+ '#......................................#',
+ '#......................................#',
+ '#.....############################.....#',
+ '#.....############################.....#',
+ '#.....##........................##.....#',
+ '#.....##........................##.....#',
+ '#.....##........................##.....#',
+ '#.....##........................##.....#',
+ '#.....##........................##.....#',
+ '#.....##.....####......####.....##.....#',
+ '#.....##.....####......####.....##.....#',
+ '#.....##.....##..........##.....##.....#',
+ '#............##..........##............#',
+ '#............##..........##............#',
+ '#............##..........##............#',
+ '.............##..........##.............',
+ '.............##..........##.............',
+ '#............##..........##............#',
+ '#............##..........##............#',
+ '#............##..........##............#',
+ '#.....##.....##..........##.....##.....#',
+ '#.....##.....####......####.....##.....#',
+ '#.....##.....####......####.....##.....#',
+ '#.....##........................##.....#',
+ '#.....##........................##.....#',
+ '#.....##........................##.....#',
+ '#.....##........................##.....#',
+ '#.....##........................##.....#',
+ '#.....############################.....#',
+ '#.....############################.....#',
+ '#......................................#',
+ '#......................................#',
+ '#......................................#',
+ '#......................................#',
+ '#......................................#',
+ '###################..###################',
+];
+function makeLevel10Map(){
+ const w=40,h=40,grid=LEVEL10_LAYOUT.map(row=>[...row].map(ch=>ch==='#'?2:0));
+ const spawns=[{x:19,y:0,w:2,h:2},{x:38,y:19,w:2,h:2},{x:19,y:38,w:2,h:2},{x:0,y:19,w:2,h:2}];
+ const exits=[{x:19,y:19,w:2,h:2}];
+ const checkpoints=[];
+ for(const r of [...spawns,...exits])for(let yy=r.y;yy<r.y+r.h;yy++)for(let xx=r.x;xx<r.x+r.w;xx++)grid[yy][xx]=0;
+ return {w,h,grid,spawns,exits,checkpoints,terrain:terrainRectsFromGrid(grid),decor:[],airExit:null,routeCheckpointIndices:[[],[],[],[]],routeExitIndices:[0,0,0,0],routeUnlockWaves:[1,1,1,1],customLayout:'level10',allRoutesConcurrent:true};
+}
+
+const LEVEL11_LAYOUT=[
+ '#..........##..........#',
+ '#..........##..........#',
+ '#..........##..........#',
+ '#..........##..........#',
+ '#..........##..........#',
+ '#......................#',
+ '#......................#',
+ '#......................#',
+ '#......................#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#....#####....#####....#',
+ '#......................#',
+ '#......................#',
+ '#......................#',
+ '#......................#',
+ '#..........##..........#',
+ '#..........##..........#',
+ '#..........##..........#',
+ '#..........##..........#',
+ '#..........##..........#',
+];
+function makeLevel11Map(){
+ const w=24,h=35,grid=LEVEL11_LAYOUT.map(row=>[...row].map(ch=>ch==='#'?2:0));
+ // Endpoint order on the map: E1, S1, E2, S2.
+ const spawns=[{x:15,y:0,w:2,h:2},{x:15,y:33,w:2,h:2}];
+ const exits=[{x:8,y:0,w:2,h:2},{x:8,y:33,w:2,h:2}];
+ const checkpoints=[];
+ for(const r of [...spawns,...exits])for(let yy=r.y;yy<r.y+r.h;yy++)for(let xx=r.x;xx<r.x+r.w;xx++)grid[yy][xx]=0;
+ return {w,h,grid,spawns,exits,checkpoints,terrain:terrainRectsFromGrid(grid),decor:[],airExit:null,routeCheckpointIndices:[[],[]],routeExitIndices:[1,0],routeUnlockWaves:[1,1],customLayout:'level11'};
 }
 
 const LEVEL12_LAYOUT=[
@@ -504,34 +778,81 @@ const LEVEL13_LAYOUT=[
  '############................############',
  '############................############',
  '############................############',
- '############................############',
- '#############..............#############',
- '#############..............#############',
- '#############..............#############',
- '#############..............#############',
- '#############..............#############',
- '#############..............#############',
- '#############..............#############',
- '#############..............#############',
- '#############..............#############',
- '#############..............#############',
- '#############..............#############',
- '#############..............#############',
- '##############............##############',
- '##############............##############',
- '##############............##############',
- '##############............##############',
- '##############............##############',
- '##############............##############',
- '##############............##############',
 ];
 function makeLevel13Map(){
- const w=40,h=82,grid=LEVEL13_LAYOUT.map(row=>[...row].map(ch=>ch==='#'?2:0));
+ const w=40,h=62,grid=LEVEL13_LAYOUT.map(row=>[...row].map(ch=>ch==='#'?2:0));
  const spawns=[{x:0,y:0,w:2,h:2},{x:19,y:0,w:2,h:2},{x:38,y:0,w:2,h:2}];
- const exits=[{x:19,y:80,w:2,h:2}];
- const checkpoints=[{x:19,y:9,w:1,h:1},{x:20,y:48,w:1,h:1}];
+ const exits=[{x:19,y:60,w:2,h:2}];
+ const checkpoints=[{x:20,y:48,w:1,h:1}];
  for(const r of [...spawns,...exits,...checkpoints])for(let yy=r.y;yy<r.y+r.h;yy++)for(let xx=r.x;xx<r.x+r.w;xx++)grid[yy][xx]=0;
- return {w,h,grid,spawns,exits,checkpoints,terrain:terrainRectsFromGrid(grid),decor:[],airExit:null,routeCheckpointIndices:[[0,1],[0,1],[0,1]],routeUnlockWaves:[1,1,1],customLayout:'level13'};
+ return {w,h,grid,spawns,exits,checkpoints,terrain:terrainRectsFromGrid(grid),decor:[],airExit:null,routeCheckpointIndices:[[0],[0],[0]],routeUnlockWaves:[1,1,1],customLayout:'level13'};
+}
+
+const LEVEL14_LAYOUT=[
+ '#############....................',
+ '##############...................',
+ '##############...................',
+ '#...##########...................',
+ '#....#########...................',
+ '#.....########...................',
+ '##.....#######...................',
+ '###....########..................',
+ '####....#######..................',
+ '####....#######..................',
+ '#####....######..................',
+ '######....###...................#',
+ '######................#.........#',
+ '#######..............##........##',
+ '#######.............####......###',
+ '######..............####.....####',
+ '###................#####....#####',
+ '##................######....#####',
+ '#................######.....#####',
+ '.................####.......#####',
+ '..................##..........###',
+ '...............................##',
+ '.................................',
+ '.................................',
+ '.................................',
+ '..................###............',
+ '.................#####...........',
+ '.....##........#######...........',
+ '....####......########...........',
+ '....######...#########...........',
+ '....#######..#########...........',
+ '....#######..########............',
+ '.....######..########............',
+ '.....######..######.............#',
+ '.......####..#####.............##',
+ '.........##..##................##',
+ '..............................###',
+ '...........................######',
+ '#........................########',
+ '##....................###########',
+ '###.................#############',
+ '#####...............#############',
+ '#####................############',
+ '#####............................',
+ '####.............................',
+ '####.............................',
+ '###........####..................',
+ '##.........####..................',
+ '#...........#####................',
+ '#...........#######..............',
+ '.............######..............',
+ '...............###...............',
+ '...............###...............',
+ '.................................',
+ '.................................',
+ '...............##................',
+];
+function makeLevel14Map(){
+ const w=33,h=56,grid=LEVEL14_LAYOUT.map(row=>[...row].map(ch=>ch==='#'?2:0));
+ const spawns=[{x:24,y:0,w:2,h:2},{x:11,y:22,w:2,h:2},{x:0,y:54,w:2,h:2},{x:31,y:27,w:2,h:2}];
+ const exits=[{x:31,y:54,w:2,h:2},{x:1,y:3,w:2,h:2}];
+ const checkpoints=[{x:27,y:28,w:1,h:1},{x:16,y:41,w:1,h:1}];
+ for(const r of [...spawns,...exits,...checkpoints])for(let yy=r.y;yy<r.y+r.h;yy++)for(let xx=r.x;xx<r.x+r.w;xx++)grid[yy][xx]=0;
+ return {w,h,grid,spawns,exits,checkpoints,terrain:terrainRectsFromGrid(grid),decor:[],airExit:null,routeCheckpointIndices:[[0],[1],[1],[]],airRouteCheckpointIndices:[[],[],[],[]],routeExitIndices:[0,0,0,1],routeUnlockWaves:[1,1,1,15],spawnColors:['#59d9ff','#59d9ff','#59d9ff','#ff78c8'],exitColors:['#ff6d84','#ff9f68'],customLayout:'level14'};
 }
 
 const LEVEL15_LAYOUT=[
@@ -743,10 +1064,14 @@ function makeLevel7Map(){
 function makeMap(level,stage=1){
  if(state.mode==='endless')return makeEndlessMap();
  if(level===15)return makeLevel15Map();
+ if(level===14)return makeLevel14Map();
  if(level===13)return makeLevel13Map();
  if(level===12)return makeLevel12Map();
+ if(level===11)return makeLevel11Map();
+ if(level===10)return makeLevel10Map();
  if(level===8)return makeLevel8Map();
  if(level===7)return makeLevel7Map();
+ if(level===6)return makeLevel6Map();
  if(level===5)return makeLevel5Map();
  const {w,h}=levelDimensions(level);
  const spawns=[],exits=[],checkpoints=[];
@@ -885,9 +1210,15 @@ function generateEndlessWavePlan(wave){
  return {type,count,hp,reward,rewardRemainder,combatRewardTarget,mazeGrant,rewardTarget:combatRewardTarget+mazeGrant,spawnGap,unitSpeed,isBoss:false,specialBoss:false,routeCount:6,activeRoutes:activeRouteIndices.length,activeRouteIndices,routeSequence,routeStartFractions:activeRouteIndices.map(()=>0),tutorialHint:wave===6?'First flying wave: every sixth wave is airborne.':wave===21?'The pink spawn is now active at reduced density.':''};
 }
 
+function balancedRouteSequence(routeCount,count,offset=0){return Array.from({length:count},(_,i)=>(i+offset)%routeCount);}
+function campaignBossWaves(level,max){
+ if(level===15)return [...new Set([Math.max(6,Math.ceil(max*.40)),Math.max(8,Math.ceil(max*.70)),max])].sort((a,b)=>a-b);
+ if(level>=10&&level<=14)return [...new Set([Math.max(6,Math.ceil(max*.55)),max])].sort((a,b)=>a-b);
+ return [max];
+}
 function generateWavePlan(level,stage,wave){
  if(state.mode==='endless')return generateEndlessWavePlan(wave);
- const max=getWaveMax(level),bossWaves=level===12?[Math.max(6,Math.ceil(max*0.55)),max]:[max],isBoss=bossWaves.includes(wave);
+ const max=getWaveMax(level),bossWaves=campaignBossWaves(level,max),isBoss=bossWaves.includes(wave);
  let type='basic';
  if(isBoss)type='boss';
  else if((level===1&&wave===5)||(level>=2&&wave>=4&&wave%4===1))type='flying';
@@ -895,6 +1226,8 @@ function generateWavePlan(level,stage,wave){
  else if(wave%6===0)type='armored';
  else if(wave%4===0)type='fast';
  else if(wave%3===0)type='slow';
+ const level10FastRush=level===10&&wave>10&&!isBoss&&type!=='flying';
+ if(level10FastRush)type='fast';
  const {w,h}=levelDimensions(level),area=w*h;
  // Every level starts from the same combat baseline. Map size only adds pressure
  // after the opening waves, when the player has had time to build an economy.
@@ -904,6 +1237,7 @@ function generateWavePlan(level,stage,wave){
  const baseCount=9+Math.floor(wave*2.2)+Math.round(18*sizePressure);
  const flyingCountScale=wave<=5?.30:wave<=10?.38:wave<=15?.46:.52;
  let count=Math.round(baseCount*(type==='flying'?flyingCountScale:type==='fast'?.7:type==='armored'?.72:type==='slow'?.78:1));
+ if(level10FastRush)count=Math.max(1,Math.round(count*1.5));
  // HP is wave-driven only: a Wave 5 creep has the same base HP on every level.
  const hpBase=Math.round(18+wave*7+Math.max(0,wave-10)*4);
  const hp=Math.round(hpBase*(type==='fast'?.72:type==='armored'?1.3:type==='slow'?1.65:type==='flying'?.82:1));
@@ -923,6 +1257,10 @@ function generateWavePlan(level,stage,wave){
    const bossHP=Math.max(260,Math.round(totalNormalHP*1.1));
    const escortType=wave>=18?'armored':wave>=14?'fast':'basic';
    const escortHp=Math.round(hpBase*(escortType==='armored'?1.15:escortType==='fast'?.78:1));
+   if(level===10){
+     const activeRouteIndices=[0,1,2,3],routeSequence=balancedRouteSequence(4,1+escortCount,wave%4);
+     return {type:'boss',count:1+escortCount,hp:bossHP,bossHP,escortCount,escortType,escortHp,bossReward:Math.max(1,Math.floor(combatRewardTarget*.55)),escortReward:escortCount?Math.max(1,Math.floor(combatRewardTarget*.45/escortCount)):0,combatRewardTarget,mazeGrant,rewardTarget,spawnGap:escortCount?.7:1,isBoss:true,specialBoss:true,routeCount:4,activeRoutes:4,activeRouteIndices,routeSequence,routeStartFractions:[0,0,0,0],tutorialHint:'All four routes are active and the wave is distributed evenly.'};
+   }
    if(level===12){
      const bossCount=2;
      const routeSequence=[0,1,...makeWeightedRouteSequence([0,1],escortCount,wave)];
@@ -934,9 +1272,11 @@ function generateWavePlan(level,stage,wave){
  const reward=Math.max(1,Math.floor(combatRewardTarget/count)),rewardRemainder=Math.max(0,combatRewardTarget-reward*count);
  const spawnGap=type==='fast'?.38:type==='flying'?(level<=3?1.15:level<=7?.95:.78):type==='armored'?.8:type==='slow'?1:.62;
  const tutorialHint=level===1&&wave===5?'Flying creeps travel through every checkpoint. Dedicated anti-air towers deal bonus damage, while mixed-target towers are less efficient against them.':level===1&&wave===1?'Build towers to shape the ground route before starting the wave.':'';
- let finalSchedule=schedule;
+ let finalSchedule=schedule,routeSequence=null;
  if(level===5&&type==='flying')finalSchedule={...schedule,activeRoutes:1,activeRouteIndices:[0],routeStartFractions:[0]};
- return {type,count,hp,reward,rewardRemainder,combatRewardTarget,mazeGrant,rewardTarget,spawnGap,unitSpeed,isBoss:false,specialBoss:false,routeCount,...finalSchedule,tutorialHint};
+ if(level===10){finalSchedule={activeRoutes:4,activeRouteIndices:[0,1,2,3],routeStartFractions:[0,0,0,0]};routeSequence=balancedRouteSequence(4,count,wave%4);}
+ if(level===14&&type==='flying'){const prog=max<=1?1:(wave-1)/(max-1),active=prog>=.30?2:1,idx=active===1?[(wave%2===1)?0:1]:[0,1];finalSchedule={activeRoutes:idx.length,activeRouteIndices:idx,routeStartFractions:idx.map((_,i)=>i===0?0:.25)};}
+ return {type,count,hp,reward,rewardRemainder,combatRewardTarget,mazeGrant,rewardTarget,spawnGap,unitSpeed,isBoss:false,specialBoss:false,routeCount,...finalSchedule,...(routeSequence?{routeSequence}:{}),tutorialHint};
 }
 
 function difficultyName(d){return d==='veryhard'?'Very Hard':capitalize(d);}
@@ -949,12 +1289,13 @@ function enterTitleScreen(mode='page'){
  $('#pauseOverlay').classList.add('hidden');
  const modal=$('#menuModal');modal.className=mode==='home'?'titleHome':'titlePage';
 }
-function showMainMenu(){
+function showMainMenu(){AUDIO.music.stop();
  enterTitleScreen('home');
  $('#menuModal').innerHTML=`<h1>MAZEHOLD</h1><p class="titleTagline">Build a maze, build your stronghold.</p><p class="difficultyCurrent">Difficulty: ${difficultyName(prefs.difficulty)}</p><div class="titleMainButtons"><button class="menuBtn" id="startGame"><strong>Start</strong><span class="small">Choose a level and archetype.</span></button><button class="menuBtn endlessUnlock" id="endlessGame"><strong>Endless</strong><span class="small">Survive infinite waves.</span></button><button class="menuBtn" id="difficultyMenu"><strong>Difficulty</strong><span class="small">Current: ${difficultyName(prefs.difficulty)}</span></button><button class="menuBtn" id="startSettings"><strong>Settings</strong><span class="small">Adjust camera controls.</span></button><button class="menuBtn" id="guideMenu"><strong>Guide</strong><span class="small">Rules, towers, and monster compendium.</span></button></div>`;
  $('#startGame').onclick=showLevelSelect;$('#endlessGame').onclick=showEndlessArchetypes;$('#difficultyMenu').onclick=showDifficulty;$('#startSettings').onclick=showStartSettings;$('#guideMenu').onclick=()=>showGuide('how');
 }
-function showLevelSelect(){state.mode='campaign';state.secondaryArchetype=null;state.secondArchetypeUnlocked=false;enterTitleScreen('page');let html=`<h2>Select Level</h2><p class="help">Difficulty: <b class="gold">${difficultyName(prefs.difficulty)}</b></p><div class="levelGrid">`;for(let i=1;i<=15;i++)html+=`<button class="levelBtn" data-lvl="${i}">${i}</button>`;html+='</div><div class="sep"></div><button class="secondary" id="backMenu">Back</button>';$('#menuModal').innerHTML=html;$$('.levelBtn').forEach(b=>b.onclick=()=>{state.level=+b.dataset.lvl;showArchetypes();});$('#backMenu').onclick=showMainMenu;}
+function isLevelCleared(level){return !!state.achievements[`level-${level}`]||['standard','hard','veryhard'].some(d=>state.achievements[`${level}-${d}`]);}
+function showLevelSelect(){state.mode='campaign';state.secondaryArchetype=null;state.secondArchetypeUnlocked=false;enterTitleScreen('page');let html=`<h2>Select Level</h2><p class="help">Difficulty: <b class="gold">${difficultyName(prefs.difficulty)}</b></p><div class="levelGrid">`;for(let i=1;i<=15;i++)html+=`<button class="levelBtn" data-lvl="${i}">${i}${isLevelCleared(i)?'<span class="levelStar" title="Level cleared">★</span>':''}</button>`;html+='</div><div class="sep"></div><button class="secondary" id="backMenu">Back</button>';$('#menuModal').innerHTML=html;$$('.levelBtn').forEach(b=>b.onclick=()=>{state.level=+b.dataset.lvl;showArchetypes();});$('#backMenu').onclick=showMainMenu;}
 function showDifficulty(){
  enterTitleScreen('page');
  $('#menuModal').innerHTML=`<h2>Difficulty</h2><p class="help">This setting applies to every newly started level until you change it.</p><div class="menuGrid"><button class="menuBtn diff ${prefs.difficulty==='standard'?'active':''}" data-d="standard"><strong>Standard</strong><br>15 lives · unlimited planning</button><button class="menuBtn diff ${prefs.difficulty==='hard'?'active':''}" data-d="hard"><strong>Hard</strong><br>10 lives · 60-second planning</button><button class="menuBtn diff ${prefs.difficulty==='veryhard'?'active':''}" data-d="veryhard"><strong>Very Hard</strong><br>5 lives · 30-second planning</button></div><div class="sep"></div><button class="secondary" id="backMenu">Back</button>`;
@@ -962,8 +1303,8 @@ function showDifficulty(){
 }
 function showStartSettings(){
  enterTitleScreen('page');
- $('#menuModal').innerHTML=`<h2>Settings</h2><div class="card"><h3>Camera Controls</h3><p class="help">Adjust how quickly the camera moves while holding W, A, S, or D.</p><label for="wasdSensitivity">WASD sensitivity: <span id="wasdValue" class="settingValue">${Math.round(prefs.wasdSensitivity*100)}%</span></label><br><input class="settingRange" id="wasdSensitivity" type="range" min="0.5" max="2" step="0.1" value="${prefs.wasdSensitivity}"><div class="small">50% is precise · 100% is the faster default · 200% is fastest</div></div><button class="secondary" id="backMenu">Back</button>`;
- $('#wasdSensitivity').oninput=e=>{prefs.wasdSensitivity=clamp(Number(e.target.value),.5,2);$('#wasdValue').textContent=`${Math.round(prefs.wasdSensitivity*100)}%`;localStorage.setItem('amazingTD_wasd_sensitivity',String(prefs.wasdSensitivity));};$('#backMenu').onclick=showMainMenu;
+ $('#menuModal').innerHTML=`<h2>Settings</h2><div class="card"><h3>Camera Controls</h3><p class="help">Adjust how quickly the camera moves while holding W, A, S, or D.</p><label for="wasdSensitivity">WASD sensitivity: <span id="wasdValue" class="settingValue">${Math.round(prefs.wasdSensitivity*100)}%</span></label><br><input class="settingRange" id="wasdSensitivity" type="range" min="0.5" max="2" step="0.1" value="${prefs.wasdSensitivity}"><div class="small">50% is precise · 100% is the faster default · 200% is fastest</div></div>${audioSettingsHTML()}<button class="secondary" id="backMenu">Back</button>`;
+ $('#wasdSensitivity').oninput=e=>{prefs.wasdSensitivity=clamp(Number(e.target.value),.5,2);$('#wasdValue').textContent=`${Math.round(prefs.wasdSensitivity*100)}%`;localStorage.setItem('amazingTD_wasd_sensitivity',String(prefs.wasdSensitivity));};wireAudioSettings();$('#backMenu').onclick=showMainMenu;
 }
 function towerDamageLabel(t){return t.dmg?`${t.dmg[0]}–${t.dmg[1]}`:'—';}
 function towerTargetLabel(t){return (t.target||[]).map(x=>capitalize(x)).join(', ');}
@@ -974,7 +1315,7 @@ function guideMonsterCompendium(){const monsters=[
  {kindId:'armored',kind:'Armored ground',stats:'Speed 1.10 · 130% base HP · scaling armor',desc:'Reduces non-fixed damage through armor. Magic and armor-reduction effects are especially valuable.'},
  {kindId:'slow',kind:'Slow ground',stats:'Speed 0.85 · 165% base HP',desc:'Slow-moving durability test that gives damage-over-time towers more time to work.'},
  {kindId:'air',kind:'Flying',stats:'Speed 1.12–1.82 · 82% base HP · 30–52% wave density',desc:'Ignores terrain and towers, but must visit every checkpoint before its paired exit. Flying waves pay 15% extra combat bounty; air-only towers deal +25% damage while mixed-target towers deal 5% less.'},
- {kindId:'boss',kind:'Boss',stats:'Speed 0.55 · displacement resistance',desc:'Appears on the final campaign wave or every tenth Endless wave. From Level 7 onward it can rush, shut down nearby towers, or apply a damage-debuff aura. Later bosses arrive with escorts.'}
+ {kindId:'boss',kind:'Boss',stats:'Speed 0.55 · displacement resistance',desc:'Appears on campaign boss waves or every tenth Endless wave. From Level 7 onward it can rush, disable the 10 nearest towers for 5 seconds on a 15-second cooldown, or apply a damage-debuff aura. The last boss of a final campaign wave charges at Fast-creep speed for 2 seconds every 6 seconds.'}
  ];return `<div class="compendiumGrid">${monsters.map(m=>{
   const vars=(CREEP_SKINS[m.kindId]||[]).map((s,i)=>`<div class="dexMon"><canvas class="dexCv" data-kind="${m.kindId}" data-skin="${i}"></canvas><div class="small">${s.name}</div></div>`).join('');
   return `<div class="card monsterCard"><h3>${m.kind}</h3><div class="dexRow">${vars}</div><div class="small gold">${m.stats}</div><p class="help">${m.desc}</p></div>`;}).join('')}</div><div class="card help"><h3>Wave Scaling</h3>Enemy durability is based on the current wave, not the level. Larger maps add more enemies only after the opening waves. Flying waves contain fewer units. Campaign bosses conclude each level; Endless bosses return every tenth wave.</div>`;}
@@ -1003,12 +1344,12 @@ function archetypeButtons(exclude=[]){let html='';for(const [id,a] of Object.ent
 function showArchetypes(){state.mode='campaign';state.secondaryArchetype=null;state.secondArchetypeUnlocked=false;enterTitleScreen('page');let html=`<h2>Level ${state.level}: Choose Archetype</h2><p class="help">Difficulty: <b class="gold">${difficultyName(prefs.difficulty)}</b><br>The archetype is locked for the entire level. Level preview: ${previewText(state.level)}</p><div class="menuGrid">${archetypeButtons()}</div><div class="sep"></div><button class="secondary" id="backLevels">Back</button>`;$('#menuModal').innerHTML=html;$$('.archetypeBtn').forEach(b=>b.onclick=()=>{state.archetype=b.dataset.a;state.difficulty=prefs.difficulty;startLevel();});$('#backLevels').onclick=showLevelSelect;}
 function showEndlessArchetypes(){state.mode='endless';state.level=0;state.secondaryArchetype=null;state.secondArchetypeUnlocked=false;enterTitleScreen('page');$('#menuModal').innerHTML=`<h2>Endless: Choose Starting Archetype</h2><p class="help">Infinite waves · flying every 6th wave · boss every 10th wave · second archetype after Wave 20.<br>Difficulty: <b class="gold">${difficultyName(prefs.difficulty)}</b></p><div class="menuGrid">${archetypeButtons()}</div><div class="sep"></div><button class="secondary" id="backMenu">Back</button>`;$$('.archetypeBtn').forEach(b=>b.onclick=()=>{state.archetype=b.dataset.a;state.difficulty=prefs.difficulty;startLevel();});$('#backMenu').onclick=showMainMenu;}
 function showSecondArchetypePrompt(){if(state.mode!=='endless'||state.secondaryArchetype)return;state.paused=true;$('#menuOverlay').classList.remove('hidden');$('#resultModal').innerHTML=`<h1>Second Archetype Unlocked</h1><p>You survived 20 waves. Choose another archetype; both tower catalogues remain available for the rest of this run.</p><div class="menuGrid">${archetypeButtons([state.archetype])}</div>`;$$('#resultModal .archetypeBtn').forEach(b=>b.onclick=()=>{state.secondaryArchetype=b.dataset.a;state.secondArchetypeUnlocked=true;state.paused=false;$('#menuOverlay').classList.add('hidden');renderTowerList();updateUI();autosave();toast(`${ARCHETYPES[state.secondaryArchetype].name} towers unlocked`);});}
-function previewText(l){const {w,h}=levelDimensions(l),waves=getWaveMax(l);if(l===1)return `10-wave tutorial · ${w}×${h} map · flying at Wave 5 · boss at Wave 10`;if(l===5)return `${waves} waves · custom ${w}×${h} split-wall map · bottom-left opening route · flying uses both checkpoints`;if(l===7)return `${waves} waves · custom ${w}×${h} Z-shaped map · one spawn · two bend checkpoints · special-ability boss`;if(l===15)return `${waves} waves · custom ${w}×${h} layout · three spawns · Spawn 3 unlocks on Wave 11 · split checkpoints`;const parts=[`${waves} waves`,`${w}×${h} map`,l>=3?'terrain / irregular edges':'open terrain',l>=5?'multiple routes · two checkpoints':'one checkpoint',l>=7?'special-ability boss':'boss finale'];return parts.join(' · ');}
+function previewText(l){const {w,h}=levelDimensions(l),waves=getWaveMax(l),bossCount=campaignBossWaves(l,waves).length;if(l===1)return `10-wave tutorial · ${w}×${h} map · flying at Wave 5 · boss at Wave 10`;if(l===5)return `${waves} waves · custom ${w}×${h} split-wall map · bottom-left opening route · flying uses both checkpoints`;if(l===7)return `${waves} waves · custom ${w}×${h} Z-shaped map · one spawn · two bend checkpoints · special-ability boss`;if(l===15)return `${waves} waves · custom ${w}×${h} layout · three boss waves · Spawn 3 unlocks on Wave 11 · split checkpoints`;const parts=[`${waves} waves`,`${w}×${h} map`,l>=3?'terrain / irregular edges':'open terrain',l>=5?'multiple routes · two checkpoints':'one checkpoint',l>=10&&l<=14?'two boss waves':l>=7?'special-ability boss':'boss finale'];return parts.join(' · ');}
 function continueSave(){const raw=localStorage.getItem('amazingTD_save');if(!raw){toast('No autosave found');return;}try{const s=JSON.parse(raw);Object.assign(state,s.meta);state.level=clamp(state.level||1,1,15);state.stage=1;startLevel(true,s);}catch(e){toast('Autosave could not be loaded');}}
 
 function startLevel(fromSave=false,save=null){
  $('#titleScreen').classList.add('hidden');$('#app').classList.remove('hidden');$('#menuOverlay').classList.add('hidden');
- state.screen='game';state.mode=fromSave?(save.meta.mode||state.mode||'campaign'):(state.mode||'campaign');state.level=state.mode==='endless'?0:clamp(state.level||1,1,15);state.stage=1;state.wave=fromSave?(save.meta.wave||0):0;state.waveMax=state.mode==='endless'?Infinity:getWaveMax(state.level);state.secondaryArchetype=fromSave?(save.meta.secondaryArchetype||null):(state.secondaryArchetype||null);state.secondArchetypeUnlocked=!!state.secondaryArchetype;state.lives=fromSave?save.meta.lives:livesFor(state.difficulty);state.gold=fromSave?save.meta.gold:startingGold(state.level);state.pathVisible=fromSave?save.meta.pathVisible:true;state.speed=fromSave&&[1,2,3].includes(Number(save.meta.speed))?Number(save.meta.speed):1;state.towers=[];state.creeps=[];state.projectiles=[];state.particles=[];state.effects=[];state.selectedBuild=null;state.selectedTower=null;state.movingTower=null;state.paused=false;state.phase='build';state.buildTimer=buildTimeFor(state.difficulty);state.blockedTimer=0;state.breachTarget=null;state.waveLeaked=0;state.undoStack=[];map=makeMap(state.level,1);
+ state.screen='game';state.mode=fromSave?(save.meta.mode||state.mode||'campaign'):(state.mode||'campaign');state.level=state.mode==='endless'?0:clamp(state.level||1,1,15);state.stage=1;state.wave=fromSave?(save.meta.wave||0):0;state.waveMax=state.mode==='endless'?Infinity:getWaveMax(state.level);state.secondaryArchetype=fromSave?(save.meta.secondaryArchetype||null):(state.secondaryArchetype||null);state.secondArchetypeUnlocked=!!state.secondaryArchetype;state.lives=fromSave?save.meta.lives:livesFor(state.difficulty);state.gold=fromSave?save.meta.gold:startingGold(state.level);state.pathVisible=fromSave?save.meta.pathVisible:true;state.speed=fromSave&&[1,2,3].includes(Number(save.meta.speed))?Number(save.meta.speed):1;state.towers=[];state.creeps=[];state.projectiles=[];state.particles=[];state.effects=[];state.selectedBuild=null;state.selectedTower=null;state.movingTower=null;state.paused=false;state.phase='build';state.buildTimer=buildTimeFor(state.difficulty);state.blockedTimer=0;state.breachTarget=null;state.waveLeaked=0;state.undoStack=[];map=makeMap(state.level,1);AUDIO.music.start('build');
  if(fromSave&&save.towers)state.towers=save.towers.map(x=>({...x,kills:x.kills||0,data:BY_ID[x.id]}));
  wavePlan=state.wave>=state.waveMax?null:generateWavePlan(state.level,1,state.wave+1);resetCamera();renderTowerList();updateUI();$('#pauseOverlay').classList.add('hidden');if(!fromSave&&state.mode==='endless')toast('Endless Mode: second archetype unlocks after Wave 20');else if(!fromSave&&state.level===1)toast('Tutorial Level: flying arrives on Wave 5, boss on Wave 10');
  const stageStart=readStageStart();
@@ -1080,9 +1421,10 @@ function checkpointZoneGoals(cp,forBreak=false,size=5){const z=cpBox(cp,size),go
   else if(!gridBlocked(x,y))goals.push({x,y});
  }return goals;}
 function inCpBox(cp,x,y,s){const b=cpBox(cp,s||1);return x>=b.x&&y>=b.y&&x<b.x+b.w&&y<b.y+b.h;}
-function checkpointIndicesForRoute(spawnIndex=0){const custom=map?.routeCheckpointIndices?.[spawnIndex%map.spawns.length];return Array.isArray(custom)?custom:map.checkpoints.map((_,i)=>i);}
+function checkpointIndicesForRoute(spawnIndex=0,air=false){const routes=air&&map?.airRouteCheckpointIndices?map.airRouteCheckpointIndices:map?.routeCheckpointIndices;const custom=routes?.[spawnIndex%map.spawns.length];return Array.isArray(custom)?custom:map.checkpoints.map((_,i)=>i);}
+function exitIndexForRoute(spawnIndex=0){const custom=map?.routeExitIndices?.[spawnIndex%map.spawns.length];return Number.isInteger(custom)?custom%map.exits.length:spawnIndex%map.exits.length;}
 function getRouteForSpawn(spawnIndex=0,air=false){
- const s=rectCenter(map.spawns[spawnIndex%map.spawns.length]),e=rectCenter(map.exits[spawnIndex%map.exits.length]),cpIndices=checkpointIndicesForRoute(spawnIndex);
+ const s=rectCenter(map.spawns[spawnIndex%map.spawns.length]),e=rectCenter(map.exits[exitIndexForRoute(spawnIndex)]),cpIndices=checkpointIndicesForRoute(spawnIndex,air);
  if(air){const points=[s];for(const i of cpIndices){const cp=map.checkpoints[i];points.push({x:cp.x,y:cp.y});}points.push(e);return points;}
  const points=[s];for(const i of cpIndices){const cp=map.checkpoints[i],g=checkpointGoals(cp);points.push(g[Math.floor(g.length/2)]||{x:cp.x,y:cp.y});}points.push(e);return points;
 }
@@ -1097,7 +1439,7 @@ function heur(p,goals){let v=1e9;for(const g of goals)v=Math.min(v,Math.abs(p.x-
 function towerAt(x,y){return state.towers.find(t=>x>=t.x&&y>=t.y&&x<t.x+t.footprint&&y<t.y+t.footprint)||null;}
 function computeGroundPath(spawnIndex=0,from=null,objIndex=0,allowBreak=false){let start=from||rectCenter(map.spawns[spawnIndex%map.spawns.length]),full=[];const cpIndices=checkpointIndicesForRoute(spawnIndex);for(let step=objIndex;step<cpIndices.length;step++){const cp=map.checkpoints[cpIndices[step]];let p=null,used=0;
  for(let s=1;s<=5&&!p;s++){const goals=checkpointZoneGoals(cp,allowBreak,s);if(!goals.length)continue;p=astar(start,goals,allowBreak);used=s;}
- if(p&&used>1){if(!full.expanded)full.expanded={};full.expanded[step]=used;}if(!p)return null;if(full.length)full.pop();full.push(...p);start=p[p.length-1];}const exit=map.exits[spawnIndex%map.exits.length];const goals=[];for(let y=exit.y;y<exit.y+exit.h;y++)for(let x=exit.x;x<exit.x+exit.w;x++)goals.push({x,y});const p=astar(start,goals,allowBreak);if(!p)return null;if(full.length)full.pop();full.push(...p);return full;}
+ if(p&&used>1){if(!full.expanded)full.expanded={};full.expanded[step]=used;}if(!p)return null;if(full.length)full.pop();full.push(...p);start=p[p.length-1];}const exit=map.exits[exitIndexForRoute(spawnIndex)];const goals=[];for(let y=exit.y;y<exit.y+exit.h;y++)for(let x=exit.x;x<exit.x+exit.w;x++)goals.push({x,y});const p=astar(start,goals,allowBreak);if(!p)return null;if(full.length)full.pop();full.push(...p);return full;}
 function computeBreachTarget(spawnIndex=0,from=null,objIndex=0){const p=computeGroundPath(spawnIndex,from,objIndex,true);if(!p)return null;for(const c of p){const tw=towerAt(c.x,c.y);if(tw)return tw;}return null;}
 function plannedRouteIndices(){return wavePlan?.activeRouteIndices?.length?wavePlan.activeRouteIndices:map.spawns.map((_,i)=>i);}
 function allRoutesValid(){for(const i of plannedRouteIndices()){if(!computeGroundPath(i))return false;}return true;}
@@ -1108,21 +1450,21 @@ function canPlace(data,x,y,ignore=null){if(state.paused)return false;for(let yy=
  }return true;}
 function placeSelected(x,y){
  state.undoStack=state.undoStack||[];
- if(state.movingTower){const tw=state.movingTower,d=BY_ID[tw.id],fromX=tw.x,fromY=tw.y;if(!canPlace(d,x,y,tw))return toast('Invalid move');tw.x=x;tw.y=y;tw.footprint=d.footprint;state.undoStack.push({type:'move',uid:tw.uid,fromX,fromY});state.movingTower=null;state.selectedTower=tw;afterMapChange();return;}
- if(!state.selectedBuild)return;const d=BY_ID[state.selectedBuild];if(state.gold<d.cost)return toast('Not enough gold');if(!canPlace(d,x,y))return toast('Cannot place there');const tw={uid:crypto.randomUUID?.()||Math.random().toString(36),id:d.id,x,y,footprint:d.footprint,upgrade:0,hp:5,kills:0,cooldown:0,totalValue:d.cost,disabled:0,targetId:null,pulseTimer:d.interval||0};state.towers.push(tw);state.gold-=d.cost;state.undoStack.push({type:'place',uid:tw.uid,cost:d.cost});state.selectedTower=tw;afterMapChange();
+ if(state.movingTower){const tw=state.movingTower,d=BY_ID[tw.id],fromX=tw.x,fromY=tw.y;if(!canPlace(d,x,y,tw)){AUDIO.play('place_error');return toast('Invalid move');}tw.x=x;tw.y=y;tw.footprint=d.footprint;AUDIO.play('place');state.undoStack.push({type:'move',uid:tw.uid,fromX,fromY});state.movingTower=null;state.selectedTower=tw;afterMapChange();return;}
+ if(!state.selectedBuild)return;const d=BY_ID[state.selectedBuild];if(state.gold<d.cost){AUDIO.play('place_error');return toast('Not enough gold');}if(!canPlace(d,x,y)){AUDIO.play('place_error');return toast('Cannot place there');}const tw={uid:crypto.randomUUID?.()||Math.random().toString(36),id:d.id,x,y,footprint:d.footprint,upgrade:0,hp:5,kills:0,cooldown:0,totalValue:d.cost,disabled:0,targetId:null,pulseTimer:d.interval||0};state.towers.push(tw);state.gold-=d.cost;AUDIO.play('place');state.undoStack.push({type:'place',uid:tw.uid,cost:d.cost});state.selectedTower=tw;afterMapChange();
 }
-function undoLastBuild(){if(state.phase!=='build'||state.paused||!state.undoStack?.length)return;const a=state.undoStack.pop(),tw=state.towers.find(t=>t.uid===a.uid);if(a.type==='place'){if(!tw)return;state.towers.splice(state.towers.indexOf(tw),1);state.gold+=a.cost;state.selectedTower=null;toast(`Placement undone +${a.cost}g`);}else if(a.type==='move'){if(!tw)return;tw.x=a.fromX;tw.y=a.fromY;state.selectedTower=tw;toast('Move undone');}afterMapChange();}
+function undoLastBuild(){if(state.phase!=='build'||state.paused||!state.undoStack?.length)return;const a=state.undoStack.pop(),tw=state.towers.find(t=>t.uid===a.uid);if(a.type==='place'){if(!tw)return;state.towers.splice(state.towers.indexOf(tw),1);state.gold+=a.cost;state.selectedTower=null;AUDIO.play('sell');toast(`Placement undone +${a.cost}g`);}else if(a.type==='move'){if(!tw)return;tw.x=a.fromX;tw.y=a.fromY;state.selectedTower=tw;AUDIO.play('move');toast('Move undone');}afterMapChange();}
 function afterMapChange(){state.mapRev=(state.mapRev||0)+1;state.routeTimer=0;updateBlockedState(true);if(state.phase==='build'&&state.wave<state.waveMax)wavePlan=generateWavePlan(state.level,1,state.wave+1);updateUI();autosave();}
-function updateBlockedState(resetIfValid=false){const valid=allRoutesValid();if(valid){state.blockedTimer=0;state.breachTarget=null;$('#countdown').classList.add('hidden');return;}if(resetIfValid&&state.blockedTimer===0)state.blockedTimer=3;state.breachTarget=computeBreachTarget(plannedRouteIndices()[0]||0)||findCheckpointBlocker();}
+function updateBlockedState(resetIfValid=false){const valid=allRoutesValid();if(valid){state.blockedTimer=0;state.breachTarget=null;$('#countdown').classList.add('hidden');return;}if(resetIfValid&&state.blockedTimer===0){state.blockedTimer=3;AUDIO.play('breach_warn');}state.breachTarget=computeBreachTarget(plannedRouteIndices()[0]||0)||findCheckpointBlocker();}
 function findCheckpointBlocker(){for(const cp of map.checkpoints){const z=cpZoneRect(cp);const t=state.towers.find(t=>rectsOverlap(towerRect(t),z));if(t)return t;}return state.towers[0]||null;}
 
-function startWave(){if(state.phase!=='build'||state.paused)return;if(state.mode!=='endless'&&state.wave>=state.waveMax){finishStage();return;}state.wave++;state.phase='wave';state.spawned=0;state.spawnClock=0;state.undoStack=[];wavePlan=generateWavePlan(state.level,1,state.wave);state.pathVisibleBeforeWave=state.pathVisible;updateUI();const intro=state.level===1&&state.wave===5?'FLYING CREEPS: they ignore your maze':state.level===1&&state.wave===10?'BOSS WAVE: prepare for a high-HP target':wavePlan.isBoss?(wavePlan.specialBoss?'EMPOWERED BOSS WAVE':'BOSS WAVE'):`${capitalize(wavePlan.type)} wave`;toast(intro);autosave();}
-function spawnCreep(){const p=wavePlan;const routePool=p.activeRouteIndices?.length?p.activeRouteIndices:[0];const progress=state.spawned/Math.max(1,p.count);const eligible=routePool.filter((_,i)=>progress>=(p.routeStartFractions?.[i]||0));const unlocked=eligible.length?eligible:[routePool[0]];const spawnIndex=(p.routeSequence?.[state.spawned]??unlocked[state.spawned%unlocked.length])%map.spawns.length;const s=rectCenter(map.spawns[spawnIndex]);const bossIndex=state.spawned,bossUnit=p.isBoss&&bossIndex<(p.bossCount||1);const waveKind=bossUnit?'boss':p.isBoss?(p.escortType||'basic'):p.type;const kind=waveKind==='flying'?'air':waveKind;const hp=bossUnit?(p.bossHP||p.hp):p.isBoss?(p.escortHp||Math.max(1,Math.floor(p.hp*.18))):p.hp;const reward=bossUnit?((p.bossReward??p.rewardTarget)+(bossIndex<(p.bossRewardRemainder||0)?1:0)):(p.isBoss?(p.escortReward||1):p.reward+(state.spawned<(p.rewardRemainder||0)?1:0));const c={id:Math.random().toString(36),kind,skin:skinFor(kind),x:s.x,y:s.y,hp,maxHp:hp,armor:kind==='armored'?5+Math.floor(state.wave/4):0,speed:kind==='fast'?3.1:kind==='armored'?1.1:kind==='slow'?.85:kind==='boss'?.55:kind==='air'?(p.unitSpeed||1.45):1.65,reward,route:spawnIndex,objIndex:0,path:kind==='air'?getRouteForSpawn(spawnIndex,true):computeGroundPath(spawnIndex),pathIndex:0,history:[],effects:[],burn:null,poisons:[],freezeImmune:0,stunImmune:0,frozen:0,stunned:0,dead:false,nextCell:null,attackCd:0,bossSkillCd:kind==='boss'&&(state.mode==='endless'||state.level>=7)?6:999,speedBoostTimer:0};state.creeps.push(c);state.spawned++;}
+function startWave(){if(state.phase!=='build'||state.paused)return;if(state.mode!=='endless'&&state.wave>=state.waveMax){finishStage();return;}state.wave++;state.phase='wave';state.spawned=0;state.spawnClock=0;state.undoStack=[];wavePlan=generateWavePlan(state.level,1,state.wave);AUDIO.play(wavePlan.isBoss?'boss':'wave_start');AUDIO.music.setMode('wave');state.pathVisibleBeforeWave=state.pathVisible;updateUI();const intro=state.level===1&&state.wave===5?'FLYING CREEPS: they ignore your maze':state.level===1&&state.wave===10?'BOSS WAVE: prepare for a high-HP target':wavePlan.isBoss?(wavePlan.specialBoss?'EMPOWERED BOSS WAVE':'BOSS WAVE'):`${capitalize(wavePlan.type)} wave`;toast(intro);autosave();}
+function spawnCreep(){const p=wavePlan;const routePool=p.activeRouteIndices?.length?p.activeRouteIndices:[0];const progress=state.spawned/Math.max(1,p.count);const eligible=routePool.filter((_,i)=>progress>=(p.routeStartFractions?.[i]||0));const unlocked=eligible.length?eligible:[routePool[0]];const spawnIndex=(p.routeSequence?.[state.spawned]??unlocked[state.spawned%unlocked.length])%map.spawns.length;const s=rectCenter(map.spawns[spawnIndex]);const bossIndex=state.spawned,bossCount=p.bossCount||1,bossUnit=p.isBoss&&bossIndex<bossCount,finalBoss=bossUnit&&state.mode!=='endless'&&state.wave===state.waveMax&&bossIndex===bossCount-1;const waveKind=bossUnit?'boss':p.isBoss?(p.escortType||'basic'):p.type;const kind=waveKind==='flying'?'air':waveKind;const hp=bossUnit?(p.bossHP||p.hp):p.isBoss?(p.escortHp||Math.max(1,Math.floor(p.hp*.18))):p.hp;const reward=bossUnit?((p.bossReward??p.rewardTarget)+(bossIndex<(p.bossRewardRemainder||0)?1:0)):(p.isBoss?(p.escortReward||1):p.reward+(state.spawned<(p.rewardRemainder||0)?1:0));const hasBossSkills=kind==='boss'&&(state.mode==='endless'||state.level>=7),c={id:Math.random().toString(36),kind,skin:skinFor(kind),x:s.x,y:s.y,hp,maxHp:hp,armor:kind==='armored'?5+Math.floor(state.wave/4):0,speed:kind==='fast'?3.1:kind==='armored'?1.1:kind==='slow'?.85:kind==='boss'?.55:kind==='air'?(p.unitSpeed||1.45):1.65,reward,route:spawnIndex,objIndex:0,path:kind==='air'?getRouteForSpawn(spawnIndex,true):computeGroundPath(spawnIndex),pathIndex:0,history:[],effects:[],burn:null,poisons:[],freezeImmune:0,stunImmune:0,frozen:0,stunned:0,dead:false,nextCell:null,attackCd:0,finalBoss,bossSkillCd:hasBossSkills?(finalBoss?9:6):999,disableSkillCd:hasBossSkills?15:999,finalRushCd:finalBoss?6:999,speedBoostTimer:0,finalRushTimer:0};state.creeps.push(c);state.spawned++;}
 function updateWave(dt){if(state.spawned<wavePlan.count){state.spawnClock-=dt;if(state.spawnClock<=0){spawnCreep();state.spawnClock=wavePlan.spawnGap;}}
- if(state.spawned>=wavePlan.count&&state.creeps.every(c=>c.dead)){const leaked=state.waveLeaked||0,grant=wavePlan.mazeGrant||0;state.gold+=grant;if(leaked===0){const bonus=Math.max(1,Math.floor((wavePlan.combatRewardTarget||wavePlan.rewardTarget)*.05));state.gold+=bonus;toast(`Maze grant +${grant}g · Perfect +${bonus}g`);}else toast(`Maze grant +${grant}g`);state.waveLeaked=0;state.phase='build';state.buildTimer=buildTimeFor(state.difficulty);wavePlan=state.mode!=='endless'&&state.wave>=state.waveMax?null:generateWavePlan(state.level,1,state.wave+1);updateUI();autosave();if(state.mode==='endless'&&state.wave===20&&!state.secondaryArchetype)showSecondArchetypePrompt();else if(state.mode!=='endless'&&state.wave>=state.waveMax)toast('Level cleared — continue when ready');}
+ if(state.spawned>=wavePlan.count&&state.creeps.every(c=>c.dead)){const leaked=state.waveLeaked||0,grant=wavePlan.mazeGrant||0;state.gold+=grant;if(leaked===0){const bonus=Math.max(1,Math.floor((wavePlan.combatRewardTarget||wavePlan.rewardTarget)*.05));state.gold+=bonus;toast(`Maze grant +${grant}g · Perfect +${bonus}g`);}else toast(`Maze grant +${grant}g`);AUDIO.play('wave_clear');AUDIO.music.setMode('build');state.waveLeaked=0;state.phase='build';state.buildTimer=buildTimeFor(state.difficulty);wavePlan=state.mode!=='endless'&&state.wave>=state.waveMax?null:generateWavePlan(state.level,1,state.wave+1);updateUI();autosave();if(state.mode==='endless'&&state.wave===20&&!state.secondaryArchetype)showSecondArchetypePrompt();else if(state.mode!=='endless'&&state.wave>=state.waveMax)toast('Level cleared — continue when ready');}
 }
-function finishStage(){state.achievements[`${state.level}-${state.difficulty}`]=true;localStorage.setItem('amazingTD_ach',JSON.stringify(state.achievements));$('#menuOverlay').classList.remove('hidden');const finalLevel=state.level>=15;$('#resultModal').innerHTML=`<h1>Level ${state.level} Complete</h1><p>You cleared all ${state.waveMax} waves on <b>${difficultyName(state.difficulty)}</b>.</p><div class="menuGrid">${finalLevel?'':`<button class="menuBtn" id="nextLevel"><strong>Next Level</strong></button>`}<button class="menuBtn" id="levelMenu"><strong>Level Select</strong></button></div>`;if(!finalLevel)$('#nextLevel').onclick=()=>{state.level=Math.min(15,state.level+1);showArchetypes();};$('#levelMenu').onclick=showLevelSelect;}
-function loseLevel(){state.phase='lost';$('#menuOverlay').classList.remove('hidden');const endless=state.mode==='endless';$('#resultModal').innerHTML=`<h1>${endless?'Endless Run Over':'Defeat'}</h1><p>${endless?`You survived ${state.wave} waves.`:'The exit portal was breached too many times.'}</p><div class="menuGrid"><button class="menuBtn" id="retry"><strong>${endless?'Retry Endless':'Retry Level'}</strong></button><button class="menuBtn" id="levelMenu"><strong>${endless?'Main Menu':'Level Select'}</strong></button></div>`;$('#retry').onclick=()=>{state.secondaryArchetype=null;state.secondArchetypeUnlocked=false;startLevel();};$('#levelMenu').onclick=endless?showMainMenu:showLevelSelect;}
+function finishStage(){AUDIO.play('victory');AUDIO.music.stop();state.achievements[`${state.level}-${state.difficulty}`]=true;state.achievements[`level-${state.level}`]=true;localStorage.setItem('amazingTD_ach',JSON.stringify(state.achievements));$('#menuOverlay').classList.remove('hidden');const finalLevel=state.level>=15;$('#resultModal').innerHTML=`<h1>Level ${state.level} Complete</h1><p>You cleared all ${state.waveMax} waves on <b>${difficultyName(state.difficulty)}</b>.</p><div class="menuGrid">${finalLevel?'':`<button class="menuBtn" id="nextLevel"><strong>Next Level</strong></button>`}<button class="menuBtn" id="levelMenu"><strong>Level Select</strong></button></div>`;if(!finalLevel)$('#nextLevel').onclick=()=>{state.level=Math.min(15,state.level+1);showArchetypes();};$('#levelMenu').onclick=showLevelSelect;}
+function loseLevel(){state.phase='lost';AUDIO.play('defeat');AUDIO.music.stop();$('#menuOverlay').classList.remove('hidden');const endless=state.mode==='endless';$('#resultModal').innerHTML=`<h1>${endless?'Endless Run Over':'Defeat'}</h1><p>${endless?`You survived ${state.wave} waves.`:'The exit portal was breached too many times.'}</p><div class="menuGrid"><button class="menuBtn" id="retry"><strong>${endless?'Retry Endless':'Retry Level'}</strong></button><button class="menuBtn" id="levelMenu"><strong>${endless?'Main Menu':'Level Select'}</strong></button></div>`;$('#retry').onclick=()=>{state.secondaryArchetype=null;state.secondArchetypeUnlocked=false;startLevel();};$('#levelMenu').onclick=endless?showMainMenu:showLevelSelect;}
 
 function update(dt,realDt=dt){if(state.screen!=='game'||state.paused)return;state.time+=dt;const move=CAMERA_MOVE_SPEED*prefs.wasdSensitivity*realDt/camera.zoom;if(keysHeld.w)camera.y-=move;if(keysHeld.s)camera.y+=move;if(keysHeld.a)camera.x-=move;if(keysHeld.d)camera.x+=move;
  if(state.phase==='build'&&state.buildTimer!=null){state.buildTimer-=dt;if(state.buildTimer<=0)startWave();}
@@ -1131,8 +1473,8 @@ function update(dt,realDt=dt){if(state.screen!=='game'||state.paused)return;stat
  if(state.phase==='wave')updateWave(dt);
  updateCreeps(dt);updateTowers(dt);updateProjectiles(dt);updateEffects(dt);updateParticles(dt);saveThrottle-=dt;if(saveThrottle<=0&&state.phase==='build'){autosave();saveThrottle=4;}updateUI();
 }
-function updateCreeps(dt){for(const c of state.creeps){if(c.dead)continue;c.freezeImmune=Math.max(0,c.freezeImmune-dt);c.stunImmune=Math.max(0,c.stunImmune-dt);c.frozen=Math.max(0,c.frozen-dt);c.stunned=Math.max(0,c.stunned-dt);c.speedBoostTimer=Math.max(0,(c.speedBoostTimer||0)-dt);updateDots(c,dt);if(c.hp<=0){killCreep(c);continue;}if(c.kind==='boss')updateBossSkill(c,dt);if(c.frozen>0||c.stunned>0)continue;
- const speed=c.speed*(c.speedBoostTimer>0?1.85:1)*(1-combinedSlow(c));
+function updateCreeps(dt){for(const c of state.creeps){if(c.dead)continue;c.freezeImmune=Math.max(0,c.freezeImmune-dt);c.stunImmune=Math.max(0,c.stunImmune-dt);c.frozen=Math.max(0,c.frozen-dt);c.stunned=Math.max(0,c.stunned-dt);c.speedBoostTimer=Math.max(0,(c.speedBoostTimer||0)-dt);c.finalRushTimer=Math.max(0,(c.finalRushTimer||0)-dt);updateDots(c,dt);if(c.hp<=0){killCreep(c);continue;}if(c.kind==='boss')updateBossSkill(c,dt);if(c.frozen>0||c.stunned>0)continue;
+ const baseMoveSpeed=c.finalRushTimer>0?3.1:c.speed*(c.speedBoostTimer>0?1.85:1),speed=baseMoveSpeed*(1-combinedSlow(c));
  if(c.kind==='air')moveAir(c,dt*speed);else moveGround(c,dt*speed,dt);
  }
 }
@@ -1154,13 +1496,17 @@ function attemptBreach(c,dt=.016){const tw=state.breachTarget;if(!tw||state.towe
   const n=p[Math.min(c.breachIdx+1,p.length-1)];const dx=n.x-c.x,dy=n.y-c.y,dd=Math.hypot(dx,dy);
   if(dd<.06)c.breachIdx=Math.min(c.breachIdx+1,p.length-1);
   else{const step=Math.min(dd,c.speed*dt);c.x+=dx/dd*step;c.y+=dy/dd*step;}
- }else if(state.blockedTimer<=0){c.attackCd-=dt;if(c.attackCd<=0){tw.hp--;c.attackCd=.75;particle(tx,ty,'#ff6d7a',2);if(tw.hp<=0){state.towers.splice(state.towers.indexOf(tw),1);state.breachTarget=null;afterMapChange();}}}}
+ }else if(state.blockedTimer<=0){c.attackCd-=dt;if(c.attackCd<=0){tw.hp--;c.attackCd=.75;particle(tx,ty,'#ff6d7a',2);if(tw.hp<=0){AUDIO.play('tower_break');state.towers.splice(state.towers.indexOf(tw),1);state.breachTarget=null;afterMapChange();}}}}
 function moveAir(c,amt){const route=getRouteForSpawn(c.route,true),cpCount=checkpointIndicesForRoute(c.route).length;const target=route[Math.min(c.pathIndex+1,route.length-1)];if(!target){leakCreep(c);return;}const dx=target.x-c.x,dy=target.y-c.y,d=Math.hypot(dx,dy);if(d<.08){c.x=target.x;c.y=target.y;c.pathIndex++;c.objIndex=Math.min(cpCount,c.pathIndex);if(c.pathIndex>=route.length-1)leakCreep(c);}else{const step=Math.min(d,amt);c.x+=dx/d*step;c.y+=dy/d*step;}}
-function leakCreep(c){if(c.dead)return;c.dead=true;state.lives--;state.waveLeaked=(state.waveLeaked||0)+1;particle(c.x,c.y,'#ff596c',12);if(state.lives<=0)loseLevel();}
-function killCreep(c,sourceTower=null){if(c.dead)return;c.dead=true;if(sourceTower&&state.towers.includes(sourceTower))sourceTower.kills=(sourceTower.kills||0)+1;state.gold+=c.reward;goldPopup(c.x,c.y,c.reward);particle(c.x,c.y,'#ffe36d',8,'burst');}
+function leakCreep(c){if(c.dead)return;c.dead=true;AUDIO.play('leak');state.lives--;state.waveLeaked=(state.waveLeaked||0)+1;particle(c.x,c.y,'#ff596c',12);if(state.lives<=0)loseLevel();}
+function killCreep(c,sourceTower=null){if(c.dead)return;c.dead=true;AUDIO.play('kill');if(sourceTower&&state.towers.includes(sourceTower))sourceTower.kills=(sourceTower.kills||0)+1;state.gold+=c.reward;goldPopup(c.x,c.y,c.reward);particle(c.x,c.y,'#ffe36d',8,'burst');}
 function updateDots(c,dt){if(c.burn){c.burn.t-=dt;c.burn.tick-=dt;if(c.burn.tick<=0){dealRaw(c,c.burn.dmg,'magic',c.burn.sourceTower);c.burn.tick=1;}if(c.burn.t<=0)c.burn=null;}for(const p of c.poisons){p.t-=dt;p.tick-=dt;if(p.tick<=0){dealRaw(c,p.dmg,'magic',p.sourceTower);p.tick=1;}}c.poisons=c.poisons.filter(p=>p.t>0);c.effects=c.effects.filter(e=>(e.t-=dt)>0);}
 function combinedSlow(c){let remain=1;for(const e of c.effects)if(e.kind==='slow')remain*=1-e.power;let slow=1-remain;return Math.min(c.kind==='boss'?.35:.65,slow);}
-function updateBossSkill(c,dt){if(state.mode!=='endless'&&state.level<7)return;c.bossSkillCd-=dt;if(c.bossSkillCd>0)return;c.bossSkillCd=state.mode==='endless'?Math.max(5.5,10-state.wave*.025):Math.max(7,12-state.level*.18);const mode=pick(['speed','disable','aura']);const nearby=state.towers.filter(t=>dist({x:t.x+t.footprint/2,y:t.y+t.footprint/2},c)<9);if(mode==='speed'){c.speedBoostTimer=Math.max(c.speedBoostTimer||0,4);particle(c.x,c.y,'#ffe08a',20);toast('Boss used Sudden Rush');return;}if(mode==='disable'){for(const t of nearby)t.disabled=Math.max(t.disabled,3.5);particle(c.x,c.y,'#d9b8ff',18);toast('Boss used Tower Shutdown');return;}for(const t of nearby)t.suppressed=Math.max(t.suppressed||0,5);particle(c.x,c.y,'#a88ad4',22);toast('Boss released a Debuff Aura');}
+function updateBossSkill(c,dt){if(state.mode!=='endless'&&state.level<7)return;
+ c.finalRushCd=(c.finalRushCd??999)-dt;c.disableSkillCd=(c.disableSkillCd??15)-dt;c.bossSkillCd=(c.bossSkillCd??6)-dt;
+ if(c.finalBoss&&c.finalRushCd<=0){c.finalRushCd=6;c.finalRushTimer=Math.max(c.finalRushTimer||0,2);particle(c.x,c.y,'#fff0a8',26);toast('Final Boss used Breakneck Charge');return;}
+ if(c.disableSkillCd<=0){c.disableSkillCd=15;const nearest=state.towers.map(t=>({t,d:dist({x:t.x+t.footprint/2,y:t.y+t.footprint/2},c)})).sort((a,b)=>a.d-b.d).slice(0,10).map(x=>x.t);for(const t of nearest)t.disabled=Math.max(t.disabled,5);if(nearest.length){particle(c.x,c.y,'#d9b8ff',18);toast(`Boss shut down ${nearest.length} tower${nearest.length===1?'':'s'}`);}return;}
+ if(c.bossSkillCd>0)return;c.bossSkillCd=state.mode==='endless'?Math.max(5.5,10-state.wave*.025):Math.max(7,12-state.level*.18);const mode=pick(['speed','aura']),nearby=state.towers.filter(t=>dist({x:t.x+t.footprint/2,y:t.y+t.footprint/2},c)<9);if(mode==='speed'){c.speedBoostTimer=Math.max(c.speedBoostTimer||0,4);particle(c.x,c.y,'#ffe08a',20);toast('Boss used Sudden Rush');return;}for(const t of nearby)t.suppressed=Math.max(t.suppressed||0,5);particle(c.x,c.y,'#a88ad4',22);toast('Boss released a Debuff Aura');}
 
 function updateTowers(dt){for(const tw of state.towers){const d=BY_ID[tw.id];tw.disabled=Math.max(0,(tw.disabled||0)-dt);tw.suppressed=Math.max(0,(tw.suppressed||0)-dt);if(tw.disabled>0)continue;if(d.utility){updateUtility(tw,d,dt);continue;}tw.cooldown-=dt*attackSpeedMult(tw,d);if(tw.cooldown>0)continue;const targets=findTargets(tw,d);if(!targets.length){if(d.lock)tw.targetId=null;continue;}fireTower(tw,d,targets);tw.cooldown=d.interval;}}
 function attackSpeedMult(tw,d){let m=1;for(const a of nearbyAuras(tw)){if(a.kind==='atkSpeed')m+=a.power;if(a.kind==='uplink')m+=a.speed;if(a.kind==='chainSpeed')m+=a.power;if(a.kind==='damageTrade')m-=a.penalty;}return Math.max(.25,m);}
@@ -1171,13 +1517,13 @@ function findTargets(tw,d){const p={x:tw.x+tw.footprint/2-.5,y:tw.y+tw.footprint
 function validTarget(d,c){return d.target.includes(c.kind==='air'?'air':'ground');}
 function airTowerScale(d,c){if(c.kind!=='air')return 1;let m=d.airScale||1;const airOnly=d.target?.length===1&&d.target[0]==='air',mixed=d.target?.includes('air')&&d.target?.includes('ground');if(airOnly)m*=1.25;else if(mixed)m*=.95;return m;}
 function vulnerability(c,type){if(c.kind==='air')return type==='flying'?1.5:type==='physical'?.75:1;if(c.kind==='armored')return type==='magic'?1.5:type==='physical'?.7:1;if(c.kind==='boss')return 1;return type==='physical'?1.25:type==='flying'?.75:1;}
-function fireTower(tw,d,targets){if(d.lock)tw.targetId=targets[0].id;if(d.line){const p={x:tw.x+tw.footprint/2-.5,y:tw.y+tw.footprint/2-.5};for(const c of lineVictims(p,targets[0],d))hitCreep(tw,d,c,1);state.effects.push({kind:'beam',x1:p.x,y1:p.y,x2:targets[0].x,y2:targets[0].y,t:.12,color:'#9ee7ff'});return;}
+function fireTower(tw,d,targets){AUDIO.play('shot_'+d.arch);if(d.lock)tw.targetId=targets[0].id;if(d.line){const p={x:tw.x+tw.footprint/2-.5,y:tw.y+tw.footprint/2-.5};for(const c of lineVictims(p,targets[0],d))hitCreep(tw,d,c,1);state.effects.push({kind:'beam',x1:p.x,y1:p.y,x2:targets[0].x,y2:targets[0].y,t:.12,color:'#9ee7ff'});return;}
  for(const c of targets){if(d.beam){hitCreep(tw,d,c,1);state.effects.push({kind:'beam',x1:tw.x+tw.footprint/2-.5,y1:tw.y+tw.footprint/2-.5,x2:c.x,y2:c.y,t:.18,color:'#ff8b67'});}else{state.projectiles.push({x:tw.x+tw.footprint/2-.5,y:tw.y+tw.footprint/2-.5,target:c,tw,d,speed:18});if(d.arch==='fire')particle(tw.x+tw.footprint/2-.5,tw.y+tw.footprint/2-.7,'#ff9d58',1,'ember');}}}
 function lineVictims(p,target,d){const ax=target.x-p.x,ay=target.y-p.y,len=Math.hypot(ax,ay)||1,ux=ax/len,uy=ay/len;return state.creeps.filter(c=>!c.dead&&validTarget(d,c)).filter(c=>{const vx=c.x-p.x,vy=c.y-p.y,proj=vx*ux+vy*uy;if(proj<0||proj>d.range)return false;const perp=Math.abs(vx*uy-vy*ux);return perp<=(d.lineWidth||1)*.5;});}
 function updateProjectiles(dt){for(const p of state.projectiles){if(p.dead||!p.target||p.target.dead){p.dead=true;continue;}const dx=p.target.x-p.x,dy=p.target.y-p.y,d=Math.hypot(dx,dy);if(d<.25){impactProjectile(p);p.dead=true;}else{const s=Math.min(d,p.speed*dt);p.x+=dx/d*s;p.y+=dy/d*s;}}state.projectiles=state.projectiles.filter(p=>!p.dead);}
 function impactProjectile(p){const d=p.d,c=p.target;if(d.splash){for(const v of state.creeps.filter(x=>!x.dead&&validTarget(d,x)&&dist(x,c)<=d.splash))hitCreep(p.tw,d,v,v===c?1:.65);}else hitCreep(p.tw,d,c,1);if(d.chain){let prev=c,seen=new Set([c.id]),scale=.7;for(let i=0;i<d.chain;i++){const n=state.creeps.filter(x=>!x.dead&&!seen.has(x.id)&&validTarget(d,x)&&dist(x,prev)<=3).sort((a,b)=>dist(a,prev)-dist(b,prev))[0];if(!n)break;hitCreep(p.tw,d,n,scale);state.effects.push({kind:'beam',x1:prev.x,y1:prev.y,x2:n.x,y2:n.y,t:.12,color:'#fff08c'});seen.add(n.id);prev=n;scale*=.72;}}
 }
-function hitCreep(tw,d,c,scale=1){let mult=1+.2*(tw.upgrade||0);for(const a of nearbyAuras(tw)){if(a.kind==='damageTrade')mult+=a.power;if(a.kind==='slowDamage'&&combinedSlow(c)>0)mult+=a.power;}if(tw.suppressed>0)mult*=.7;if(d.groundScale&&c.kind!=='air')mult*=d.groundScale;if(c.kind==='air')mult*=airTowerScale(d,c);if(d.bonusFrozen&&c.frozen>0)mult*=1+d.bonusFrozen;else if(d.bonusSlowed&&combinedSlow(c)>0)mult*=1+d.bonusSlowed;if(d.isolatedBonus&&state.creeps.filter(x=>!x.dead&&dist(x,c)<2.2).length===1)mult*=1+d.isolatedBonus;if(d.execute&&c.hp/c.maxHp<.3)mult*=1+d.execute;
+function hitCreep(tw,d,c,scale=1){AUDIO.play('hit');let mult=1+.2*(tw.upgrade||0);for(const a of nearbyAuras(tw)){if(a.kind==='damageTrade')mult+=a.power;if(a.kind==='slowDamage'&&combinedSlow(c)>0)mult+=a.power;}if(tw.suppressed>0)mult*=.7;if(d.groundScale&&c.kind!=='air')mult*=d.groundScale;if(c.kind==='air')mult*=airTowerScale(d,c);if(d.bonusFrozen&&c.frozen>0)mult*=1+d.bonusFrozen;else if(d.bonusSlowed&&combinedSlow(c)>0)mult*=1+d.bonusSlowed;if(d.isolatedBonus&&state.creeps.filter(x=>!x.dead&&dist(x,c)<2.2).length===1)mult*=1+d.isolatedBonus;if(d.execute&&c.hp/c.maxHp<.3)mult*=1+d.execute;
  const roll=d.dmg?rand(d.dmg[0],d.dmg[1]):0;let damage=floorDamage(roll*mult*scale*vulnerability(c,d.type));if(!d.fixed)damage=Math.max(1,damage-Math.floor(c.armor||0));dealRaw(c,damage,d.type,tw);applyOnHit(c,d,tw);particle(c.x,c.y,archColor(d.arch),1,ARCH_PARTICLE[d.arch]||'spark');}
 function dealRaw(c,damage,type,sourceTower=null){c.hp-=Math.max(0,Math.floor(damage));if(c.hp<=0)killCreep(c,sourceTower);}
 function applyOnHit(c,d,tw){const up=1+.1*(tw.upgrade||0),airMod=airTowerScale(d,c);if(d.slow)addEffect(c,'slow',d.slow*up,d.duration||2);if(d.stun&&c.stunImmune<=0){c.stunned=Math.max(c.stunned,d.stun*up);c.stunImmune=.5;}if(d.burn){const dmg=d.burn*up*airMod;if(!c.burn||dmg>=c.burn.dmg)c.burn={dmg,t:d.duration||3,tick:1,sourceTower:tw};else{c.burn.t=d.duration||3;c.burn.sourceTower=tw;}}if(d.poison){const source=d.id,existing=c.poisons.filter(p=>p.source===source).length,scale=[1,.7,.5,.35,.25][Math.min(existing,4)];c.poisons.push({source,dmg:d.poison*up*scale*airMod,t:d.duration||4,tick:1,sourceTower:tw});}if(d.push)pushBack(c,Math.round(d.push*up));}
@@ -1298,8 +1644,8 @@ function bakeMap(){
   for(let i=0;i<4;i++)p(x+3+hash01(rect.x+i,rect.y)* (w-8),y+3+hash01(rect.y,rect.x+i)*(h-8),2,2,col,.8);
   g.fillStyle='#fff';g.font=`bold ${Math.floor(h*.5)}px monospace`;g.textAlign='center';g.textBaseline='middle';
   g.shadowColor=WF.outline;g.shadowOffsetX=1;g.shadowOffsetY=1;g.fillText(label,x+w/2,y+h/2+1);g.shadowColor='transparent';g.shadowOffsetX=0;g.shadowOffsetY=0;};
- map.spawns.forEach((s,i)=>pad(s,routeColor(i),map.spawns.length>1?`S${i+1}`:'S'));
- map.exits.forEach((e,i)=>pad(e,routeColor(i),map.exits.length>1?`E${i+1}`:'E'));
+ map.spawns.forEach((s,i)=>pad(s,map.spawnColors?.[i]||routeColor(i),map.spawns.length>1?`S${i+1}`:'S'));
+ map.exits.forEach((e,i)=>pad(e,map.exitColors?.[i]||routeColor(i),map.exits.length>1?`E${i+1}`:'E'));
  for(const c of map.checkpoints){const x=c.x*T,y=c.y*T;p(x+1,y+1,T-2,T-2,'#3d3110',.8);p(x+1,y+1,T-2,T-2,WF.checkpoint,.2);
   const cx=x+T/2,cy=y+T/2,s=T*.16;p(cx-s,cy-T*.30,s*2,s*2,WF.checkpoint);p(cx-T*.30,cy-s,s*2,s*2,WF.checkpoint);p(cx+T*.30-s*2+2,cy-s,s*2,s*2,WF.checkpoint);p(cx-s,cy+T*.30-s*2+2,s*2,s*2,WF.checkpoint);p(cx-s,cy-s,s*2,s*2,'#fff7be');
   p(x+1,y+1,T-2,1,WF.checkpoint);p(x+1,y+T-2,T-2,1,WF.checkpoint);p(x+1,y+1,1,T-2,WF.checkpoint);p(x+T-2,y+1,1,T-2,WF.checkpoint);}
@@ -1837,23 +2183,20 @@ canvas.addEventListener('wheel',e=>{e.preventDefault();camera.zoom=clamp(camera.
 window.addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(k==='escape'){togglePause();return;}keysHeld[k]=true;});window.addEventListener('keyup',e=>keysHeld[e.key.toLowerCase()]=false);
 
 $('#startWaveBtn').onclick=startWave;$('#togglePathBtn').onclick=()=>{state.pathVisible=!state.pathVisible;updateUI();autosave();};$('#undoBtn').onclick=undoLastBuild;$('#speedBtn').onclick=()=>{const speeds=[1,2,3],i=speeds.indexOf(state.speed);state.speed=speeds[(i+1)%speeds.length];updateUI();autosave();};$('#pauseBtn').onclick=togglePause;$('#resumeBtn').onclick=togglePause;$('#upgradeBtn').onclick=upgradeSelected;$('#sellBtn').onclick=sellSelected;$('#moveBtn').onclick=moveSelected;$('#upgradeHoverTarget').onmouseenter=showUpgradeHover;$('#upgradeHoverTarget').onmouseleave=hideTowerHover;
-function upgradeSelected(){const tw=state.selectedTower;if(!tw||tw.upgrade>=3)return;const d=BY_ID[tw.id],cost=Math.ceil(d.cost*1.2);if(state.gold<cost)return;state.gold-=cost;tw.upgrade++;tw.totalValue+=cost;state.undoStack=[];updateUI();autosave();}
-function sellSelected(){const tw=state.selectedTower;if(!tw)return;state.gold+=sellValue(tw);state.towers.splice(state.towers.indexOf(tw),1);state.selectedTower=null;state.undoStack=[];afterMapChange();}
-function moveSelected(){const tw=state.selectedTower;if(!tw)return;state.movingTower=tw;state.selectedTower=null;updateSelectionCard();syncCursor();toast('Choose a new location — movement is free');}
-function togglePause(){if(state.screen!=='game')return;state.paused=!state.paused;$('#pauseOverlay').classList.toggle('hidden',!state.paused);$('#settingsArea').classList.add('hidden');updateUI();}
-$('#restartStageBtn').onclick=()=>{let s=readStageStart();if(!s||!stageStartMatches(s)){saveStageStart();s=readStageStart();}if(!s){startLevel();return;}Object.assign(state,s.meta);state.screen='game';state.wave=0;state.waveMax=state.mode==='endless'?Infinity:getWaveMax(state.level);state.towers=(s.towers||[]).map(x=>({...x,kills:x.kills||0,data:BY_ID[x.id]}));state.creeps=[];state.projectiles=[];state.particles=[];state.effects=[];state.selectedBuild=null;state.selectedTower=null;state.movingTower=null;state.phase='build';state.paused=false;state.buildTimer=buildTimeFor(state.difficulty);state.blockedTimer=0;state.breachTarget=null;state.waveLeaked=0;state.undoStack=[];map=makeMap(state.level,1);wavePlan=generateWavePlan(state.level,1,1);resetCamera();renderTowerList();$('#pauseOverlay').classList.add('hidden');$('#settingsArea').classList.add('hidden');updateUI();autosave();toast(state.mode==='endless'?'Endless run restarted':`Level ${state.level} restarted`);};
+function upgradeSelected(){const tw=state.selectedTower;if(!tw||tw.upgrade>=3)return;const d=BY_ID[tw.id],cost=Math.ceil(d.cost*1.2);if(state.gold<cost)return;state.gold-=cost;tw.upgrade++;tw.totalValue+=cost;state.undoStack=[];AUDIO.play('upgrade');updateUI();autosave();}
+function sellSelected(){const tw=state.selectedTower;if(!tw)return;AUDIO.play('sell');state.gold+=sellValue(tw);state.towers.splice(state.towers.indexOf(tw),1);state.selectedTower=null;state.undoStack=[];afterMapChange();}
+function moveSelected(){const tw=state.selectedTower;if(!tw)return;state.movingTower=tw;state.selectedTower=null;updateSelectionCard();syncCursor();AUDIO.play('move');toast('Choose a new location — movement is free');}
+function togglePause(){if(state.screen!=='game')return;state.paused=!state.paused;AUDIO.music.duck(state.paused);$('#pauseOverlay').classList.toggle('hidden',!state.paused);$('#settingsArea').classList.add('hidden');updateUI();}
+$('#restartStageBtn').onclick=()=>{let s=readStageStart();if(!s||!stageStartMatches(s)){saveStageStart();s=readStageStart();}if(!s){startLevel();return;}Object.assign(state,s.meta);state.screen='game';state.wave=0;state.waveMax=state.mode==='endless'?Infinity:getWaveMax(state.level);state.towers=(s.towers||[]).map(x=>({...x,kills:x.kills||0,data:BY_ID[x.id]}));state.creeps=[];state.projectiles=[];state.particles=[];state.effects=[];state.selectedBuild=null;state.selectedTower=null;state.movingTower=null;state.phase='build';state.paused=false;state.buildTimer=buildTimeFor(state.difficulty);state.blockedTimer=0;state.breachTarget=null;state.waveLeaked=0;state.undoStack=[];map=makeMap(state.level,1);AUDIO.music.start('build');wavePlan=generateWavePlan(state.level,1,1);resetCamera();renderTowerList();$('#pauseOverlay').classList.add('hidden');$('#settingsArea').classList.add('hidden');updateUI();autosave();toast(state.mode==='endless'?'Endless run restarted':`Level ${state.level} restarted`);};
 $('#quitBtn').onclick=()=>{state.paused=false;$('#pauseOverlay').classList.add('hidden');showMainMenu();};$('#settingsBtn').onclick=showSettings;
-function showSettings(){const a=$('#settingsArea');a.classList.toggle('hidden');a.innerHTML=`<div class="card"><h3>Settings</h3><label>WASD sensitivity: <span id="pauseWasdValue" class="settingValue">${Math.round(prefs.wasdSensitivity*100)}%</span></label><br><input class="settingRange" id="pauseWasdSensitivity" type="range" min="0.5" max="2" step="0.1" value="${prefs.wasdSensitivity}"><label class="checkbox"><input id="pathSetting" type="checkbox" ${state.pathVisible?'checked':''}> Show planning paths</label><label class="checkbox"><input id="debugToggle" type="checkbox" ${state.debug?'checked':''}> Enable debug tools</label><div id="debugArea" class="${state.debug?'':'hidden'}"><div class="debugGrid"><button class="secondary" data-debug="gold">+100 Gold</button><button class="secondary" data-debug="lives">+5 Lives</button><button class="secondary" data-debug="kill">Kill Creeps</button><button class="secondary" data-debug="skip">Skip Wave</button><button class="secondary" data-debug="upgrade">Max Selected</button><button class="secondary" data-debug="boss">Spawn Boss</button></div><p class="small warning">Debug mode disables achievements for this session.</p></div></div>`;$('#pauseWasdSensitivity').oninput=e=>{prefs.wasdSensitivity=clamp(Number(e.target.value),.5,2);$('#pauseWasdValue').textContent=`${Math.round(prefs.wasdSensitivity*100)}%`;localStorage.setItem('amazingTD_wasd_sensitivity',String(prefs.wasdSensitivity));};$('#pathSetting').onchange=e=>{state.pathVisible=e.target.checked;updateUI();};$('#debugToggle').onchange=e=>{state.debug=e.target.checked;$('#debugArea').classList.toggle('hidden',!state.debug);};$$('[data-debug]').forEach(b=>b.onclick=()=>debugAction(b.dataset.debug));}
-function debugAction(a){if(a==='gold')state.gold+=100;if(a==='lives')state.lives+=5;if(a==='kill')state.creeps.forEach(killCreep);if(a==='skip'){state.creeps.forEach(c=>c.dead=true);state.spawned=wavePlan.count;}if(a==='upgrade'&&state.selectedTower)state.selectedTower.upgrade=3;if(a==='boss'){const old=wavePlan;wavePlan={type:'boss',count:1,hp:1000,bossHP:1000,bossReward:100,escortCount:0,rewardTarget:100,spawnGap:1,isBoss:true,specialBoss:state.mode==='endless'||state.level>=7};state.spawned=0;spawnCreep();wavePlan=old;}updateUI();}
-
+function showSettings(){const a=$('#settingsArea');a.classList.toggle('hidden');a.innerHTML=`<div class="card"><h3>Settings</h3><label>WASD sensitivity: <span id="pauseWasdValue" class="settingValue">${Math.round(prefs.wasdSensitivity*100)}%</span></label><br><input class="settingRange" id="pauseWasdSensitivity" type="range" min="0.5" max="2" step="0.1" value="${prefs.wasdSensitivity}"><label class="checkbox"><input id="pathSetting" type="checkbox" ${state.pathVisible?'checked':''}> Show planning paths</label></div>${audioSettingsHTML()}`;$('#pauseWasdSensitivity').oninput=e=>{prefs.wasdSensitivity=clamp(Number(e.target.value),.5,2);$('#pauseWasdValue').textContent=`${Math.round(prefs.wasdSensitivity*100)}%`;localStorage.setItem('amazingTD_wasd_sensitivity',String(prefs.wasdSensitivity));};$('#pathSetting').onchange=e=>{state.pathVisible=e.target.checked;updateUI();};wireAudioSettings();};
 function saveMeta(wave=state.wave){return {mode:state.mode,level:state.level,stage:1,wave,waveMax:state.mode==='endless'?null:getWaveMax(state.level),difficulty:state.difficulty,archetype:state.archetype,secondaryArchetype:state.secondaryArchetype,secondArchetypeUnlocked:!!state.secondaryArchetype,gold:state.gold,lives:state.lives,pathVisible:state.pathVisible,speed:state.speed};}
 function serialiseTowers(towers=state.towers){return towers.map(({uid,id,x,y,footprint,upgrade,hp,kills,totalValue,cooldown,disabled,suppressed,targetId,pulseTimer})=>({uid,id,x,y,footprint,upgrade,hp,kills:kills||0,totalValue,cooldown,disabled,suppressed,targetId,pulseTimer}));}
 function saveStageStart(){if(state.screen!=='game')return;const snapshot={meta:saveMeta(0),towers:[]};localStorage.setItem('amazingTD_stage_start',JSON.stringify(snapshot));}
 function readStageStart(){const raw=localStorage.getItem('amazingTD_stage_start');if(!raw)return null;try{return JSON.parse(raw);}catch{return null;}}
 function stageStartMatches(s){return !!(s&&s.meta&&(s.meta.mode||'campaign')===state.mode&&s.meta.level===state.level&&(s.meta.stage===undefined||s.meta.stage===1)&&s.meta.difficulty===state.difficulty&&s.meta.archetype===state.archetype);}
 function autosave(){if(state.screen!=='game')return;localStorage.setItem('amazingTD_save',JSON.stringify({meta:saveMeta(),towers:serialiseTowers()}));}
-function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.remove('hidden');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.add('hidden'),1800);}
-function capitalize(s){return s?s[0].toUpperCase()+s.slice(1):'';}
+function toast(msg){const t=$('#toast');if(!t)return;t.textContent=msg;t.classList.remove('hidden');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.add('hidden'),1800);}
 
 const titleCanvas=$('#titleBattleCanvas'),titleCtx=titleCanvas.getContext('2d');titleCtx.imageSmoothingEnabled=false;
 const titleDemo={
