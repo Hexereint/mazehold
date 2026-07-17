@@ -183,6 +183,10 @@ const capitalize=s=>String(s??'').replace(/(^|[\s_-])([a-z])/g,(_,p,c)=>p+c.toUp
 const COLORS={ground:'#a9e7ff',air:'#d9b8ff',danger:'#ff5f70',checkpoint:'#ffe36d',spawn:'#7df2a1',exit:'#ff8c93'};
 const ROUTE_COLORS=['#59d9ff','#ff9f68','#d79cff','#7df2a1','#ffd95e','#ff78c8'];
 function routeColor(i,air=false){if((map?.spawns.length||1)<=1)return air?COLORS.air:COLORS.ground;return ROUTE_COLORS[i%ROUTE_COLORS.length];}
+function isFlyingKind(kind){return kind==='air'||kind==='leviathan';}
+function isBossKind(kind){return kind==='boss'||kind==='leviathan';}
+function isFlyingCreep(c){return !!c&&isFlyingKind(c.kind);}
+function isBossCreep(c){return !!c&&isBossKind(c.kind);}
 // External sprite assets removed: all pixel art is generated procedurally in the WF renderer below.
 
 const ARCHETYPES={
@@ -411,7 +415,7 @@ let cameraDrag={active:false,pointerId:null,startX:0,startY:0,lastX:0,lastY:0,mo
 
 function levelDimensions(level){
  if(level===1)return {w:20,h:40};
- if(level===2)return {w:20,h:20};
+ if(level===2)return {w:32,h:32};
  if(level===5)return {w:20,h:40};
  if(level===6)return {w:40,h:40};
  if(level===8)return {w:60,h:30};
@@ -1210,8 +1214,9 @@ function generateEndlessWavePlan(wave){
  if(isBoss){
   const bossSpawnIndices=activeRouteIndices,bossCount=bossSpawnIndices.length,escortRoutes=endlessActiveRoutes(wave),allRoutes=[...new Set([...bossSpawnIndices,...escortRoutes])],escortCount=Math.min(18,2+Math.floor(wave/10)*2),bossHP=Math.round(hpBase*(18+wave*.42)),escortType=wave>=40?'armored':wave>=20?'fast':'basic',escortHp=Math.round(hpBase*(escortType==='armored'?1.18:escortType==='fast'?.78:1));
   const bossCombatRewardTarget=Math.round(combatRewardTarget*(1+Math.max(0,bossCount-1)*.7)),bossRewardPool=Math.max(bossCount,Math.floor(bossCombatRewardTarget*.58)),bossReward=Math.max(1,Math.floor(bossRewardPool/bossCount)),bossRewardRemainder=Math.max(0,bossRewardPool-bossReward*bossCount);
-  const count=bossCount+escortCount,routeSequence=[...bossSpawnIndices,...makeWeightedRouteSequence(escortRoutes,escortCount,wave)],hint=bossCount===1?`Boss route: Spawn ${bossSpawnIndices[0]+1}`:bossCount===6?'Bosses attacking from all six spawns, including pink':'Bosses attacking from all five regular spawns';
-  return {type:'boss',count,hp:bossHP,bossHP,bossCount,escortCount,escortType,escortHp,bossReward,bossRewardRemainder,escortReward:Math.max(1,Math.floor(bossCombatRewardTarget*.42/Math.max(1,escortCount))),combatRewardTarget:bossCombatRewardTarget,mazeGrant,rewardTarget:bossCombatRewardTarget+mazeGrant,spawnGap:bossCount>1?.32:.68,isBoss:true,specialBoss:true,bossSpawnIndex:bossSpawnIndices[0],bossSpawnIndices,routeCount:6,activeRoutes:allRoutes.length,activeRouteIndices:allRoutes,routeSequence,routeStartFractions:allRoutes.map(()=>0),tutorialHint:hint};
+  const leviathanBossIndex=wave>20?bossCount-1:-1,leviathanHP=Math.round(bossHP*2.5);
+  const count=bossCount+escortCount,routeSequence=[...bossSpawnIndices,...makeWeightedRouteSequence(escortRoutes,escortCount,wave)],baseHint=bossCount===1?`Boss route: Spawn ${bossSpawnIndices[0]+1}`:bossCount===6?'Bosses attacking from all six spawns, including pink':'Bosses attacking from all five regular spawns',hint=leviathanBossIndex>=0?`${baseHint} · Mother Whale inbound`:baseHint;
+  return {type:'boss',count,hp:bossHP,bossHP,bossCount,leviathanBossIndex,leviathanHP,escortCount,escortType,escortHp,bossReward,bossRewardRemainder,escortReward:Math.max(1,Math.floor(bossCombatRewardTarget*.42/Math.max(1,escortCount))),combatRewardTarget:bossCombatRewardTarget,mazeGrant,rewardTarget:bossCombatRewardTarget+mazeGrant,spawnGap:bossCount>1?.32:.68,isBoss:true,specialBoss:true,bossSpawnIndex:bossSpawnIndices[0],bossSpawnIndices,routeCount:6,activeRoutes:allRoutes.length,activeRouteIndices:allRoutes,routeSequence,routeStartFractions:allRoutes.map(()=>0),tutorialHint:hint};
  }
  let count=Math.max(4,Math.round(baseCount*(type==='flying'?.50:type==='fast'?.72:type==='armored'?.74:type==='slow'?.80:1)));
  const reward=Math.max(1,Math.floor(combatRewardTarget/count)),rewardRemainder=Math.max(0,combatRewardTarget-reward*count),routeSequence=makeWeightedRouteSequence(activeRouteIndices,count,wave);
@@ -1324,26 +1329,28 @@ function guideMonsterCompendium(){const monsters=[
  {kindId:'armored',kind:'Armored ground',stats:'Speed 1.10 · 130% base HP · scaling armor',desc:'Reduces non-fixed damage through armor. Magic and armor-reduction effects are especially valuable.'},
  {kindId:'slow',kind:'Slow ground',stats:'Speed 0.85 · 165% base HP',desc:'Slow-moving durability test that gives damage-over-time towers more time to work.'},
  {kindId:'air',kind:'Flying',stats:'Speed 1.12–1.82 · 82% base HP · 30–52% wave density',desc:'Ignores terrain and towers, but must visit every checkpoint before its paired exit. Flying waves pay 15% extra combat bounty; air-only towers deal +25% damage while mixed-target towers deal 5% less.'},
+ {kindId:'leviathan',kind:'Mother Whale',stats:'Speed 0.38 · 250% boss HP · flying boss',desc:'A massive airborne whale that begins appearing on Endless boss waves after Wave 20. It follows the flying route, moves very slowly, and has far more health than a normal boss.'},
  {kindId:'boss',kind:'Boss',stats:'Speed 0.55 · displacement resistance',desc:'Appears on campaign boss waves or every tenth Endless wave. From Level 7 onward it can rush, disable the 10 nearest towers for 5 seconds on a 15-second cooldown, or apply a damage-debuff aura. The last boss of a final campaign wave charges at Fast-creep speed for 2 seconds every 6 seconds.'}
  ];return `<div class="compendiumGrid">${monsters.map(m=>{
   const vars=(CREEP_SKINS[m.kindId]||[]).map((s,i)=>`<div class="dexMon"><canvas class="dexCv" data-kind="${m.kindId}" data-skin="${i}"></canvas><div class="small">${s.name}</div></div>`).join('');
   return `<div class="card monsterCard"><h3>${m.kind}</h3><div class="dexRow">${vars}</div><div class="small gold">${m.stats}</div><p class="help">${m.desc}</p></div>`;}).join('')}</div><div class="card help"><h3>Wave Scaling</h3>Enemy durability is based on the current wave, not the level. Larger maps add more enemies only after the opening waves. Flying waves contain fewer units. Campaign bosses conclude each level; Endless bosses return every tenth wave.</div>`;}
 let dexTimer=null;
 function stopDexAnim(){if(dexTimer){clearInterval(dexTimer);dexTimer=null;}}
-function startDexAnim(){stopDexAnim();const cvs=$$('.dexCv');if(!cvs.length)return;const S=2;
- for(const cv of cvs){const fr=getCreepFrames(cv.dataset.kind,+cv.dataset.skin)[0];cv.width=fr.width*S;cv.height=fr.height*S+8;}
+function startDexAnim(){stopDexAnim();const cvs=$$('.dexCv');if(!cvs.length)return;const S=2,ready=[];
+ for(const cv of cvs){try{const fr=getCreepFrames(cv.dataset.kind,+cv.dataset.skin)[0];cv.width=fr.width*S;cv.height=fr.height*S+8;ready.push(cv);}catch(err){console.error('Compendium sprite failed:',cv.dataset.kind,err);cv.width=64;cv.height=72;}}
+ if(!ready.length)return;
  let f=0;
- const draw=()=>{if(!document.body.contains(cvs[0])){stopDexAnim();return;}
-  for(const cv of cvs){const frames=getCreepFrames(cv.dataset.kind,+cv.dataset.skin);const g=cv.getContext('2d');g.imageSmoothingEnabled=false;g.clearRect(0,0,cv.width,cv.height);
-   const fr=frames[f%frames.length];const air=cv.dataset.kind==='air';const hop=air?4+[0,1,2,1][f%4]:[0,2,3,2][f%4];
-   g.drawImage(fr,0,8-hop,fr.width*S,fr.height*S);}
+ const draw=()=>{if(!document.body.contains(ready[0])){stopDexAnim();return;}
+  for(const cv of ready){try{const frames=getCreepFrames(cv.dataset.kind,+cv.dataset.skin);const g=cv.getContext('2d');g.imageSmoothingEnabled=false;g.clearRect(0,0,cv.width,cv.height);
+   const fr=frames[f%frames.length],flying=isFlyingKind(cv.dataset.kind),hop=flying?4+[0,1,2,1][f%4]:[0,2,3,2][f%4];
+   g.drawImage(fr,0,8-hop,fr.width*S,fr.height*S);}catch(err){console.error('Compendium animation failed:',cv.dataset.kind,err);}}
   f++;};
  draw();dexTimer=setInterval(draw,150);}
 function showGuide(tab='how'){
  enterTitleScreen('page');
  const nav=`<div class="guideNav"><button class="secondary guideTab ${tab==='how'?'active':''}" data-guide="how">How to Play</button><button class="secondary guideTab ${tab==='towers'?'active':''}" data-guide="towers">Archetypes & Towers</button><button class="secondary guideTab ${tab==='monsters'?'active':''}" data-guide="monsters">Monster Compendium</button></div>`;
  let body='';
- if(tab==='how')body=`<div class="guideSection"><div class="card help"><h3>Objective</h3>Survive every wave. Each creep that reaches an exit costs one life. Clear the final boss wave to complete the level.</div><div class="card help"><h3>Build the Maze</h3>Select a tower and place it on clear grid cells. Ground creeps reroute around towers, allowing you to create long paths. Towers can be moved freely during planning, and Undo Build reverses recent placements.</div><div class="card help"><h3>Checkpoints</h3>Every ground and flying creep must visit all checkpoints in order. Checkpoints are the focal point of the maze. If a ground checkpoint is tightly enclosed, its valid capture area expands step by step up to 5×5. Completely blocking all routes triggers a warning before creeps attack a blocking tower.</div><div class="card help"><h3>Combat and Economy</h3>Kills award combat bounty. Splash hits deal 65% damage to secondary targets, and chain lightning decays with each jump. Completing a wave also grants maze income based on map size, checkpoints, and active routes. Perfect waves award a small bonus. Towers can be upgraded three times. Each upgrade grants +30% damage, +15% effect strength (slows, burns, stuns, pulses), and +5% attack speed; range is unchanged.</div><div class="card help"><h3>Endless Mode</h3>Endless has no final wave. The top-center spawn handles the first five waves and remains active as upper and lower side lanes phase in. Flying creeps appear every sixth wave. Boss Waves 10, 20, and 30 introduce the top-center, top-left, and top-right boss routes. Wave 40 attacks from all five regular spawns; from Wave 50 onward, every boss wave attacks from all six spawns, including pink. The pink lane opens for reduced-density normal creeps after Wave 20, when a second archetype also unlocks.</div><div class="card help"><h3>Controls</h3>Hold left-click and drag, or use WASD, to move the camera. Mouse wheel zooms. Camera movement remains unchanged at 1×, 2×, and 3× game speed. Shift+drag draws a box to select multiple towers for mass upgrading or selling. Right-click cancels placement or selection. Escape pauses.</div></div>`;
+ if(tab==='how')body=`<div class="guideSection"><div class="card help"><h3>Objective</h3>Survive every wave. Each creep that reaches an exit costs one life. Clear the final boss wave to complete the level.</div><div class="card help"><h3>Build the Maze</h3>Select a tower and place it on clear grid cells. Ground creeps reroute around towers, allowing you to create long paths. Towers can be moved freely during planning, and Undo Build reverses recent placements.</div><div class="card help"><h3>Checkpoints</h3>Every ground and flying creep must visit all checkpoints in order. Checkpoints are the focal point of the maze. If a ground checkpoint is tightly enclosed, its valid capture area expands step by step up to 5×5. Completely blocking all routes triggers a warning before creeps attack a blocking tower.</div><div class="card help"><h3>Combat and Economy</h3>Kills award combat bounty. Splash hits deal 65% damage to secondary targets, and chain lightning decays with each jump. Completing a wave also grants maze income based on map size, checkpoints, and active routes. Perfect waves award a small bonus. Towers can be upgraded three times. Each upgrade grants +30% damage, +15% effect strength (slows, burns, stuns, pulses), and +5% attack speed; range is unchanged.</div><div class="card help"><h3>Endless Mode</h3>Endless has no final wave. The top-center spawn handles the first five waves and remains active as upper and lower side lanes phase in. Flying creeps appear every sixth wave. Boss Waves 10, 20, and 30 introduce the top-center, top-left, and top-right boss routes. Wave 40 attacks from all five regular spawns; from Wave 50 onward, every boss wave attacks from all six spawns, including pink. The pink lane opens for reduced-density normal creeps after Wave 20, when a second archetype also unlocks. From Wave 30 onward, each boss wave includes a slow, high-HP flying Mother Whale.</div><div class="card help"><h3>Controls</h3>Hold left-click and drag, or use WASD, to move the camera. Mouse wheel zooms. Camera movement remains unchanged at 1×, 2×, and 3× game speed. Shift+drag draws a box to select multiple towers for mass upgrading or selling. Right-click cancels placement or selection. Escape pauses.</div></div>`;
  else if(tab==='towers')body=`<div class="guideSection">${guideTowerCatalogue()}</div>`;
  else body=`<div class="guideSection">${guideMonsterCompendium()}</div>`;
  $('#menuModal').innerHTML=`<h1>Guide</h1>${nav}${body}<div class="sep"></div><button class="secondary" id="backMenu">Back</button>`;$$('.guideTab').forEach(b=>b.onclick=()=>showGuide(b.dataset.guide));$('#backMenu').onclick=showMainMenu;
@@ -1392,14 +1399,14 @@ function updateUI(){
   const rows=[],start=state.mode==='endless'?Math.max(1,state.wave-3):1,end=state.mode==='endless'?state.wave+10:state.waveMax;
   for(let n=start;n<=end;n++){
    const plan=generateWavePlan(state.level,1,n),done=n<=completedWaves,current=state.phase==='wave'&&n===state.wave,next=state.phase==='build'&&n===state.wave+1;
-   const label=plan.isBoss?(plan.bossCount>1?'Boss Assault':'Boss'):capitalize(plan.type),routeMeta=state.mode==='endless'?(plan.isBoss?(plan.bossCount>1?` · S1–S${plan.bossCount}`:` · Boss S${(plan.bossSpawnIndex??1)+1}`):` · ${plan.activeRouteIndices.length} route${plan.activeRouteIndices.length===1?'':'s'}${plan.activeRouteIndices.includes(5)?' + Pink':''}`):'';
-   const meta=(plan.isBoss?`${plan.bossCount||1} boss${(plan.bossCount||1)===1?'':'es'} + ${plan.escortCount||0} escorts`:`${plan.count} creeps`)+routeMeta;
+   const label=plan.isBoss?(plan.leviathanBossIndex>=0?(plan.bossCount>1?'Mother Whale Assault':'Mother Whale'):(plan.bossCount>1?'Boss Assault':'Boss')):capitalize(plan.type),routeMeta=state.mode==='endless'?(plan.isBoss?(plan.bossCount>1?` · S1–S${plan.bossCount}`:` · Boss S${(plan.bossSpawnIndex??1)+1}`):` · ${plan.activeRouteIndices.length} route${plan.activeRouteIndices.length===1?'':'s'}${plan.activeRouteIndices.includes(5)?' + Pink':''}`):'';
+   const meta=(plan.isBoss?`${plan.bossCount||1} boss${(plan.bossCount||1)===1?'':'es'}${plan.leviathanBossIndex>=0?' incl. Mother Whale':''} + ${plan.escortCount||0} escorts`:`${plan.count} creeps`)+routeMeta;
    rows.push(`<div class="waveRow ${done?'waveDone':''} ${current?'waveCurrent':''} ${next?'waveNext':''}"><span class="waveNo">W${n}</span><span class="waveType waveType-${plan.type}">${label}</span><span class="waveMeta">${meta}</span></div>`);
   }
-  waveCard.innerHTML=`${state.mode==='endless'?'<h3>Endless Forecast</h3><div class="small">Flying every 6th · Boss every 10th</div><div class="sep"></div>':state.wave>=state.waveMax&&state.phase==='build'?'<h3>Level Cleared</h3><div class="help good">All waves complete.</div><div class="sep"></div>':''}<div class="waveList">${rows.join('')}</div>`;
+  waveCard.innerHTML=`${state.mode==='endless'?'<h3>Endless Forecast</h3><div class="small">Flying every 6th · Boss every 10th · Mother Whale after Wave 20</div><div class="sep"></div>':state.wave>=state.waveMax&&state.phase==='build'?'<h3>Level Cleared</h3><div class="help good">All waves complete.</div><div class="sep"></div>':''}<div class="waveList">${rows.join('')}</div>`;
   waveCard.dataset.key=waveCardKey;
  }
- $('#rulesCard').innerHTML=`${map?.checkpoints.length||0} checkpoint(s)<br>${map?.spawns.length||0} spawn(s)<br>${map?.exits.length||0} exit(s)<br>${map?.terrain.length||0} terrain feature(s)${map?.customLayout==='endless'?'<br><br><span class="good">Infinite waves. Pink spawn unlocks after Wave 20 at reduced density.</span><br><span class="modeNote">Second archetype: '+(state.secondaryArchetype?ARCHETYPES[state.secondaryArchetype].name:state.wave>=20?'Choose after this wave':'unlocks after Wave 20')+'</span>':map?.customLayout==='level5'?'<br><br><span class="good">Bottom-left opens first. Flying always starts there and visits both checkpoints.</span>':map?.customLayout==='level7'?'<br><br><span class="good">Custom Z-shaped battlefield with one route through both bends.</span>':map?.customLayout==='level15'?'<br><br><span class="good">Spawn 3 unlocks on Wave 11 and bypasses checkpoints.</span>':''}<br><br>${state.difficulty==='standard'?'Unlimited planning':state.difficulty==='hard'?'60-second planning':'30-second planning'}`;
+ $('#rulesCard').innerHTML=`${map?.checkpoints.length||0} checkpoint(s)<br>${map?.spawns.length||0} spawn(s)<br>${map?.exits.length||0} exit(s)<br>${map?.terrain.length||0} terrain feature(s)${map?.customLayout==='endless'?'<br><br><span class="good">Infinite waves. Pink spawn unlocks after Wave 20 at reduced density. Mother Whale bosses begin on Wave 30.</span><br><span class="modeNote">Second archetype: '+(state.secondaryArchetype?ARCHETYPES[state.secondaryArchetype].name:state.wave>=20?'Choose after this wave':'unlocks after Wave 20')+'</span>':map?.customLayout==='level5'?'<br><br><span class="good">Bottom-left opens first. Flying always starts there and visits both checkpoints.</span>':map?.customLayout==='level7'?'<br><br><span class="good">Custom Z-shaped battlefield with one route through both bends.</span>':map?.customLayout==='level15'?'<br><br><span class="good">Spawn 3 unlocks on Wave 11 and bypasses checkpoints.</span>':''}<br><br>${state.difficulty==='standard'?'Unlimited planning':state.difficulty==='hard'?'60-second planning':'30-second planning'}`;
  const plannedRoutes=wavePlan?.activeRouteIndices||[0];
  $('#legend').innerHTML=(map?.spawns.length||1)>1?plannedRoutes.map(i=>`<div><span class="dot" style="background:${routeColor(i)}"></span>Route ${i+1} → Exit ${i+1}</div>`).join(''):`<div><span class="dot g"></span>Ground route</div><div><span class="dot a"></span>Flying route</div>`;
  $('#undoBtn').disabled=state.phase!=='build'||state.paused||!(state.undoStack?.length);
@@ -1424,7 +1431,7 @@ function updateSelectionCard(){
  }else if(state.selectedBuild){const d=BY_ID[state.selectedBuild];c.innerHTML=`<h3>${d.name}</h3><div class="kv"><span>Cost</span><b class="gold">${d.cost}</b><span>Footprint</span><b>${d.footprint}×${d.footprint}</b><span>Range</span><b>${d.range}</b>${d.dmg?`<span>Damage</span><b>${d.dmg[0]}–${d.dmg[1]}</b>`:''}<span>Targets</span><b>${d.target.join(', ')}</b></div><p class="help">${d.effect}</p>`;
  }else if(state.selectedCreep){const cr=state.selectedCreep,skinList=CREEP_SKINS[cr.kind],names={[cr.kind]:(skinList&&skinList[cr.skin||0]||{name:capitalize(cr.kind)}).name};
   const status=[cr.frozen>0?'Frozen':null,cr.stunned>0?'Stunned':null,cr.burn?'Burning':null,cr.poisons?.length?'Poisoned':null,combinedSlow(cr)>0?'Slowed':null].filter(Boolean).join(', ')||'None';
-  c.innerHTML=`<h3>${names[cr.kind]||cr.kind}</h3><span class="tag ${cr.kind==='air'?'flying':''}">${cr.kind}</span><div class="sep"></div><div class="kv"><span>HP</span><b>${Math.max(0,Math.ceil(cr.hp))}/${cr.maxHp}</b><span>Armor</span><b>${cr.armor||0}</b><span>Speed</span><b>${cr.speed.toFixed(2)}</b><span>Bounty</span><b class="gold">${cr.reward}g</b><span>Status</span><b>${status}</b></div>`;
+  c.innerHTML=`<h3>${names[cr.kind]||cr.kind}</h3><span class="tag ${isFlyingCreep(cr)?'flying':''}">${cr.kind==='leviathan'?'flying boss':cr.kind}</span><div class="sep"></div><div class="kv"><span>HP</span><b>${Math.max(0,Math.ceil(cr.hp))}/${cr.maxHp}</b><span>Armor</span><b>${cr.armor||0}</b><span>Speed</span><b>${cr.speed.toFixed(2)}</b><span>Bounty</span><b class="gold">${cr.reward}g</b><span>Status</span><b>${status}</b></div>`;
  }else c.textContent='Click a tower or creep to inspect it, or pick one to build.';
 }
 function scaledDamageText(d,u){if(!d.dmg)return '—';const mult=1+.3*u;return `${Math.floor(d.dmg[0]*mult)}–${Math.floor(d.dmg[1]*mult)}`}
@@ -1466,7 +1473,7 @@ function allRoutesValid(){for(const i of plannedRouteIndices()){if(!computeGroun
 
 function canPlace(data,x,y,ignore=null){if(state.paused)return false;for(let yy=y;yy<y+data.footprint;yy++)for(let xx=x;xx<x+data.footprint;xx++){
   if(xx<0||yy<0||xx>=map.w||yy>=map.h||gridBlocked(xx,yy,ignore))return false;
-  if(state.creeps.some(c=>!c.dead&&c.kind!=='air'&&((Math.floor(c.x)===xx&&Math.floor(c.y)===yy)||(c.nextCell&&c.nextCell.x===xx&&c.nextCell.y===yy))))return false;
+  if(state.creeps.some(c=>!c.dead&&!isFlyingCreep(c)&&((Math.floor(c.x)===xx&&Math.floor(c.y)===yy)||(c.nextCell&&c.nextCell.x===xx&&c.nextCell.y===yy))))return false;
  }return true;}
 function placeSelected(x,y){
  state.undoStack=state.undoStack||[];
@@ -1478,13 +1485,20 @@ function afterMapChange(){state.mapRev=(state.mapRev||0)+1;state.routeTimer=0;up
 function updateBlockedState(resetIfValid=false){const valid=allRoutesValid();if(valid){state.blockedTimer=0;state.breachTarget=null;$('#countdown').classList.add('hidden');return;}if(resetIfValid&&state.blockedTimer===0){state.blockedTimer=3;AUDIO.play('breach_warn');}state.breachTarget=computeBreachTarget(plannedRouteIndices()[0]||0)||findCheckpointBlocker();}
 function findCheckpointBlocker(){for(const cp of map.checkpoints){const z=cpZoneRect(cp);const t=state.towers.find(t=>rectsOverlap(towerRect(t),z));if(t)return t;}return state.towers[0]||null;}
 
-function startWave(){if(state.phase!=='build'||state.paused)return;if(state.mode!=='endless'&&state.wave>=state.waveMax){finishStage();return;}state.wave++;state.phase='wave';state.spawned=0;state.spawnClock=0;state.undoStack=[];wavePlan=generateWavePlan(state.level,1,state.wave);AUDIO.play(wavePlan.isBoss?'boss':'wave_start');AUDIO.music.setMode('wave');state.pathVisibleBeforeWave=state.pathVisible;updateUI();const intro=state.level===1&&state.wave===5?'FLYING CREEPS: they ignore your maze':state.level===1&&state.wave===10?'BOSS WAVE: prepare for a high-HP target':wavePlan.isBoss?(wavePlan.specialBoss?'EMPOWERED BOSS WAVE':'BOSS WAVE'):`${capitalize(wavePlan.type)} wave`;toast(intro);autosave();}
-function spawnCreep(){const p=wavePlan;const routePool=p.activeRouteIndices?.length?p.activeRouteIndices:[0];const progress=state.spawned/Math.max(1,p.count);const eligible=routePool.filter((_,i)=>progress>=(p.routeStartFractions?.[i]||0));const unlocked=eligible.length?eligible:[routePool[0]];const spawnIndex=(p.routeSequence?.[state.spawned]??unlocked[state.spawned%unlocked.length])%map.spawns.length;const s=rectCenter(map.spawns[spawnIndex]);const bossIndex=state.spawned,bossCount=p.bossCount||1,bossUnit=p.isBoss&&bossIndex<bossCount,finalBoss=bossUnit&&state.mode!=='endless'&&state.wave===state.waveMax&&bossIndex===bossCount-1;const waveKind=bossUnit?'boss':p.isBoss?(p.escortType||'basic'):p.type;const kind=waveKind==='flying'?'air':waveKind;const hp=bossUnit?(p.bossHP||p.hp):p.isBoss?(p.escortHp||Math.max(1,Math.floor(p.hp*.18))):p.hp;const reward=bossUnit?((p.bossReward??p.rewardTarget)+(bossIndex<(p.bossRewardRemainder||0)?1:0)):(p.isBoss?(p.escortReward||1):p.reward+(state.spawned<(p.rewardRemainder||0)?1:0));const hasBossSkills=kind==='boss'&&(state.mode==='endless'||state.level>=7),c={id:Math.random().toString(36),kind,skin:skinFor(kind),x:s.x,y:s.y,hp,maxHp:hp,armor:kind==='armored'?5+Math.floor(state.wave/4):0,speed:kind==='fast'?3.1:kind==='armored'?1.1:kind==='slow'?.85:kind==='boss'?.55:kind==='air'?(p.unitSpeed||1.45):1.65,reward,route:spawnIndex,objIndex:0,path:kind==='air'?getRouteForSpawn(spawnIndex,true):computeGroundPath(spawnIndex),pathIndex:0,history:[],effects:[],burn:null,poisons:[],freezeImmune:0,stunImmune:0,frozen:0,stunned:0,dead:false,nextCell:null,attackCd:0,finalBoss,bossSkillCd:hasBossSkills?(finalBoss?9:6):999,disableSkillCd:hasBossSkills?15:999,finalRushCd:finalBoss?6:999,speedBoostTimer:0,finalRushTimer:0};state.creeps.push(c);state.spawned++;}
-function updateWave(dt){if(state.spawned<wavePlan.count){state.spawnClock-=dt;if(state.spawnClock<=0){spawnCreep();state.spawnClock=wavePlan.spawnGap;}}
- if(state.spawned>=wavePlan.count&&state.creeps.every(c=>c.dead)){const leaked=state.waveLeaked||0,grant=wavePlan.mazeGrant||0;state.gold+=grant;if(leaked===0){const bonus=Math.max(1,Math.floor((wavePlan.combatRewardTarget||wavePlan.rewardTarget)*.05));state.gold+=bonus;toast(`Maze grant +${grant}g · Perfect +${bonus}g`);}else toast(`Maze grant +${grant}g`);AUDIO.play('wave_clear');AUDIO.music.setMode('build');state.waveLeaked=0;state.phase='build';state.buildTimer=buildTimeFor(state.difficulty);wavePlan=state.mode!=='endless'&&state.wave>=state.waveMax?null:generateWavePlan(state.level,1,state.wave+1);updateUI();autosave();if(state.mode==='endless'&&state.wave===20&&!state.secondaryArchetype)showSecondArchetypePrompt();else if(state.mode!=='endless'&&state.wave>=state.waveMax)toast('Level cleared — continue when ready');}
+function startWave(){if(state.phase!=='build'||state.paused)return;if(state.mode!=='endless'&&state.wave>=state.waveMax){finishStage();return;}state.wave++;state.phase='wave';state.spawned=0;state.spawnClock=0;state.undoStack=[];wavePlan=generateWavePlan(state.level,1,state.wave);AUDIO.play(wavePlan.isBoss?'boss':'wave_start');AUDIO.music.setMode('wave');state.pathVisibleBeforeWave=state.pathVisible;updateUI();const intro=state.level===1&&state.wave===5?'FLYING CREEPS: they ignore your maze':state.level===1&&state.wave===10?'BOSS WAVE: prepare for a high-HP target':wavePlan.isBoss?(wavePlan.leviathanBossIndex>=0?'MOTHER WHALE INBOUND':wavePlan.specialBoss?'EMPOWERED BOSS WAVE':'BOSS WAVE'):`${capitalize(wavePlan.type)} wave`;toast(intro);autosave();}
+function spawnCreep(){
+ const p=wavePlan,routePool=p.activeRouteIndices?.length?p.activeRouteIndices:[0],progress=state.spawned/Math.max(1,p.count);
+ const eligible=routePool.filter((_,i)=>progress>=(p.routeStartFractions?.[i]||0)),unlocked=eligible.length?eligible:[routePool[0]];
+ const spawnIndex=(p.routeSequence?.[state.spawned]??unlocked[state.spawned%unlocked.length])%map.spawns.length,s=rectCenter(map.spawns[spawnIndex]);
+ const bossIndex=state.spawned,bossCount=p.bossCount||1,bossUnit=p.isBoss&&bossIndex<bossCount,leviathanUnit=bossUnit&&p.leviathanBossIndex===bossIndex;
+ const finalBoss=bossUnit&&state.mode!=='endless'&&state.wave===state.waveMax&&bossIndex===bossCount-1;
+ const waveKind=leviathanUnit?'leviathan':bossUnit?'boss':p.isBoss?(p.escortType||'basic'):p.type,kind=waveKind==='flying'?'air':waveKind;
+ const hp=leviathanUnit?(p.leviathanHP||Math.round((p.bossHP||p.hp)*2.5)):bossUnit?(p.bossHP||p.hp):p.isBoss?(p.escortHp||Math.max(1,Math.floor(p.hp*.18))):p.hp;
+ const reward=bossUnit?((p.bossReward??p.rewardTarget)+(bossIndex<(p.bossRewardRemainder||0)?1:0)):(p.isBoss?(p.escortReward||1):p.reward+(state.spawned<(p.rewardRemainder||0)?1:0));
+ const hasBossSkills=kind==='boss'&&(state.mode==='endless'||state.level>=7),flying=isFlyingKind(kind);
+ const c={id:Math.random().toString(36),kind,skin:skinFor(kind),x:s.x,y:s.y,hp,maxHp:hp,armor:kind==='armored'?5+Math.floor(state.wave/4):0,speed:kind==='fast'?3.1:kind==='armored'?1.1:kind==='slow'?.85:kind==='leviathan'?.38:kind==='boss'?.55:kind==='air'?(p.unitSpeed||1.45):1.65,reward,route:spawnIndex,objIndex:0,path:flying?getRouteForSpawn(spawnIndex,true):computeGroundPath(spawnIndex),pathIndex:0,history:[],effects:[],burn:null,poisons:[],freezeImmune:0,stunImmune:0,frozen:0,stunned:0,dead:false,nextCell:null,attackCd:0,finalBoss,isLeviathan:leviathanUnit,bossSkillCd:hasBossSkills?(finalBoss?9:6):999,disableSkillCd:hasBossSkills?15:999,finalRushCd:finalBoss?6:999,speedBoostTimer:0,finalRushTimer:0};
+ state.creeps.push(c);state.spawned++;
 }
-function finishStage(){AUDIO.play('victory');AUDIO.music.stop();state.achievements[`${state.level}-${state.difficulty}`]=true;state.achievements[`level-${state.level}`]=true;localStorage.setItem('amazingTD_ach',JSON.stringify(state.achievements));$('#menuOverlay').classList.remove('hidden');const finalLevel=state.level>=15;$('#resultModal').innerHTML=`<h1>Level ${state.level} Complete</h1><p>You cleared all ${state.waveMax} waves on <b>${difficultyName(state.difficulty)}</b>.</p><div class="menuGrid">${finalLevel?'':`<button class="menuBtn" id="nextLevel"><strong>Next Level</strong></button>`}<button class="menuBtn" id="levelMenu"><strong>Level Select</strong></button></div>`;if(!finalLevel)$('#nextLevel').onclick=()=>{state.level=Math.min(15,state.level+1);showArchetypes();};$('#levelMenu').onclick=showLevelSelect;}
-function loseLevel(){state.phase='lost';AUDIO.play('defeat');AUDIO.music.stop();$('#menuOverlay').classList.remove('hidden');const endless=state.mode==='endless';$('#resultModal').innerHTML=`<h1>${endless?'Endless Run Over':'Defeat'}</h1><p>${endless?`You survived ${state.wave} waves.`:'The exit portal was breached too many times.'}</p><div class="menuGrid"><button class="menuBtn" id="retry"><strong>${endless?'Retry Endless':'Retry Level'}</strong></button><button class="menuBtn" id="levelMenu"><strong>${endless?'Main Menu':'Level Select'}</strong></button></div>`;$('#retry').onclick=()=>{state.secondaryArchetype=null;state.secondArchetypeUnlocked=false;startLevel();};$('#levelMenu').onclick=endless?showMainMenu:showLevelSelect;}
 
 function update(dt,realDt=dt){if(state.screen!=='game'||state.paused)return;state.time+=dt;const move=CAMERA_MOVE_SPEED*prefs.wasdSensitivity*realDt/camera.zoom;if(keysHeld.w)camera.y-=move;if(keysHeld.s)camera.y+=move;if(keysHeld.a)camera.x-=move;if(keysHeld.d)camera.x+=move;
  if(state.phase==='build'&&state.buildTimer!=null){state.buildTimer-=dt;if(state.buildTimer<=0)startWave();}
@@ -1495,7 +1509,7 @@ function update(dt,realDt=dt){if(state.screen!=='game'||state.paused)return;stat
 }
 function updateCreeps(dt){for(const c of state.creeps){if(c.dead)continue;c.freezeImmune=Math.max(0,c.freezeImmune-dt);c.stunImmune=Math.max(0,c.stunImmune-dt);c.frozen=Math.max(0,c.frozen-dt);c.stunned=Math.max(0,c.stunned-dt);c.speedBoostTimer=Math.max(0,(c.speedBoostTimer||0)-dt);c.finalRushTimer=Math.max(0,(c.finalRushTimer||0)-dt);updateDots(c,dt);if(c.hp<=0){killCreep(c);continue;}if(c.kind==='boss')updateBossSkill(c,dt);if(c.frozen>0||c.stunned>0)continue;
  const baseMoveSpeed=c.finalRushTimer>0?3.1:c.speed*(c.speedBoostTimer>0?1.85:1),speed=baseMoveSpeed*(1-combinedSlow(c));
- if(c.kind==='air')moveAir(c,dt*speed);else moveGround(c,dt*speed,dt);
+ if(isFlyingCreep(c))moveAir(c,dt*speed);else moveGround(c,dt*speed,dt);
  }
 }
 function moveGround(c,amt,dt){const rev=state.mapRev||0;
@@ -1521,7 +1535,7 @@ function moveAir(c,amt){const route=getRouteForSpawn(c.route,true),cpCount=check
 function leakCreep(c){if(c.dead)return;c.dead=true;AUDIO.play('leak');state.lives--;state.waveLeaked=(state.waveLeaked||0)+1;particle(c.x,c.y,'#ff596c',12);if(state.lives<=0)loseLevel();}
 function killCreep(c,sourceTower=null){if(c.dead)return;c.dead=true;AUDIO.play('kill');if(sourceTower&&state.towers.includes(sourceTower))sourceTower.kills=(sourceTower.kills||0)+1;state.gold+=c.reward;goldPopup(c.x,c.y,c.reward);particle(c.x,c.y,'#ffe36d',8,'burst');}
 function updateDots(c,dt){if(c.burn){c.burn.t-=dt;c.burn.tick-=dt;if(c.burn.tick<=0){dealRaw(c,c.burn.dmg,'magic',c.burn.sourceTower);c.burn.tick=1;}if(c.burn.t<=0)c.burn=null;}for(const p of c.poisons){p.t-=dt;p.tick-=dt;if(p.tick<=0){dealRaw(c,p.dmg,'magic',p.sourceTower);p.tick=1;}}c.poisons=c.poisons.filter(p=>p.t>0);c.effects=c.effects.filter(e=>(e.t-=dt)>0);}
-function combinedSlow(c){let remain=1;for(const e of c.effects)if(e.kind==='slow')remain*=1-e.power;let slow=1-remain;return Math.min(c.kind==='boss'?.35:.65,slow);}
+function combinedSlow(c){let remain=1;for(const e of c.effects)if(e.kind==='slow')remain*=1-e.power;let slow=1-remain;return Math.min(isBossCreep(c)?.35:.65,slow);}
 function updateBossSkill(c,dt){if(state.mode!=='endless'&&state.level<7)return;
  c.finalRushCd=(c.finalRushCd??999)-dt;c.disableSkillCd=(c.disableSkillCd??15)-dt;c.bossSkillCd=(c.bossSkillCd??6)-dt;
  if(c.finalBoss&&c.finalRushCd<=0){c.finalRushCd=6;c.finalRushTimer=Math.max(c.finalRushTimer||0,2);particle(c.x,c.y,'#fff0a8',26);toast('Final Boss used Breakneck Charge');return;}
@@ -1534,21 +1548,21 @@ function nearbyAuras(tw){const p={x:tw.x+tw.footprint/2,y:tw.y+tw.footprint/2},a
 function effectiveRange(tw,d){let r=d.range;for(const a of nearbyAuras(tw))if(a.kind==='uplink')r*=1+a.power;return r;}
 function findTargets(tw,d){const p={x:tw.x+tw.footprint/2-.5,y:tw.y+tw.footprint/2-.5},r=effectiveRange(tw,d);let a=state.creeps.filter(c=>!c.dead&&validTarget(d,c)&&dist(p,c)<=r&&(d.minRange?dist(p,c)>=d.minRange:true));if(d.lock&&tw.targetId){const old=a.find(c=>c.id===tw.targetId);if(old)return [old];}
  a.sort((x,y)=>dist(p,x)-dist(p,y)||(vulnerability(y,d.type)-vulnerability(x,d.type))||(x.hp-y.hp));if(d.line&&a.length){let best=a[0],score=-1;for(const c of a){const s=lineVictims(p,c,d).length;if(s>score){score=s;best=c;}}a=[best];}return a.slice(0,d.multi||1);}
-function validTarget(d,c){return d.target.includes(c.kind==='air'?'air':'ground');}
-function airTowerScale(d,c){if(c.kind!=='air')return 1;let m=d.airScale||1;const airOnly=d.target?.length===1&&d.target[0]==='air',mixed=d.target?.includes('air')&&d.target?.includes('ground');if(airOnly)m*=1.25;else if(mixed)m*=.95;return m;}
-function vulnerability(c,type){if(c.kind==='air')return type==='flying'?1.5:type==='physical'?.75:1;if(c.kind==='armored')return type==='magic'?1.5:type==='physical'?.7:1;if(c.kind==='boss')return 1;return type==='physical'?1.25:type==='flying'?.75:1;}
+function validTarget(d,c){return d.target.includes(isFlyingCreep(c)?'air':'ground');}
+function airTowerScale(d,c){if(!isFlyingCreep(c))return 1;let m=d.airScale||1;const airOnly=d.target?.length===1&&d.target[0]==='air',mixed=d.target?.includes('air')&&d.target?.includes('ground');if(airOnly)m*=1.25;else if(mixed)m*=.95;return m;}
+function vulnerability(c,type){if(c.kind==='leviathan')return type==='flying'?1.5:type==='physical'?.75:1;if(c.kind==='air')return type==='flying'?1.5:type==='physical'?.75:1;if(c.kind==='armored')return type==='magic'?1.5:type==='physical'?.7:1;if(c.kind==='boss')return 1;return type==='physical'?1.25:type==='flying'?.75:1;}
 function fireTower(tw,d,targets){AUDIO.play('shot_'+d.arch);if(d.lock)tw.targetId=targets[0].id;if(d.line){const p={x:tw.x+tw.footprint/2-.5,y:tw.y+tw.footprint/2-.5};for(const c of lineVictims(p,targets[0],d))hitCreep(tw,d,c,1);state.effects.push({kind:'beam',x1:p.x,y1:p.y,x2:targets[0].x,y2:targets[0].y,t:.12,color:'#9ee7ff'});return;}
  for(const c of targets){if(d.beam){hitCreep(tw,d,c,1);state.effects.push({kind:'beam',x1:tw.x+tw.footprint/2-.5,y1:tw.y+tw.footprint/2-.5,x2:c.x,y2:c.y,t:.18,color:'#ff8b67'});}else{state.projectiles.push({x:tw.x+tw.footprint/2-.5,y:tw.y+tw.footprint/2-.5,target:c,tw,d,speed:18});if(d.arch==='fire')particle(tw.x+tw.footprint/2-.5,tw.y+tw.footprint/2-.7,'#ff9d58',1,'ember');}}}
 function lineVictims(p,target,d){const ax=target.x-p.x,ay=target.y-p.y,len=Math.hypot(ax,ay)||1,ux=ax/len,uy=ay/len;return state.creeps.filter(c=>!c.dead&&validTarget(d,c)).filter(c=>{const vx=c.x-p.x,vy=c.y-p.y,proj=vx*ux+vy*uy;if(proj<0||proj>d.range)return false;const perp=Math.abs(vx*uy-vy*ux);return perp<=(d.lineWidth||1)*.5;});}
 function updateProjectiles(dt){for(const p of state.projectiles){if(p.dead||!p.target||p.target.dead){p.dead=true;continue;}const dx=p.target.x-p.x,dy=p.target.y-p.y,d=Math.hypot(dx,dy);if(d<.25){impactProjectile(p);p.dead=true;}else{const s=Math.min(d,p.speed*dt);p.x+=dx/d*s;p.y+=dy/d*s;}}state.projectiles=state.projectiles.filter(p=>!p.dead);}
 function impactProjectile(p){const d=p.d,c=p.target;if(d.splash){for(const v of state.creeps.filter(x=>!x.dead&&validTarget(d,x)&&dist(x,c)<=d.splash))hitCreep(p.tw,d,v,v===c?1:.65);}else hitCreep(p.tw,d,c,1);if(d.chain){let prev=c,seen=new Set([c.id]),scale=.7;for(let i=0;i<d.chain;i++){const n=state.creeps.filter(x=>!x.dead&&!seen.has(x.id)&&validTarget(d,x)&&dist(x,prev)<=3).sort((a,b)=>dist(a,prev)-dist(b,prev))[0];if(!n)break;hitCreep(p.tw,d,n,scale);state.effects.push({kind:'beam',x1:prev.x,y1:prev.y,x2:n.x,y2:n.y,t:.12,color:'#fff08c'});seen.add(n.id);prev=n;scale*=.72;}}
 }
-function hitCreep(tw,d,c,scale=1){AUDIO.play('hit');let mult=1+.3*(tw.upgrade||0);for(const a of nearbyAuras(tw)){if(a.kind==='damageTrade')mult+=a.power;if(a.kind==='slowDamage'&&combinedSlow(c)>0)mult+=a.power;}if(tw.suppressed>0)mult*=.7;if(d.groundScale&&c.kind!=='air')mult*=d.groundScale;if(c.kind==='air')mult*=airTowerScale(d,c);if(d.bonusFrozen&&c.frozen>0)mult*=1+d.bonusFrozen;else if(d.bonusSlowed&&combinedSlow(c)>0)mult*=1+d.bonusSlowed;if(d.isolatedBonus&&state.creeps.filter(x=>!x.dead&&dist(x,c)<2.2).length===1)mult*=1+d.isolatedBonus;if(d.execute&&c.hp/c.maxHp<.3)mult*=1+d.execute;
+function hitCreep(tw,d,c,scale=1){AUDIO.play('hit');let mult=1+.3*(tw.upgrade||0);for(const a of nearbyAuras(tw)){if(a.kind==='damageTrade')mult+=a.power;if(a.kind==='slowDamage'&&combinedSlow(c)>0)mult+=a.power;}if(tw.suppressed>0)mult*=.7;if(d.groundScale&&!isFlyingCreep(c))mult*=d.groundScale;if(isFlyingCreep(c))mult*=airTowerScale(d,c);if(d.bonusFrozen&&c.frozen>0)mult*=1+d.bonusFrozen;else if(d.bonusSlowed&&combinedSlow(c)>0)mult*=1+d.bonusSlowed;if(d.isolatedBonus&&state.creeps.filter(x=>!x.dead&&dist(x,c)<2.2).length===1)mult*=1+d.isolatedBonus;if(d.execute&&c.hp/c.maxHp<.3)mult*=1+d.execute;
  const roll=d.dmg?rand(d.dmg[0],d.dmg[1]):0;let damage=floorDamage(roll*mult*scale*vulnerability(c,d.type));if(!d.fixed)damage=Math.max(1,damage-Math.floor(c.armor||0));dealRaw(c,damage,d.type,tw);applyOnHit(c,d,tw);particle(c.x,c.y,archColor(d.arch),1,ARCH_PARTICLE[d.arch]||'spark');}
 function dealRaw(c,damage,type,sourceTower=null){c.hp-=Math.max(0,Math.floor(damage));if(c.hp<=0)killCreep(c,sourceTower);}
 function applyOnHit(c,d,tw){const up=1+.15*(tw.upgrade||0),airMod=airTowerScale(d,c);if(d.slow)addEffect(c,'slow',d.slow*up,d.duration||2);if(d.stun&&c.stunImmune<=0){c.stunned=Math.max(c.stunned,d.stun*up);c.stunImmune=.5;}if(d.burn){const dmg=d.burn*up*airMod;if(!c.burn||dmg>=c.burn.dmg)c.burn={dmg,t:d.duration||3,tick:1,sourceTower:tw};else{c.burn.t=d.duration||3;c.burn.sourceTower=tw;}}if(d.poison){const source=d.id,existing=c.poisons.filter(p=>p.source===source).length,scale=[1,.7,.5,.35,.25][Math.min(existing,4)];c.poisons.push({source,dmg:d.poison*up*scale*airMod,t:d.duration||4,tick:1,sourceTower:tw});}if(d.push)pushBack(c,Math.round(d.push*up));}
 function addEffect(c,kind,power,t){c.effects.push({kind,power,t});}
-function pushBack(c,blocks){if(!c.history.length)return;const max=c.kind==='boss'?1:blocks;const idx=Math.max(0,c.history.length-1-max),p=c.history[idx];if(p){c.x=p.x;c.y=p.y;c.path=computeGroundPath(c.route,{x:c.x,y:c.y},c.objIndex);c.pathIndex=0;c.history=c.history.slice(0,idx+1);}}
+function pushBack(c,blocks){if(!c.history.length)return;const max=isBossCreep(c)?1:blocks;const idx=Math.max(0,c.history.length-1-max),p=c.history[idx];if(p){c.x=p.x;c.y=p.y;c.path=computeGroundPath(c.route,{x:c.x,y:c.y},c.objIndex);c.pathIndex=0;c.history=c.history.slice(0,idx+1);}}
 function pullBack(c,blocks){pushBack(c,blocks)}
 function damageColor(t){return t==='physical'?'#ffd29b':t==='flying'?'#d9b8ff':'#90d6ff'}
 
@@ -1556,7 +1570,7 @@ function updateUtility(tw,d,dt){if(d.aura)return;tw.pulseTimer=(tw.pulseTimer??d
  if(d.pulse==='armorDown')targets.forEach(c=>c.effects.push({kind:'armorDown',power:d.power*up,t:d.duration}));
  if(d.pulse==='freeze')targets.forEach(c=>{if(c.freezeImmune<=0){c.frozen=d.power*up;c.freezeImmune=2;}});
  if(d.pulse==='fireAmp')targets.forEach(c=>c.effects.push({kind:'fireAmp',power:d.power*up,t:d.duration}));
- if(d.pulse==='blackhole'&&targets.length){const c=targets.sort((a,b)=>b.x-a.x)[0];for(const v of state.creeps.filter(x=>!x.dead&&x.kind!=='air'&&dist(x,c)<=d.radius)){pullBack(v,Math.round(d.pull*up));addEffect(v,'slow',d.slow*up,d.duration);}}
+ if(d.pulse==='blackhole'&&targets.length){const c=targets.sort((a,b)=>b.x-a.x)[0];for(const v of state.creeps.filter(x=>!x.dead&&!isFlyingCreep(x)&&dist(x,c)<=d.radius)){pullBack(v,Math.round(d.pull*up));addEffect(v,'slow',d.slow*up,d.duration);}}
  if(d.pulse==='stun')targets.forEach(c=>{if(c.stunImmune<=0){c.stunned=d.power*up;c.stunImmune=.5;}});
  if(d.pulse==='physicalArmorDown')targets.forEach(c=>c.effects.push({kind:'physicalArmorDown',power:d.power*up,t:d.duration}));
  if(d.pulse==='damageAll')targets.forEach(c=>{let damage=Math.floor(rand(d.dmg[0],d.dmg[1])*(1+.2*(tw.upgrade||0))*vulnerability(c,d.type)*airTowerScale(d,c));damage=Math.max(1,damage-Math.floor(c.armor||0));dealRaw(c,damage,d.type,tw);particle(c.x,c.y,'#fff08c');});
@@ -1718,45 +1732,136 @@ function getTowerCv(d){
  const TALL=['spire','totem','rod','pillar','lance','monolith','shrine','geyser','pylon','battery','flask','sprayer','fang','beacon','coil','capacitor','bell','seal'];
  const SQUAT=['gun','turret','cannon','array','projector','slinger','ballista','harpoon','thrower','jet','ram','platform','uplink','drum','vat','pool','well','nest','furnace'];
  const shape=TALL.includes(body)?'tall':SQUAT.includes(body)?'squat':'box';
+ const seed=strHash(d.id);
+ const tri=(x1,y1,x2,y2,x3,y3,c,a=1)=>{g.globalAlpha=a;g.fillStyle=c;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.lineTo(x3,y3);g.closePath();g.fill();g.globalAlpha=1;};
+ const dot=(cx,cy,r,c,a=1)=>{g.globalAlpha=a;g.fillStyle=c;g.beginPath();g.arc(cx,cy,r,0,Math.PI*2);g.fill();g.globalAlpha=1;};
+ const ell=(cx,cy,rx,ry,c,a=1)=>{g.globalAlpha=a;g.fillStyle=c;g.beginPath();g.ellipse(cx,cy,Math.max(1,rx),Math.max(1,ry),0,0,Math.PI*2);g.fill();g.globalAlpha=1;};
  // pedestal slab
  p(x-w*.52,y+h*.30,w*1.04,7,PAL.dk);p(x-w*.52,y+h*.30,w*1.04,3,PAL.md);p(x-w*.44,y+h*.30+1,w*.88,1,'rgba(255,255,255,.5)');
  p(x-w*.40,y+h*.30+7,4,2,WF.grassDark);p(x+w*.28,y+h*.30+7,5,2,WF.grassDark);
- if(shape==='tall'){ // slender tapering tower
-  p(x-w*.30,y+h*.06,w*.60,h*.24,PAL.dk);p(x-w*.30+2,y+h*.06+2,w*.60-4,h*.24-4,PAL.md);
-  p(x-w*.19,y-h*.50,w*.38,h*.60,PAL.dk);p(x-w*.19+2,y-h*.50+2,w*.38-4,h*.60-4,PAL.md);
-  p(x-w*.19+2,y-h*.50+2,w*.38-4,3,PAL.lt);p(x-w*.19+2,y-h*.50+2,2,h*.60-4,PAL.lt,.55);
-  p(x-w*.12,y-h*.34,w*.24,h*.12,col,.35);p(x-w*.12,y-h*.34,w*.24,2,col,.8);
- }else if(shape==='squat'){ // wide low bunker + mount post
-  p(x-w*.50,y-h*.04,w,h*.42,PAL.dk);p(x-w*.50+2,y-h*.04+2,w-4,h*.42-4,PAL.md);
-  p(x-w*.50+2,y-h*.04+2,w-4,3,PAL.lt);p(x-w*.50+2,y-h*.04+2,3,h*.42-4,PAL.lt,.5);
-  p(x-w*.42,y+h*.28,w*.84,4,PAL.dk); // tread base
-  p(x-3,y-h*.30,6,h*.28,PAL.dk);p(x-2,y-h*.30,2,h*.28,PAL.md); // mast for the apparatus
-  p(x-w*.34,y+h*.06,w*.20,h*.14,col,.35);p(x+w*.14,y+h*.06,w*.20,h*.14,col,.35);
- }else{ // classic keep
-  p(x-w/2,y-h/2,w,h*.86,PAL.dk);p(x-w/2+2,y-h/2+2,w-4,h*.86-4,PAL.md);
-  p(x-w/2+2,y-h/2+2,w-4,3,PAL.lt);p(x-w/2+2,y-h/2+2,3,h*.86-4,PAL.lt,.5);
-  p(x-w*.33,y-h*.36,w*.66,h*.16,col,.30);p(x-w*.33,y-h*.36,w*.66,2,col,.7);
-  p(x-w*.22,y+h*.12,w*.44,3,PAL.dk);
-  for(let i=0;i<3;i++)p(x-w*.40+i*9,y+h*.02,4,3,PAL.dk,.55);
+ const POOLY=body==='pool'||body==='nest'||body==='vat'||body==='well';
+ if(d.arch==='lightning'){
+  // pixel tesla coil: cabinet base, wound copper coil, discharge sphere
+  const bw=shape==='squat'?w*.92:w*.64;
+  p(x-bw/2,y+h*.12,bw,h*.20,PAL.dk);p(x-bw/2+2,y+h*.12+2,bw-4,h*.20-4,PAL.md);
+  p(x-bw/2+2,y+h*.12+2,bw-4,2,PAL.lt);
+  p(x-bw*.34,y+h*.19,3,3,'#fff1a2');p(x+bw*.22,y+h*.19,3,3,PAL.trim,.85);
+  if(shape==='squat'){p(x-bw*.42,y+h*.06,6,4,PAL.dk);p(x+bw*.30,y+h*.06,6,4,PAL.dk);p(x-bw*.44,y+h*.24,3,5,'#8a6a2a');p(x+bw*.36,y+h*.24,3,5,'#8a6a2a');}
+  const ch=shape==='tall'?h*.56:shape==='squat'?h*.36:h*.46,cy0=y+h*.12;
+  p(x-3,cy0-ch,6,ch,'#4a4433');
+  const rings=Math.max(3,Math.floor(ch/5));
+  for(let i=0;i<rings;i++){const yy=cy0-4-i*5;p(x-7,yy,14,3,i%2?'#b48a3c':'#8a6a2a');p(x-7,yy,14,1,'#e8c46a');}
+  p(x-9,cy0-ch-4,18,4,'#c9ccd6');p(x-9,cy0-ch-4,18,1,'#f2f4f8');
+  dot(x,cy0-ch-10,6,'#dde2ea');dot(x,cy0-ch-10,7,'#fff7bd',.18);p(x-3,cy0-ch-13,3,2,'#ffffff');
+  p(x-1,cy0-ch-17,2,3,'#fff1a2');p(x-5,cy0-ch-14,2,2,'#fff1a2',.7);p(x+4,cy0-ch-15,2,2,'#fff1a2',.7);
+ }else if(d.arch==='frost'){
+  // crystalline: faceted ice shards on a frozen slab
+  const base=y+h*.30;
+  p(x-w*.44,base-6,w*.88,7,'#bfe6f2');p(x-w*.44,base-6,w*.88,2,'#eaf9ff');
+  const facet=(cx,topY,ww)=>{tri(cx-ww,base,cx,base,cx,topY,'#a9d6ea');tri(cx,base,cx+ww,base,cx,topY,'#5f93b5');tri(cx-ww*.45,base,cx,base,cx,topY+(base-topY)*.18,'#e6f7ff',.75);p(cx-1,topY+3,2,5,'#ffffff',.9);};
+  if(shape==='tall'){facet(x,y-h*.54,w*.24);facet(x-w*.30,y-h*.06,w*.13);facet(x+w*.28,y+h*.00,w*.12);}
+  else if(shape==='squat'){facet(x-w*.26,y-h*.12,w*.17);facet(x+w*.25,y-h*.16,w*.16);facet(x,y-h*.32,w*.21);}
+  else{facet(x,y-h*.46,w*.21);facet(x-w*.28,y-h*.08,w*.13);facet(x+w*.27,y-h*.14,w*.14);}
+  p(x-w*.34,y+h*.14,2,2,'#ffffff',.9);p(x+w*.20,y-h*.02,2,2,'#ffffff',.8);p(x-w*.06,y+h*.06,2,2,'#eaf9ff',.7);
+ }else if(d.arch==='poison'&&POOLY){
+  // spawning pool: organic membrane rim, bubbling bile, rim spines
+  const cy2=y+h*.12;
+  ell(x,cy2+2,w*.54,h*.25,'#402a3e');
+  ell(x,cy2,w*.52,h*.23,'#6a4460');
+  ell(x,cy2-1,w*.46,h*.19,'#8a5c74');
+  ell(x,cy2-1,w*.38,h*.15,'#3f6d30');
+  ell(x-1,cy2-2,w*.32,h*.12,'#5f9c44');
+  ell(x-3,cy2-3,w*.22,h*.08,'#7ed957');
+  dot(x-8,cy2-3,2,'#d8ff9a');dot(x+7,cy2-1,2.5,'#a4f26e');dot(x+1,cy2-5,1.5,'#eaffc8');dot(x-3,cy2+1,1.5,'#c8f28e',.9);
+  for(let i=0;i<6;i++){const a0=(i/6)*Math.PI*2+seed;const sx=x+Math.cos(a0)*w*.48,sy=cy2+Math.sin(a0)*h*.20;tri(sx-2,sy,sx+2,sy,sx+Math.cos(a0)*3,sy-7,'#3c2b3a');}
+  ell(x-w*.30,cy2+h*.16,4,2,'#5f9c44',.7);ell(x+w*.28,cy2+h*.14,3,2,'#5f9c44',.6);
+ }else if(d.arch==='poison'){
+  // fleshy organic stalk with toxin sacs
+  ell(x,y+h*.24,w*.40,h*.12,'#4a3348');
+  const st=shape==='tall'?h*.62:h*.44;
+  for(let i=0;i<Math.floor(st/6);i++){const yy=y+h*.20-i*6,ww=w*.16+Math.sin(i*1.7+seed)*2;ell(x+Math.sin(i*.9+seed)*2,yy,ww,4,i%2?'#6a8f5c':'#587c4c');}
+  ell(x,y+h*.20-st,w*.15,5,'#7aa868');
+  dot(x-w*.20,y+h*.06,4,'#6a4460');dot(x-w*.20,y+h*.05,2.5,'#a4f26e');
+  dot(x+w*.22,y-h*.04,3.5,'#6a4460');dot(x+w*.22,y-h*.05,2,'#c8f28e');
+  p(x-1,y+h*.20-st-4,2,4,'#3c2b3a');
+ }else if(d.arch==='tech'){
+  // futuristic chassis: bevelled alloy panels, neon strips, status lights
+  if(shape==='tall'){
+   p(x-w*.24,y-h*.44,w*.48,h*.78,PAL.dk);p(x-w*.24+2,y-h*.44+2,w*.48-4,h*.78-4,PAL.md);
+   p(x-w*.24+2,y-h*.44+2,w*.48-4,2,PAL.lt);
+   p(x-w*.30,y+h*.10,w*.60,h*.16,PAL.dk);p(x-w*.30+2,y+h*.10+2,w*.60-4,h*.16-4,PAL.md);
+   p(x-w*.20,y-h*.30,w*.40,2,PAL.trim);p(x-w*.20,y-h*.10,w*.40,2,PAL.trim,.7);p(x-w*.20,y+h*.06,w*.40,1,PAL.trim,.5);
+   p(x+w*.10,y-h*.40,3,3,'#fff');p(x-w*.16,y-h*.40,3,3,'#7be8ff');
+  }else if(shape==='squat'){
+   p(x-w*.50,y-h*.02,w,h*.40,PAL.dk);p(x-w*.50+2,y-h*.02+2,w-4,h*.40-4,PAL.md);
+   p(x-w*.50+2,y-h*.02+2,w-4,2,PAL.lt);
+   p(x-w*.46,y+h*.30,w*.92,4,'#242b36');for(let i=0;i<5;i++)p(x-w*.42+i*w*.20,y+h*.31,4,2,'#6b7787');
+   p(x-3,y-h*.28,6,h*.26,PAL.dk);p(x-2,y-h*.28,2,h*.26,PAL.lt,.6);
+   p(x-w*.42,y+h*.06,w*.84,2,PAL.trim,.8);p(x-w*.34,y+h*.16,3,3,'#7be8ff');p(x+w*.28,y+h*.16,3,3,'#fff');
+  }else{
+   p(x-w/2,y-h*.34,w,h*.70,PAL.dk);p(x-w/2+2,y-h*.34+2,w-4,h*.70-4,PAL.md);
+   p(x-w/2+2,y-h*.34+2,w-4,2,PAL.lt);
+   p(x-w*.36,y-h*.20,w*.72,h*.12,'#242b36');p(x-w*.34,y-h*.18,w*.30,h*.08,PAL.trim,.5);
+   p(x-w*.36,y+h*.04,w*.72,2,PAL.trim,.85);p(x-w*.36,y+h*.14,w*.72,1,PAL.trim,.5);
+   p(x+w*.26,y-h*.30,3,3,'#fff');p(x-w*.32,y+h*.20,3,3,'#7be8ff');
+  }
+  p(x+w*.36,y-h*.44,2,8,'#8a97a8');p(x+w*.35,y-h*.46,4,2,'#7be8ff');
+ }else if(d.arch==='water'){
+  // bubbly liquid: contained water column with rising bubbles
+  const base=y+h*.26;
+  p(x-w*.40,base,w*.80,6,'#2d5f6b');p(x-w*.40,base,w*.80,2,'#579aa8');
+  const dh=shape==='tall'?h*.66:shape==='squat'?h*.40:h*.52;
+  ell(x,base-dh*.44,w*(shape==='squat'?.44:.32),dh*.52,'#3d7d8d');
+  ell(x-2,base-dh*.48,w*(shape==='squat'?.38:.27),dh*.44,'#579aa8');
+  ell(x-4,base-dh*.60,w*.16,dh*.22,'#abdfe7',.85);
+  g.strokeStyle='#abdfe7';g.lineWidth=1.5;g.beginPath();g.arc(x,base-dh*.30,w*.20,Math.PI*.15,Math.PI*.85);g.stroke();g.lineWidth=1;
+  dot(x-6,base-dh*.28,2.5,'#e4f7ff',.9);dot(x+5,base-dh*.52,2,'#e4f7ff',.85);dot(x+2,base-dh*.14,1.5,'#e4f7ff',.8);dot(x-3,base-dh*.78,1.5,'#ffffff',.9);
+  dot(x+w*.30,base-4,2,'#7cd8ff',.8);dot(x-w*.32,base-2,1.5,'#7cd8ff',.7);
+ }else if(d.arch==='fire'){
+  // scorched basalt with glowing magma cracks and vents
+  if(shape==='tall'){
+   p(x-w*.28,y+h*.04,w*.56,h*.26,PAL.dk);p(x-w*.28+2,y+h*.04+2,w*.56-4,h*.26-4,PAL.md);
+   p(x-w*.18,y-h*.48,w*.36,h*.58,PAL.dk);p(x-w*.18+2,y-h*.48+2,w*.36-4,h*.58-4,PAL.md);
+  }else if(shape==='squat'){
+   p(x-w*.48,y-h*.04,w*.96,h*.42,PAL.dk);p(x-w*.48+2,y-h*.04+2,w*.96-4,h*.42-4,PAL.md);
+  }else{
+   p(x-w*.42,y-h*.40,w*.84,h*.76,PAL.dk);p(x-w*.42+2,y-h*.40+2,w*.84-4,h*.76-4,PAL.md);
+  }
+  const cr=(cx,cy,n)=>{let px2=cx,py2=cy;for(let i=0;i<n;i++){const nx=px2+(hash01((i*3+1)|0,(cy+seed*13)|0)*6-3),ny=py2+3;p(Math.min(px2,nx),py2,Math.abs(nx-px2)+2,2,'#ff7a3d');p(Math.min(px2,nx),py2,2,2,'#ffd27e');px2=nx;py2=ny;}};
+  cr(x-w*.12,shape==='tall'?y-h*.36:y-h*.24,4);cr(x+w*.14,shape==='squat'?y+h*.02:y-h*.10,3);
+  p(x-w*.30,y+h*.20,4,3,'#ff7a3d',.9);p(x+w*.22,y+h*.22,3,2,'#ffd27e',.9);
+  p(x-w*.06,y+h*.26,w*.12,3,'#ff5c47',.8);
+ }else if(d.arch==='earth'){
+  // stacked boulders / mossy megalith
+  const rock=(cx,cy,rx,ry)=>{ell(cx,cy,rx,ry,'#6b5130');ell(cx-1,cy-1,rx-2,ry-2,'#a9814a');ell(cx-rx*.25,cy-ry*.35,rx*.45,ry*.35,'#e5c48d',.8);};
+  if(shape==='tall'){rock(x,y+h*.18,w*.30,7);rock(x+1,y-h*.02,w*.26,7);rock(x-1,y-h*.20,w*.22,7);rock(x,y-h*.38,w*.17,6);}
+  else if(shape==='squat'){rock(x-w*.24,y+h*.14,w*.26,8);rock(x+w*.24,y+h*.14,w*.24,8);rock(x,y-h*.06,w*.28,9);}
+  else{rock(x,y+h*.14,w*.40,10);rock(x,y-h*.14,w*.30,10);rock(x,y-h*.36,w*.20,7);}
+  p(x-w*.10,y-h*.02,4,2,'#4a3722',.8);p(x+w*.08,y+h*.14,5,2,'#4a3722',.7);
+  p(x-w*.24,y-h*.12,4,3,'#79c46a');p(x+w*.16,y+h*.06,3,2,'#79c46a',.9);
+ }else{
+  // wind: pale stone spire with pennant and airy swirls
+  if(shape==='tall'){
+   p(x-w*.30,y+h*.06,w*.60,h*.24,PAL.dk);p(x-w*.30+2,y+h*.06+2,w*.60-4,h*.24-4,PAL.md);
+   p(x-w*.19,y-h*.50,w*.38,h*.60,PAL.dk);p(x-w*.19+2,y-h*.50+2,w*.38-4,h*.60-4,PAL.md);
+   p(x-w*.19+2,y-h*.50+2,w*.38-4,3,PAL.lt);p(x-w*.19+2,y-h*.50+2,2,h*.60-4,PAL.lt,.55);
+   p(x-w*.12,y-h*.34,w*.24,h*.12,col,.35);p(x-w*.12,y-h*.34,w*.24,2,col,.8);
+  }else if(shape==='squat'){
+   p(x-w*.50,y-h*.04,w,h*.42,PAL.dk);p(x-w*.50+2,y-h*.04+2,w-4,h*.42-4,PAL.md);
+   p(x-w*.50+2,y-h*.04+2,w-4,3,PAL.lt);p(x-w*.50+2,y-h*.04+2,3,h*.42-4,PAL.lt,.5);
+   p(x-w*.42,y+h*.28,w*.84,4,PAL.dk);
+   p(x-3,y-h*.30,6,h*.28,PAL.dk);p(x-2,y-h*.30,2,h*.28,PAL.md);
+   p(x-w*.34,y+h*.06,w*.20,h*.14,col,.35);p(x+w*.14,y+h*.06,w*.20,h*.14,col,.35);
+  }else{
+   p(x-w/2,y-h/2,w,h*.86,PAL.dk);p(x-w/2+2,y-h/2+2,w-4,h*.86-4,PAL.md);
+   p(x-w/2+2,y-h/2+2,w-4,3,PAL.lt);p(x-w/2+2,y-h/2+2,3,h*.86-4,PAL.lt,.5);
+   p(x-w*.33,y-h*.36,w*.66,h*.16,col,.30);p(x-w*.33,y-h*.36,w*.66,2,col,.7);
+   p(x-w*.22,y+h*.12,w*.44,3,PAL.dk);
+   for(let i=0;i<3;i++)p(x-w*.40+i*9,y+h*.02,4,3,PAL.dk,.55);
+  }
+  p(x+w*.30,y-h*.44,2,10,'#8fa3c4');p(x+w*.32,y-h*.44,7,4,PAL.trim);p(x+w*.32,y-h*.44,7,1,'#fff',.8);
+  p(x-w*.20,y-h*.06,7,2,PAL.trim,.7);p(x-w*.10,y-h*.02,9,2,PAL.trim,.5);
  }
- // archetype detailing
- if(d.arch==='fire'){p(x-w*.30,y+h*.02,3,6,PAL.trim);p(x+w*.10,y-h*.12,3,8,PAL.trim);p(x-w*.05,y+h*.16,5,2,PAL.trim);p(x-w*.28,y+h*.04,1,3,'#fff2aa');}
- else if(d.arch==='tech'){p(x-w*.36,y-h*.06,w*.72,2,PAL.trim,.9);p(x-w*.36,y+h*.10,w*.72,1,PAL.trim,.6);p(x+w*.24,y-h*.20,3,3,'#fff');}
- else if(d.arch==='poison'){p(x-w*.24,y+h*.10,3,7,PAL.trim,.85);p(x+w*.14,y+h*.02,3,9,PAL.trim,.7);p(x-w*.02,y+h*.20,3,5,PAL.trim,.8);}
- else if(d.arch==='frost'){p(x-w*.28,y-h*.44,3,6,'#e8f8ff');p(x+w*.16,y-h*.44,3,8,'#e8f8ff');p(x-w*.04,y-h*.46,3,5,'#e8f8ff');}
- else if(d.arch==='water'){p(x-w*.34,y+h*.06,w*.68,3,PAL.trim,.55);p(x-w*.34,y+h*.10,w*.50,2,'#e4f7ff',.45);}
- else if(d.arch==='earth'){p(x-w*.34,y-h*.02,w*.68,2,PAL.dk,.8);p(x-w*.34,y-h*.18,w*.68,2,PAL.dk,.55);p(x+w*.20,y+h*.14,4,3,'#79c46a');}
- else if(d.arch==='lightning'){p(x-w*.30,y-h*.28,2,2,'#fff1a2');p(x+w*.26,y-h*.28,2,2,'#fff1a2');p(x-w*.30,y+h*.12,2,2,'#fff1a2');p(x+w*.26,y+h*.12,2,2,'#fff1a2');}
- else if(d.arch==='wind'){p(x-w*.20,y-h*.06,7,2,PAL.trim,.8);p(x-w*.10,y-h*.02,9,2,PAL.trim,.6);p(x-w*.16,y+h*.02,6,2,PAL.trim,.45);}
- if(body==='totem'||body==='spire'||body==='rod'||body==='pillar'||body==='lance'){line(0,0,9,h*.72,dk);line(-2,0,2,h*.72,md);}
- if(body==='tower'||body==='watch'||body==='bastion'||body==='fort'){p(x-w*.18,y-h*.30,w*.36,h*.54,dk);p(x-w*.26,y-h*.40,w*.52,h*.16,md);p(x-w*.26,y-h*.40,w*.52,2,WF.stoneLight);for(let i=0;i<3;i++)p(x-w*.26+i*w*.20,y-h*.46,w*.10,h*.07,md);}
- if(body==='fan'||body==='beacon'||body==='bell'||body==='seal'||body==='node'||body==='coil'||body==='capacitor'){line(0,2,w*.34,h*.38,dk);line(-w*.09,2,3,h*.38,md);}
- if(body==='nest'||body==='pool'||body==='well'){p(x-w*.28,y-h*.06,w*.56,h*.26,dk);p(x-w*.28,y-h*.06,w*.56,3,md);}
- if(body==='brazier'||body==='pot'||body==='altar'||body==='furnace'||body==='vat'||body==='cup'||body==='drum'){p(x-w*.24,y-h*.06,w*.48,h*.28,dk);p(x-w*.16,y-h*.22,w*.32,h*.10,md);}
- if(body==='gun'||body==='turret'||body==='cannon'||body==='array'||body==='projector'||body==='slinger'||body==='ballista'||body==='harpoon'||body==='thrower'||body==='jet'||body==='ram'){p(x-w*.26,y-h*.02,w*.52,h*.20,dk);p(x-w*.12,y-h*.26,w*.24,h*.20,md);}
- if(body==='platform'||body==='uplink'){p(x-w*.30,y-h*.04,w*.60,h*.22,dk);p(x-w*.18,y-h*.22,w*.36,h*.12,md);}
- if(body==='shrine'||body==='monolith'||body==='geyser'){p(x-w*.20,y-h*.30,w*.40,h*.50,dk);p(x-w*.20,y-h*.30,3,h*.50,md);}
- if(body==='battery'||body==='pylon'||body==='launcher'||body==='flask'||body==='sprayer'||body==='fang'){p(x-w*.16,y-h*.34,w*.32,h*.56,dk);p(x-w*.16,y-h*.34,w*.32,3,md);}
  if(d.utility){p(x-5,y-3,10,10,col);p(x-3,y-1,4,3,'#fff');sb(x-6,y-4,12,12,WF.shine);}
  switch(top){
   case 'dart': line(0,-h*.40,4,12,accent2); line(0,-h*.48,8,3,col); break;
@@ -1824,9 +1929,6 @@ function getTowerCv(d){
   case 'whirl': for(let i=0;i<3;i++){g.beginPath();g.arc(x,y-h*.10,10-i*3,0,Math.PI*2);g.strokeStyle='#a9e7ff';g.stroke();} break;
   case 'push': p(x-10,y-h*.34,20,5,'#84d7ff'); p(x+8,y-h*.42,4,10,'#e4f7ff'); break;
  }
- // tier pennant
- const tierCol=d.tier==='high'?'#d198ff':d.tier==='mid'?'#74b8ff':'#7bdc96';
- p(x+w*.42,y-h*.30,2,16,'#6b5b45');p(x+w*.42+2,y-h*.30,7,5,tierCol);p(x+w*.42+2,y-h*.30,7,1,'#fff');
  outlinePass(cv);
  const out=withShadow(cv,w*1.25,9,2);
  GFX.tower[d.id]=out;return out;
@@ -1837,18 +1939,49 @@ const CREEP_SKINS={
  basic:[{name:'Dew Slime'},{name:'Puffshroom'},{name:'Berry Blob'}],
  fast:[{name:'Fox Imp'},{name:'Zephyr Wisp'}],
  armored:[{name:'Knight Beetle'},{name:'Acorn Warden'}],
- slow:[{name:'Tortoise Golem'},{name:'Moss Snail'}],
+ slow:[{name:'Tortoise Golem'},{name:'Moss Snail'},{name:'Stone Golem'}],
  air:[{name:'Flutterbat'},{name:'Storm Crow'}],
- boss:[{name:'Ogre King'},{name:'Fungal Titan'}]};
-function skinFor(kind){const list=CREEP_SKINS[kind];if(!list||list.length<2)return 0;const off={basic:0,fast:1,armored:2,slow:3,air:4,boss:5}[kind]||0;return (state.level+off)%list.length;}
+ boss:[{name:'Ogre King'},{name:'Fungal Titan'}],
+ leviathan:[{name:'Mother Whale'}]};
+function skinFor(kind){const list=CREEP_SKINS[kind];if(!list||list.length<2)return 0;const off={basic:0,fast:1,armored:2,slow:3,air:4,boss:5,leviathan:6}[kind]||0;return (state.level+off)%list.length;}
+function thinPixelArt(cv){ // reduce 2px source outlines to 1px (Zhang-Suen pass) and retint to game outline color
+ const W=cv.width,H=cv.height,g=cv.getContext('2d'),im=g.getImageData(0,0,W,H),d=im.data,oc=hexRGB(WF.outline),id=(x,y)=>(y*W+x)*4;
+ for(let i=0;i<d.length;i+=4)d[i+3]=d[i+3]<90?0:255;
+ const dk=new Uint8Array(W*H),op=new Uint8Array(W*H);
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=id(x,y);op[y*W+x]=d[i+3]?1:0;dk[y*W+x]=(d[i+3]&&d[i]<45&&d[i+1]<45&&d[i+2]<45)?1:0;}
+ const at=(x,y)=>(x<0||x>=W||y<0||y>=H)?0:dk[y*W+x],opq=(x,y)=>(x<0||x>=W||y<0||y>=H)?0:op[y*W+x],removed=[];
+ for(let step=0;step<2;step++){const del=[];
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){if(!dk[y*W+x])continue;
+   const n=[at(x,y-1),at(x+1,y-1),at(x+1,y),at(x+1,y+1),at(x,y+1),at(x-1,y+1),at(x-1,y),at(x-1,y-1)],B=n.reduce((a,b)=>a+b,0);
+   if(B<2||B>6)continue;let A=0;for(let k=0;k<8;k++)if(!n[k]&&n[(k+1)%8])A++;if(A!==1)continue;
+   const p2=n[0],p4=n[2],p6=n[4],p8=n[6];
+   if(step===0){if(p2*p4*p6||p4*p6*p8)continue;}else{if(p2*p4*p8||p2*p6*p8)continue;}
+   del.push([x,y]);}
+  for(const [x,y] of del){dk[y*W+x]=0;removed.push([x,y]);}}
+ for(const [x,y] of removed){const i=id(x,y);
+  if(!opq(x-1,y)||!opq(x+1,y)||!opq(x,y-1)||!opq(x,y+1)){d[i+3]=0;op[y*W+x]=0;continue;}
+  const cnt={};
+  for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const nx=x+dx,ny=y+dy;if((!dx&&!dy)||nx<0||nx>=W||ny<0||ny>=H)continue;
+   if(op[ny*W+nx]&&!dk[ny*W+nx]){const j=id(nx,ny),k=d[j]+','+d[j+1]+','+d[j+2];cnt[k]=(cnt[k]||0)+1;}}
+  const best=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];
+  if(best){const [r,gg,b]=best[0].split(',').map(Number);d[i]=r;d[i+1]=gg;d[i+2]=b;}}
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(dk[y*W+x]){const i=id(x,y);d[i]=oc[0];d[i+1]=oc[1];d[i+2]=oc[2];}
+ g.putImageData(im,0,0);return cv;
+}
+const GOLEM_IMG=new Image();GOLEM_IMG.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIgAAAAeCAYAAAD3hVYMAAADKUlEQVR42u1bS2hTQRQ9EXcR/BFUpF24cpHauGh3LrrRlUKKCl1oK6ILF0p14wda6sqNFutnoUjiBwqtpNKI4I8iIkKiNNqC+2ajhPoBH24EXUxudIY3780kY/Ns7tk8JnNzZ+Zwz3nz5vFinufBBvF4/JdJnOd5MbQAljsfK8BgBGClrVI+zL6yiv9Xymm2cluFD3YQRn0Oolbk01zGKjHFq3kaVVCzlNuqfLCDMOwchCpsdOQEAODWeN73j/v6Dvj+Pjl+V2ont24BABzu211XBTdbudHnI2vJR9aKD3YQhpmDUEXtSbX5Bn76WJauhJcXRYodp34CAN6+fh44IOUPU06zlct8sIMw6tmD7D96BAAwceNmtcJ6AQAXxrJSxdE1+wbVtrhWKotShVPczFROyj99bAgulftuVLQ7B9ucKjf6fCxIV0LpkuAjdbIxPthBGMEOQhVz7/p5AMCGjf6VSpWvu/fp4lVQfhpPp2Bb5Y4V3Ch3ufBxpeiGD3YQht0ehO7tPWlRoYPDl/H37vn08QGjxFSx6v/VvcNSKVdVik650eWjPdBJGneydl8+2EEYZg5SKM5LHd7XRacDzZdE/via9YFxheIcAKC7C06VO10SSk08eyHmsXpddZwOzTyiwQchn38EAPj+pSKtpycNR0624LtudhCGmYN0dyV9Kw1Twc/PmWFxzzo0MhQYl0yJ/ImEopjMhNQkRZOTeN8+O11wslOeB42jIip8kKJpPrV5PJhxwsfc7HsAwKq1CXnd1XmwgzDsnmJ0eHj1mqQMUsr9rDjT3zsgK4fi6wU5SU0xOTfK1Y2DzKTV/5aKD9XJTGHKR8f2bf5OxnsQhlMHiW/eJFUmtfvP/QjsR6XsdMI65T65Iw4edx5062T/Kx+Pbws+dvU3xgc7CMPMQdSTy9q9X6Mceg6ndwZhbx1144T1q/PQKTN9hvrhRLlR4aNeJ+s9a8cHnaSygzDsHESteBW6fvVtY1hcWP6aIgy/7whT7h/pl62UGxU+qF9VtupktH51vaZORiequnmwgzACEbP9NrfZaPS7ElMni+p6Xa2bv4thOMFvYI2a7bl3mwAAAAAASUVORK5CYII=';
 function getCreepFrames(kind,skin=0){
  const key=kind+':'+(skin||0);
  if(GFX.creep[key])return GFX.creep[key];
+ if(kind==='slow'&&skin===2){ // stone golem — imported pixel sprite, animated at slow-creep fps
+  if(GOLEM_IMG.complete&&GOLEM_IMG.naturalWidth){const gf=[];for(let f=0;f<4;f++){const cv=mkCv(34,36),g=cv.getContext('2d');g.drawImage(GOLEM_IMG,f*34,0,34,30,0,2,34,30);thinPixelArt(cv);gf.push(cv);}GFX.creep[key]=gf;return gf;}
+  return getCreepFrames(kind,0); // fallback until sprite sheet decodes
+ }
  const frames=[];const N=4;
  for(let f=0;f<N;f++){
-  const big=kind==='boss',S=big?52:32,cv=mkCv(S,S+6),g=cv.getContext('2d'),p=P(g);
+  const big=isBossKind(kind),S=kind==='leviathan'?64:big?52:32,cv=mkCv(S,S+6),g=cv.getContext('2d'),p=P(g);
   const cx=S/2,base=S-4,k=[0,.10,.02,-.08][f],hop=[0,1,2,1][f];
   const ell=(ex,ey,rx,ry,c)=>{g.fillStyle=c;g.beginPath();g.ellipse(ex,ey,rx,ry,0,0,Math.PI*2);g.fill();};
+  const tri=(x1,y1,x2,y2,x3,y3,c)=>{g.fillStyle=c;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.lineTo(x3,y3);g.closePath();g.fill();};
   if(kind==='basic'&&skin===1){ // puffshroom — bouncy mushroom
    const bw=10*(1+k*.8),bh=7*(1-k),by=base-bh;
    ell(cx,by+1,5.5,bh*.75,'#f2e3c2');
@@ -1912,6 +2045,42 @@ function getCreepFrames(kind,skin=0){
    p(cx-7,by-6,3,2,'#79c46a');p(cx+6,by-2,2,2,'#79c46a'); // moss
    p(cx+7,by+1,6,5,'#d8b071');p(cx+9,by+2,2,2,'#2e2013'); // head + eye
    p(cx-7,base-2,4,3,'#8a5f38');p(cx+1,base-2,4,3,'#8a5f38');
+  }else if(kind==='leviathan'){ // Mother Whale — armored void flagship, front view, red-lit
+   const by=base-24+[0,-1,-2,-1][f],w=[-2,0,2,0][f],gl=[.55,.85,1,.85][f];
+   const DK='#23262e',D='#343945',M='#4a505f',L='#6a7284',HL='#9aa2b4',RB='#7d828f',RH='#a9aeb9',RD='#c9243a',R='#ff4a5a',RG='#ff9aa4';
+   // upper rear fin spires
+   tri(cx-14,by-10,cx-22,by-20+w,cx-10,by-13,D);tri(cx+14,by-10,cx+22,by-20+w,cx+10,by-13,D);
+   p(cx-20,by-19+w,2,2,M);p(cx+18,by-19+w,2,2,M);
+   // huge side wings, layered with red underglow
+   tri(cx-9,by-5,cx-31,by-11+w,cx-12,by+4,D);tri(cx-11,by-4,cx-29,by-9+w,cx-13,by+1,M);
+   tri(cx+9,by-5,cx+31,by-11+w,cx+12,by+4,D);tri(cx+11,by-4,cx+29,by-9+w,cx+13,by+1,M);
+   p(cx-29,by-8+w,6,1,R,gl);p(cx+23,by-8+w,6,1,R,gl);
+   p(cx-30,by-11+w,3,2,L);p(cx+27,by-11+w,3,2,L);
+   tri(cx-12,by+2,cx-24,by+5+w,cx-12,by+7,DK);tri(cx+12,by+2,cx+24,by+5+w,cx+12,by+7,DK);
+   p(cx-22,by+4+w,4,1,RD,gl*.8);p(cx+18,by+4+w,4,1,RD,gl*.8);
+   // bulky shoulder armor
+   ell(cx-11,by-7,7,9,D);ell(cx+11,by-7,7,9,D);ell(cx-11,by-9,5.5,6,M);ell(cx+11,by-9,5.5,6,M);
+   // missile pod clusters on shoulders
+   p(cx-14,by-13,7,4,L);p(cx+7,by-13,7,4,L);
+   p(cx-13,by-12,2,2,DK);p(cx-10,by-12,2,2,DK);p(cx+8,by-12,2,2,DK);p(cx+11,by-12,2,2,DK);
+   p(cx-13,by-12,1,1,R,gl);p(cx-10,by-12,1,1,R,gl);p(cx+8,by-12,1,1,R,gl);p(cx+11,by-12,1,1,R,gl);
+   // central ribbed hull (tall keel)
+   ell(cx,by+5,13,17,D);ell(cx,by+6,10.5,14.5,RB);ell(cx-3,by+3,5.5,9,RH);
+   p(cx-1,by-6,2,26,M);p(cx-6,by-2,1,20,M);p(cx+5,by-2,1,20,M);
+   p(cx-10,by+6,20,1,DK);p(cx-9,by+12,18,1,DK);p(cx-7,by+17,14,1,DK);
+   p(cx-9,by+13,2,1,R,gl*.7);p(cx+7,by+7,2,1,R,gl*.7);p(cx-3,by+18,2,1,RG,gl*.7);
+   // red-lit collar between hull and head
+   p(cx-8,by-9,16,3,RD);p(cx-6,by-9,12,1,R,gl);p(cx-2,by-8,4,1,RG,gl);
+   // head dome with glowing visor
+   ell(cx,by-14,8,7.5,M);ell(cx,by-16,6.5,5,L);p(cx-2,by-21,4,2,HL);
+   p(cx-6,by-14,12,4,DK);p(cx-5,by-13,10,2,RD);p(cx-4,by-13,8,1,R,gl);p(cx-2,by-13,2,1,'#ffd9dd',gl);
+   p(cx-1,by-9,2,2,DK);
+   // ventral flukes + tail spike
+   tri(cx-5,by+20,cx-15,by+26,cx-2,by+23,DK);tri(cx+5,by+20,cx+15,by+26,cx+2,by+23,DK);
+   p(cx-13,by+24,3,1,M);p(cx+10,by+24,3,1,M);p(cx-1,by+22,2,4,D);
+   // engine glow + drifting embers
+   p(cx-8,by+21,3,1,R,gl*.8);p(cx+5,by+21,3,1,R,gl*.8);
+   p(cx-26,by-16+(f%2),2,2,R,.6);p(cx+24,by-3-(f%2),2,2,RG,.6);p(cx+27,by-17+((f+1)%2),1,1,RG,.7);
   }else if(kind==='air'&&skin===1){ // storm crow
    const by=base-13,wf=[-4,-1,3,-1][f];
    g.fillStyle='#3f4a7d';g.beginPath();g.moveTo(cx-6,by);g.lineTo(cx-14,by+wf-3);g.lineTo(cx-13,by+wf+3);g.closePath();g.fill();
@@ -2023,7 +2192,7 @@ function syncPool(pool,list,make,update){
  for(const it of list){let m=pool.get(it);if(!m){m=make(it);pool.set(it,m);}update(it,m);}
  for(const [it,m] of pool)if(!list.includes(it)){(m.parts||[m]).forEach(o=>GL.scene.remove(o));pool.delete(it);}
 }
-const CREEP_SIZE={basic:.95,fast:.92,armored:1.0,slow:1.05,air:.95,boss:2.0};
+const CREEP_SIZE={basic:.95,fast:.92,armored:1.0,slow:1.05,air:.95,boss:2.0,leviathan:2.6};
 function syncScene(tr){
  const w=Math.floor(tr.r.width),h=Math.floor(tr.r.height);
  if(GL.size.w!==w||GL.size.h!==h){GL.size={w,h};GL.renderer.setPixelRatio(Math.min(2,devicePixelRatio||1));GL.renderer.setSize(w,h,false);}
@@ -2046,14 +2215,14 @@ function syncScene(tr){
  // creeps
  const alive=state.creeps.filter(c=>!c.dead);
  syncPool(GL.creepPool,alive,c=>{const body=new THREE.Mesh(GL.quad,matOf(getCreepFrames(c.kind,c.skin)[0]));
-  const sh=new THREE.Mesh(GL.quad,matOf(getShadowCv()));sh.renderOrder=2;sh.material=sh.material.clone();sh.material.opacity=c.kind==='air'?.25:.4;
+  const sh=new THREE.Mesh(GL.quad,matOf(getShadowCv()));sh.renderOrder=2;sh.material=sh.material.clone();sh.material.opacity=isFlyingCreep(c)?.22:.4;
   GL.scene.add(sh);GL.scene.add(body);body.parts=[body,sh];body.sh=sh;body.ph=strHash(c.id)*6;return body;},
- (c,m)=>{const frames=getCreepFrames(c.kind,c.skin),fps=c.kind==='fast'?11:c.kind==='slow'?5:c.kind==='air'?9:7;
+ (c,m)=>{const frames=getCreepFrames(c.kind,c.skin),fps=c.kind==='leviathan'?5:c.kind==='fast'?11:c.kind==='slow'?5:isFlyingCreep(c)?9:7;
   const stopped=c.frozen>0||c.stunned>0;
   const idx=stopped?0:Math.floor((state.time+m.ph)*fps)%frames.length;
   const mat=matOf(frames[idx]);if(m.material!==mat)m.material=mat;
   const size=CREEP_SIZE[c.kind]||1,asp=frames[idx].height/frames[idx].width;
-  const hop=stopped?0:(c.kind==='air'?.30+Math.sin(state.time*4+m.ph)*.07:Math.abs(Math.sin((state.time+m.ph)*(fps*.8)))*.05);
+  const hop=stopped?0:(isFlyingCreep(c)?(c.kind==='leviathan'?.42:.30)+Math.sin(state.time*(c.kind==='leviathan'?2.3:4)+m.ph)*(c.kind==='leviathan'?.10:.07):Math.abs(Math.sin((state.time+m.ph)*(fps*.8)))*.05);
   const next=c.nextCell||c.path?.[Math.min(c.pathIndex+1,(c.path?.length||1)-1)];
   const flip=next&&next.x<c.x?-1:1;
   m.scale.set(size*flip,size*asp,1);
@@ -2096,8 +2265,8 @@ function draw2DWorld(tr){
  ctx.drawImage(GFX.mapCv,o.x,o.y,map.w*tr.cell,map.h*tr.cell);
  const draws=[];
  for(const tw of state.towers)draws.push({y:tw.y+tw.footprint,f:()=>{const cv=getTowerCv(BY_ID[tw.id]),fp=tw.footprint,wW=fp*1.32*tr.cell,wH=wW*cv.height/cv.width;const p=worldToScreen(tw.x+fp/2,tw.y+fp-.04,tr);ctx.globalAlpha=tw.disabled>0?.55:1;ctx.drawImage(cv,p.x-wW/2,p.y-wH,wW,wH);ctx.globalAlpha=1;}});
- for(const c of state.creeps){if(c.dead)continue;draws.push({y:c.y+.5,f:()=>{const frames=getCreepFrames(c.kind,c.skin),fps=c.kind==='fast'?11:c.kind==='slow'?5:c.kind==='air'?9:7;const stopped=c.frozen>0||c.stunned>0;const ph=strHash(c.id)*6,idx=stopped?0:Math.floor((state.time+ph)*fps)%frames.length;const cv=frames[idx],size=(CREEP_SIZE[c.kind]||1)*tr.cell,hgt=size*cv.height/cv.width;const hop=stopped?0:(c.kind==='air'?.30+Math.sin(state.time*4+ph)*.07:Math.abs(Math.sin((state.time+ph)*(fps*.8)))*.05)*tr.cell;const p=worldToScreen(c.x+.5,c.y+.5,tr);
-  ctx.globalAlpha=c.kind==='air'?.25:.4;const sc=getShadowCv();ctx.drawImage(sc,p.x-size*.36,p.y+size*.10,size*.72,size*.30);ctx.globalAlpha=1;
+ for(const c of state.creeps){if(c.dead)continue;draws.push({y:c.y+.5,f:()=>{const frames=getCreepFrames(c.kind,c.skin),fps=c.kind==='leviathan'?5:c.kind==='fast'?11:c.kind==='slow'?5:isFlyingCreep(c)?9:7;const stopped=c.frozen>0||c.stunned>0;const ph=strHash(c.id)*6,idx=stopped?0:Math.floor((state.time+ph)*fps)%frames.length;const cv=frames[idx],size=(CREEP_SIZE[c.kind]||1)*tr.cell,hgt=size*cv.height/cv.width;const hop=stopped?0:(isFlyingCreep(c)?(c.kind==='leviathan'?.42:.30)+Math.sin(state.time*(c.kind==='leviathan'?2.3:4)+ph)*(c.kind==='leviathan'?.10:.07):Math.abs(Math.sin((state.time+ph)*(fps*.8)))*.05)*tr.cell;const p=worldToScreen(c.x+.5,c.y+.5,tr);
+  ctx.globalAlpha=isFlyingCreep(c)?.22:.4;const sc=getShadowCv();ctx.drawImage(sc,p.x-size*.36,p.y+size*.10,size*.72,size*.30);ctx.globalAlpha=1;
   const next=c.nextCell||c.path?.[Math.min(c.pathIndex+1,(c.path?.length||1)-1)];const flip=next&&next.x<c.x;
   ctx.save();ctx.translate(p.x,p.y-hop-size*.14);if(flip)ctx.scale(-1,1);ctx.drawImage(cv,-size/2,-hgt/2,size,hgt);ctx.restore();}});}
  draws.sort((a,b)=>a.y-b.y).forEach(d=>d.f());
@@ -2105,9 +2274,11 @@ function draw2DWorld(tr){
 }
 
 /* ---------- PATH CHEVRONS ---------- */
+function leviathanRouteForPlan(plan){if(!plan||plan.leviathanBossIndex==null||plan.leviathanBossIndex<0)return -1;return plan.routeSequence?.[plan.leviathanBossIndex]??plan.bossSpawnIndices?.[plan.leviathanBossIndex]??plan.activeRouteIndices?.[plan.leviathanBossIndex]??0;}
 function drawPaths(tr){if(state.phase!=='build'||!state.pathVisible)return;
- const routes=wavePlan?.activeRouteIndices?.length?wavePlan.activeRouteIndices:map.spawns.map((_,i)=>i),flying=wavePlan?.type==='flying';
- for(const i of routes){const p=flying?getRouteForSpawn(i,true):computeGroundPath(i);if(p)drawPathLine(p,tr,routeColor(i,flying),flying);}
+ const routes=wavePlan?.activeRouteIndices?.length?wavePlan.activeRouteIndices:map.spawns.map((_,i)=>i),flying=wavePlan?.type==='flying',leviRoute=leviathanRouteForPlan(wavePlan),leviOnly=wavePlan?.isBoss&&(wavePlan.bossCount||1)===1&&leviRoute>=0;
+ for(const i of routes){const air=flying||(leviOnly&&i===leviRoute),p=air?getRouteForSpawn(i,true):computeGroundPath(i);if(p)drawPathLine(p,tr,routeColor(i,air),air);}
+ if(leviRoute>=0&&!leviOnly){const p=getRouteForSpawn(leviRoute,true);if(p)drawPathLine(p,tr,routeColor(leviRoute,true),true);}
  for(const cp of map.checkpoints){const gp=worldToScreen(cp.x,cp.y,tr);ctx.strokeStyle='rgba(255,227,109,.9)';ctx.lineWidth=2;ctx.strokeRect(gp.x+tr.cell*.15,gp.y+tr.cell*.15,tr.cell*.7,tr.cell*.7);ctx.lineWidth=1;}
 }
 function drawPathLine(path,tr,color,air=false){if(!path||path.length<2)return;const spacing=air?2.6:2.15,speed=air?.42:.55,segments=[];let total=0;
@@ -2131,11 +2302,11 @@ function drawMultiSelect(tr){
   ctx.strokeStyle='#ffd95e';ctx.lineWidth=2;ctx.setLineDash([6,4]);ctx.strokeRect(a.x,a.y,b.x-a.x,b.y-a.y);ctx.setLineDash([]);ctx.lineWidth=1;}}
 function drawWorldOverlays(tr){drawMultiSelect(tr);
  for(const c of state.creeps){if(c.dead)continue;const p=worldToScreen(c.x+.5,c.y+.5,tr),size=(CREEP_SIZE[c.kind]||1)*tr.cell;
-  if(c.hp<c.maxHp)drawHPBar(p.x-size*.42,p.y-size*.78,size*.84,c.hp/c.maxHp,c.kind==='boss'?'#d18cf2':'#7df2a1');
+  if(c.hp<c.maxHp)drawHPBar(p.x-size*.42,p.y-size*.78,size*.84,c.hp/c.maxHp,c.kind==='leviathan'?'#8de8ff':isBossCreep(c)?'#d18cf2':'#7df2a1');
   if(c.frozen>0){strokeBox(p.x-size*.46,p.y-size*.62,size*.92,size*.82,'#b7e5ff');px(p.x-2,p.y-size*.72,4,4,'#e8fbff');}
   if(c.stunned>0)px(p.x-size*.10,p.y-size*.80,4,4,'#ffe36d');
   if(c===state.selectedCreep){ctx.strokeStyle='#ffe16f';ctx.setLineDash([4,3]);ctx.beginPath();ctx.arc(p.x,p.y,size*.62,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);}
-  if(c.kind==='boss'){ctx.strokeStyle='rgba(209,130,242,.65)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y,tr.cell*1.05+Math.sin(state.time*3)*2,0,Math.PI*2);ctx.stroke();ctx.lineWidth=1;}
+  if(isBossCreep(c)){ctx.strokeStyle=c.kind==='leviathan'?'rgba(141,232,255,.72)':'rgba(209,130,242,.65)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y,tr.cell*(c.kind==='leviathan'?1.45:1.05)+Math.sin(state.time*3)*2,0,Math.PI*2);ctx.stroke();ctx.lineWidth=1;}
  }
  for(const tw of state.towers){const d=BY_ID[tw.id],p=worldToScreen(tw.x,tw.y,tr),size=tw.footprint*tr.cell;
   if(tw.upgrade)for(let i=0;i<tw.upgrade;i++){px(p.x+3+i*7,p.y+3,5,5,WF.outline);px(p.x+4+i*7,p.y+4,3,3,'#ffe36d');px(p.x+4+i*7,p.y+4,2,1,'#fff');}
@@ -2190,7 +2361,7 @@ function drawPlacement(tr){
 function pointerToGrid(e){const rect=canvas.getBoundingClientRect(),tr=getTransform();pointer.x=e.clientX-rect.left;pointer.y=e.clientY-rect.top;pointer.fx=(pointer.x-tr.ox)/tr.cell+camera.x;pointer.fy=(pointer.y-tr.oy)/tr.cell+camera.y;pointer.gridX=Math.floor(pointer.fx);pointer.gridY=Math.floor(pointer.fy);} 
  
 
-function creepAt(gx,gy){let best=null,bd=.75;for(const c of state.creeps){if(c.dead)continue;const r=c.kind==='boss'?1.1:.55;const d=Math.hypot(c.x+.0-gx,c.y+.0-gy);if(d<r+.2&&d<bd){bd=d;best=c;}}return best;}
+function creepAt(gx,gy){let best=null,bd=.75;for(const c of state.creeps){if(c.dead)continue;const r=isBossCreep(c)?1.25:.55;const d=Math.hypot(c.x+.0-gx,c.y+.0-gy);if(d<r+.2&&d<bd){bd=d;best=c;}}return best;}
 function syncCursor(){const placing=!!(state.selectedBuild||state.movingTower);canvas.classList.toggle('placing',placing);let hover=false;if(!placing&&pointer.gridX>=0&&state.screen==='game'&&map)hover=!!towerAt(pointer.gridX,pointer.gridY)||!!creepAt(pointer.fx,pointer.fy);canvas.classList.toggle('hoverable',hover);}
 let marquee=null;
 canvas.addEventListener('pointerdown',e=>{if(e.button!==0||state.screen!=='game'||state.paused)return;
@@ -2255,7 +2426,7 @@ const titleDemo={
 function resizeTitleDemo(){const r=titleCanvas.getBoundingClientRect(),dpr=Math.min(2,devicePixelRatio||1),w=Math.max(1,Math.floor(r.width*dpr)),h=Math.max(1,Math.floor(r.height*dpr));if(titleCanvas.width!==w||titleCanvas.height!==h){titleCanvas.width=w;titleCanvas.height=h;titleCtx.setTransform(dpr,0,0,dpr,0,0);titleCtx.imageSmoothingEnabled=false;}}
 function titleRoutePoint(t,w,h,lane=0){const pts=lane%2?[[-.05,.28],[.20,.28],[.20,.70],[.48,.70],[.48,.38],[.76,.38],[1.06,.64]]:[[-.05,.60],[.17,.60],[.17,.36],[.43,.36],[.43,.68],[.72,.68],[.72,.30],[1.06,.30]];const total=pts.length-1,u=Math.max(0,Math.min(.999,t))*total,i=Math.floor(u),f=u-i;return{x:(pts[i][0]+(pts[i+1][0]-pts[i][0])*f)*w,y:(pts[i][1]+(pts[i+1][1]-pts[i][1])*f)*h};}
 function titleCreepKind(){const r=Math.random();return r<.46?'basic':r<.63?'fast':r<.77?'armored':r<.89?'slow':'air';}
-function titleCanTarget(d,c){const target=c.kind==='air'?'air':'ground';return d.target?.includes(target);}
+function titleCanTarget(d,c){const target=isFlyingKind(c.kind)?'air':'ground';return d.target?.includes(target);}
 function updateTitleDemo(dt){
  if($('#titleScreen').classList.contains('hidden'))return;
  titleDemo.time+=dt;titleDemo.spawn-=dt;
@@ -2292,8 +2463,8 @@ function renderTitleDemo(){
  const towerSize=Math.max(58,Math.min(92,Math.min(w,h)*.105));
  for(const tw of titleDemo.towers){const d=BY_ID[tw.id],cv=getTowerCv(d),dw=towerSize*(d.footprint===3?1.16:1),dh=dw*cv.height/cv.width,push=(tw.recoil||0)>0?3:0;g.drawImage(cv,Math.round(tw.x*w-dw/2),Math.round(tw.y*h-dh+push),Math.round(dw),Math.round(dh));}
  for(const c of titleDemo.creeps){
-  const p=titleRoutePoint(c.t,w,h,c.lane),frames=getCreepFrames(c.kind,c.skin),fps=c.kind==='fast'?11:c.kind==='slow'?5:c.kind==='air'?9:7,idx=Math.floor((titleDemo.time+c.phase)*fps)%frames.length,cv=frames[idx];
-  const base=c.kind==='boss'?82:c.kind==='armored'?58:c.kind==='slow'?60:c.kind==='air'?48:c.kind==='fast'?45:48,size=Math.max(base*.85,Math.min(base*1.35,Math.min(w,h)*.072)),dh=size*cv.height/cv.width,bob=c.kind==='air'?Math.sin(titleDemo.time*5+c.phase)*5:Math.abs(Math.sin(titleDemo.time*8+c.phase))*2;
+  const p=titleRoutePoint(c.t,w,h,c.lane),frames=getCreepFrames(c.kind,c.skin),fps=c.kind==='fast'?11:c.kind==='slow'?5:isFlyingKind(c.kind)?9:7,idx=Math.floor((titleDemo.time+c.phase)*fps)%frames.length,cv=frames[idx];
+  const base=c.kind==='leviathan'?104:c.kind==='boss'?82:c.kind==='armored'?58:c.kind==='slow'?60:isFlyingKind(c.kind)?48:c.kind==='fast'?45:48,size=Math.max(base*.85,Math.min(base*1.35,Math.min(w,h)*.072)),dh=size*cv.height/cv.width,bob=isFlyingKind(c.kind)?Math.sin(titleDemo.time*5+c.phase)*5:Math.abs(Math.sin(titleDemo.time*8+c.phase))*2;
   g.save();if(c.t>.55){g.translate(p.x,p.y);g.scale(-1,1);g.drawImage(cv,-size/2,-dh-bob,size,dh);}else g.drawImage(cv,p.x-size/2,p.y-dh-bob,size,dh);g.restore();
  }
  for(const sh of titleDemo.shots){const cv=getProjCv(sh.d),sz=Math.max(15,Math.min(24,Math.min(w,h)*.026)),p=titleRoutePoint(sh.target?.t||0,w,h,sh.target?.lane||0);g.save();g.translate(sh.x,sh.y);g.rotate(Math.atan2(p.y-sh.y,p.x-sh.x));g.drawImage(cv,-sz/2,-sz/2,sz,sz);g.restore();}
