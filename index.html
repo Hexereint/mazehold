@@ -412,6 +412,8 @@ const camera={x:0,y:0,zoom:1};
 const canvas=$('#gameCanvas'),ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
 let map=null,last=performance.now(),keysHeld={},pointer={x:0,y:0,gridX:-1,gridY:-1},wavePlan=null,saveThrottle=0;
 let cameraDrag={active:false,pointerId:null,startX:0,startY:0,lastX:0,lastY:0,moved:false},suppressNextCanvasClick=false;
+const BACKGROUND_CATCHUP_MAX=180,BACKGROUND_CATCHUP_STEP=.05;
+let hiddenAtMs=null;
 
 function levelDimensions(level){
  if(level===1)return {w:20,h:40};
@@ -2592,6 +2594,35 @@ function renderTitleDemo(){
  for(const sh of titleDemo.shots){const cv=getProjCv(sh.d),sz=Math.max(15,Math.min(24,Math.min(w,h)*.026)),p=titleRoutePoint(sh.target?.t||0,w,h,sh.target?.lane||0);g.save();g.translate(sh.x,sh.y);g.rotate(Math.atan2(p.y-sh.y,p.x-sh.x));g.drawImage(cv,-sz/2,-sz/2,sz,sz);g.restore();}
  for(const b of titleDemo.bursts){const a=Math.max(0,b.t/.32),rad=6+(1-a)*18;g.globalAlpha=a;g.strokeStyle=b.c;g.lineWidth=3;g.strokeRect(Math.round(b.x-rad),Math.round(b.y-rad),Math.round(rad*2),Math.round(rad*2));g.globalAlpha=1;}
 }
+function runBackgroundCatchup(elapsedSec){
+ if(!elapsedSec||elapsedSec<=0)return;
+ if(state.screen!=='game'||state.paused)return;
+ const capped=Math.min(BACKGROUND_CATCHUP_MAX,elapsedSec);
+ let remain=capped;
+ while(remain>0){
+  const realStep=Math.min(BACKGROUND_CATCHUP_STEP,remain);
+  update(realStep*state.speed,realStep);
+  remain-=realStep;
+  if(state.screen!=='game'||state.paused)break;
+ }
+ if(elapsedSec>capped)toast(`Background progress capped at ${Math.round(capped)}s`);
+ render();
+}
+function resumeFromHidden(){
+ const now=performance.now();
+ last=now;
+ if(hiddenAtMs==null)return;
+ const elapsedSec=Math.max(0,(now-hiddenAtMs)/1000);
+ hiddenAtMs=null;
+ runBackgroundCatchup(elapsedSec);
+}
+document.addEventListener('visibilitychange',()=>{
+ if(document.hidden){if(hiddenAtMs==null)hiddenAtMs=performance.now();return;}
+ resumeFromHidden();
+});
+window.addEventListener('blur',()=>{if(hiddenAtMs==null)hiddenAtMs=performance.now();});
+window.addEventListener('focus',()=>{if(!document.hidden)resumeFromHidden();});
+
 function loop(now){const raw=Math.min(.05,(now-last)/1000);last=now;update(raw*state.speed,raw);updateTitleDemo(raw);render();renderTitleDemo();requestAnimationFrame(loop);}showMainMenu();requestAnimationFrame(loop);
 </script>
 </body>
