@@ -1378,7 +1378,7 @@ function enterTitleScreen(mode='page'){
 }
 function showMainMenu(){AUDIO.music.stop();
  enterTitleScreen('home');
- $('#menuModal').innerHTML=`<h1>MAZEHOLD</h1><p class="titleTagline">Build a maze, build your stronghold.</p><p class="difficultyCurrent">Difficulty: ${difficultyName(prefs.difficulty)}</p><div class="titleMainButtons"><button class="menuBtn" id="startGame"><strong>Start</strong><span class="small">Choose a level and archetype.</span></button><button class="menuBtn endlessUnlock" id="endlessGame"><strong>Endless</strong><span class="small">Survive infinite waves.</span></button><button class="menuBtn" id="difficultyMenu"><strong>Difficulty</strong><span class="small">Current: ${difficultyName(prefs.difficulty)}</span></button><button class="menuBtn" id="startSettings"><strong>Settings</strong><span class="small">Adjust camera controls.</span></button><button class="menuBtn" id="guideMenu"><strong>Guide</strong><span class="small">Rules, towers, and monster compendium.</span></button></div>`;
+ $('#menuModal').innerHTML=`<h1>MAZEHOLD</h1><p class="titleTagline">Build a maze, build your stronghold.</p><p class="difficultyCurrent">Difficulty: ${difficultyName(prefs.difficulty)}</p><div class="titleMainButtons"><button class="menuBtn" id="startGame"><strong>Challenges</strong><span class="small">Choose a level and archetype.</span></button><button class="menuBtn endlessUnlock" id="endlessGame"><strong>Endless</strong><span class="small">Survive infinite waves.</span></button><button class="menuBtn" id="difficultyMenu"><strong>Difficulty</strong><span class="small">Current: ${difficultyName(prefs.difficulty)}</span></button><button class="menuBtn" id="startSettings"><strong>Settings</strong><span class="small">Adjust camera controls.</span></button><button class="menuBtn" id="guideMenu"><strong>Guide</strong><span class="small">Rules, towers, and monster compendium.</span></button></div>`;
  $('#startGame').onclick=showLevelSelect;$('#endlessGame').onclick=showEndlessArchetypes;$('#difficultyMenu').onclick=showDifficulty;$('#startSettings').onclick=showStartSettings;$('#guideMenu').onclick=()=>showGuide('how');
 }
 function isLevelCleared(level){return !!state.achievements[`level-${level}`]||['standard','hard','veryhard'].some(d=>state.achievements[`${level}-${d}`]);}
@@ -1571,6 +1571,55 @@ function spawnCreep(){
  const hasBossSkills=kind==='boss'&&(state.mode==='endless'||state.level>=7),flying=isFlyingKind(kind);
  const c={id:Math.random().toString(36),kind,skin:skinFor(kind),x:s.x,y:s.y,hp,maxHp:hp,armor:kind==='armored'?5+Math.floor(state.wave/4):0,speed:kind==='fast'?3.1:kind==='armored'?1.1:kind==='slow'?.85:kind==='leviathan'?.38:kind==='boss'?.55:kind==='air'?(p.unitSpeed||1.45):1.65,reward,route:spawnIndex,objIndex:0,path:flying?getRouteForSpawn(spawnIndex,true):computeGroundPath(spawnIndex),pathIndex:0,history:[],effects:[],burn:null,poisons:[],freezeImmune:0,stunImmune:0,frozen:0,stunned:0,dead:false,nextCell:null,attackCd:0,finalBoss,isLeviathan:leviathanUnit,bossSkillCd:hasBossSkills?(finalBoss?9:6):999,disableSkillCd:hasBossSkills?15:999,finalRushCd:finalBoss?6:999,speedBoostTimer:0,finalRushTimer:0};
  state.creeps.push(c);state.spawned++;
+}
+
+function updateWave(dt){
+ if(state.spawned<wavePlan.count){
+  state.spawnClock-=dt;
+  if(state.spawnClock<=0){spawnCreep();state.spawnClock=wavePlan.spawnGap;}
+ }
+ if(state.spawned>=wavePlan.count&&state.creeps.every(c=>c.dead)){
+  const leaked=state.waveLeaked||0,grant=wavePlan.mazeGrant||0;
+  state.gold+=grant;
+  AUDIO.play('wave_clear');
+  AUDIO.music.setMode('build');
+  if(leaked===0){
+   const bonus=Math.max(1,Math.floor((wavePlan.combatRewardTarget||wavePlan.rewardTarget)*.05));
+   state.gold+=bonus;
+   toast(`Maze grant +${grant}g · Perfect +${bonus}g`);
+  }else toast(`Maze grant +${grant}g`);
+  state.waveLeaked=0;
+  state.phase='build';
+  state.buildTimer=buildTimeFor(state.difficulty);
+  wavePlan=state.mode!=='endless'&&state.wave>=state.waveMax?null:generateWavePlan(state.level,1,state.wave+1);
+  updateUI();
+  autosave();
+  if(state.mode==='endless'&&state.wave===20&&!state.secondaryArchetype)showSecondArchetypePrompt();
+  else if(state.mode!=='endless'&&state.wave>=state.waveMax)toast('Level cleared — continue when ready');
+ }
+}
+function finishStage(){
+ state.achievements[`${state.level}-${state.difficulty}`]=true;
+ state.achievements[`level-${state.level}`]=true;
+ localStorage.setItem('amazingTD_ach',JSON.stringify(state.achievements));
+ AUDIO.play('victory');
+ AUDIO.music.duck(true);
+ $('#menuOverlay').classList.remove('hidden');
+ const finalLevel=state.level>=15;
+ $('#resultModal').innerHTML=`<h1>Level ${state.level} Complete</h1><p>You cleared all ${state.waveMax} waves on <b>${difficultyName(state.difficulty)}</b>.</p><div class="menuGrid">${finalLevel?'':`<button class="menuBtn" id="nextLevel"><strong>Next Level</strong></button>`}<button class="menuBtn" id="levelMenu"><strong>Level Select</strong></button></div>`;
+ if(!finalLevel)$('#nextLevel').onclick=()=>{AUDIO.music.duck(false);state.level=Math.min(15,state.level+1);showArchetypes();};
+ $('#levelMenu').onclick=()=>{AUDIO.music.duck(false);showLevelSelect();};
+}
+function loseLevel(){
+ if(state.phase==='lost')return;
+ state.phase='lost';
+ AUDIO.play('defeat');
+ AUDIO.music.duck(true);
+ $('#menuOverlay').classList.remove('hidden');
+ const endless=state.mode==='endless';
+ $('#resultModal').innerHTML=`<h1>${endless?'Endless Run Over':'Defeat'}</h1><p>${endless?`You survived ${state.wave} waves.`:'The exit portal was breached too many times.'}</p><div class="menuGrid"><button class="menuBtn" id="retry"><strong>${endless?'Retry Endless':'Retry Level'}</strong></button><button class="menuBtn" id="levelMenu"><strong>${endless?'Main Menu':'Level Select'}</strong></button></div>`;
+ $('#retry').onclick=()=>{AUDIO.music.duck(false);state.secondaryArchetype=null;state.secondArchetypeUnlocked=false;startLevel();};
+ $('#levelMenu').onclick=()=>{AUDIO.music.duck(false);(endless?showMainMenu:showLevelSelect)();};
 }
 
 function update(dt,realDt=dt){if(state.screen!=='game'||state.paused)return;state.time+=dt;const move=CAMERA_MOVE_SPEED*prefs.wasdSensitivity*realDt/camera.zoom;if(keysHeld.w)camera.y-=move;if(keysHeld.s)camera.y+=move;if(keysHeld.a)camera.x-=move;if(keysHeld.d)camera.x+=move;
